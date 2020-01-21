@@ -17,7 +17,7 @@
  * Initial revision
  *
  */
-
+package com.knu.ynortman;
 /**
  * Reads standard input and writes to standard output 
  * and the named file.

@@ -1,3 +1,4 @@
+package com.knu.ynortman;
 /*
  * $Id: BitBlock.java,v 1.3 2001/10/07 23:48:55 rayo Exp $
  */

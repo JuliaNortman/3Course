@@ -20,7 +20,7 @@
  * Initial revision
  *
  */
-
+package com.knu.ynortman;
 /**
  * A directory entry for a simulated file system.
  * @author Ray Ontko

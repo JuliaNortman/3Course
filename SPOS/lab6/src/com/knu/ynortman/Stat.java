@@ -15,7 +15,7 @@
  * Initial revision
  *
  */
-
+package com.knu.ynortman;
 /**
  * This simulates the unix struct "stat".
  * @author Ray Ontko

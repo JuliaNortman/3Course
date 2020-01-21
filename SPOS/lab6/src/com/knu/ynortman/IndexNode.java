@@ -39,7 +39,7 @@
  * Initial revision
  *
  */
-
+package com.knu.ynortman;
 /**
  * An index node for a simulated file system.
  * @author Ray Ontko

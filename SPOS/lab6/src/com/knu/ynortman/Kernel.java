@@ -2,7 +2,7 @@
  * $Id: Kernel.java,v 1.23 2001/10/08 01:15:46 rayo Exp $
  * 456789012345678901234567890123456789012345678901234567890123456789012
  */
-
+package com.knu.ynortman;
 import java.util.StringTokenizer ;
 import java.util.Properties ;
 import java.io.FileInputStream ;
@@ -191,7 +191,6 @@ public class Kernel
    * <pre>
    *   extern int errno ;
    * </pre>
-   * @see getErrno
    */
   public static void setErrno( int newErrno )
   {
@@ -211,7 +210,6 @@ public class Kernel
    * <pre>
    *   extern int errno ;
    * </pre>
-   * @see setErrno
    */
   public static int getErrno()
   {
