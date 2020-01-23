@@ -1,33 +1,45 @@
 package com.knu.ynortman.secondPart;
 
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class SemaphoreThreadTask {
     private int semaphore = 0;
     private SliderSemaphore slider;
-    protected Thread t1;
-    protected Thread t2;
-    protected Runnable right;
-    protected Runnable left;
+    private Thread t1;
+    private Thread t2;
+    private Runnable right;
+    private Runnable left;
+    private volatile AtomicBoolean rightRunning;
+    private volatile AtomicBoolean leftRunning;
 
     public SemaphoreThreadTask() {
         super();
+        rightRunning = new AtomicBoolean(true);
+        leftRunning = new AtomicBoolean(true);
         slider = new SliderSemaphore();
+        right = () -> {
+            while(leftRunning.get()) {
+                slider.moveOnePositionRight();
+                System.out.println(leftRunning.get());
+            }
+            t1.interrupt();
+            System.out.println("t1 interruped");
+        };
+
+        left = () -> {
+            while(rightRunning.get()) {
+                slider.moveOnePositionLeft();
+                System.out.println(rightRunning.get());
+            }
+            t2.interrupt();
+            System.out.println("t2 interrupted");
+        };
+
         slider.setStartLeftActionListener(this::startLeftThread);
         slider.setStartRightActionListener(this::startRightThread);
         slider.setStopLeftActionListener(this::stopLeftThread);
         slider.setStopRightActionListener(this::stopRightThread);
-        right = () -> {
-            while(true) {
-                slider.moveOnePositionRight();
-            }
-        };
-
-        left = () -> {
-            while(true) {
-                slider.moveOnePositionLeft();
-            }
-        };
-
         slider.setLeftDecrActionListener(this::decrLeftPriority );
         slider.setLeftIncrActionListener(this::incrLeftPriority);
         slider.setRightDecrActionListener(this::decrRightPriority);
@@ -64,7 +76,8 @@ public class SemaphoreThreadTask {
         }
         if(t1 != null) {
             semaphore = 0;
-            t1.stop();
+            rightRunning.set(false);
+            System.out.println(rightRunning.get());
             t1 = null;
         }
     }
@@ -76,7 +89,8 @@ public class SemaphoreThreadTask {
         }
         if(t2 != null) {
             semaphore = 0;
-            t2.stop();
+            leftRunning.set(false);
+            System.out.println(leftRunning.get());
             t2 = null;
         }
     }

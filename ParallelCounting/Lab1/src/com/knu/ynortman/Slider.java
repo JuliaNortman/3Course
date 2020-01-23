@@ -49,7 +49,9 @@ public class Slider extends JFrame {
         try {
             Thread.sleep(200);
         }
-        catch (InterruptedException ignored) {}
+        catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     public synchronized void moveOnePositionLeft() {
@@ -57,7 +59,9 @@ public class Slider extends JFrame {
         try {
             Thread.sleep(200);
         }
-        catch (InterruptedException ignored) {}
+        catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     public synchronized void setRightIncrActionListener(Runnable r) {
