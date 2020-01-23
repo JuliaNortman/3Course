@@ -1,14 +1,21 @@
-package com.knu.ynortman;
+package com.knu.ynortman.secondPart;
 
-public class SimpleThreadTask {
-    protected Slider slider;
+
+public class SemaphoreThreadTask {
+    private int semaphore = 0;
+    private SliderSemaphore slider;
     protected Thread t1;
     protected Thread t2;
     protected Runnable right;
     protected Runnable left;
 
-    public SimpleThreadTask() {
-        slider = new Slider();
+    public SemaphoreThreadTask() {
+        super();
+        slider = new SliderSemaphore();
+        slider.setStartLeftActionListener(this::startLeftThread);
+        slider.setStartRightActionListener(this::startRightThread);
+        slider.setStopLeftActionListener(this::stopLeftThread);
+        slider.setStopRightActionListener(this::stopRightThread);
         right = () -> {
             while(true) {
                 slider.moveOnePositionRight();
@@ -27,11 +34,51 @@ public class SimpleThreadTask {
         slider.setRightIncrActionListener(this::incrRightPriority);
     }
 
-    public void execute() {
+
+    public synchronized void startRightThread() {
+        if(semaphore == 1) {
+            slider.setWarning();
+            return;
+        }
+        semaphore = 1;
         t1 = new Thread(right, "Thread1");
-        t2 = new Thread(left,  "Thread2");
         t1.start();
+        slider.clearWarning();
+    }
+
+    public synchronized void startLeftThread() {
+        if(semaphore == 1) {
+            slider.setWarning();
+            return;
+        }
+        semaphore = 1;
+        t2 = new Thread(left, "Thread2");
         t2.start();
+        slider.clearWarning();
+    }
+
+    public synchronized void stopRightThread() {
+        slider.clearWarning();
+        if(semaphore == 0) {
+            return;
+        }
+        if(t1 != null) {
+            semaphore = 0;
+            t1.stop();
+            t1 = null;
+        }
+    }
+
+    public synchronized void stopLeftThread() {
+        slider.clearWarning();
+        if(semaphore == 0) {
+            return;
+        }
+        if(t2 != null) {
+            semaphore = 0;
+            t2.stop();
+            t2 = null;
+        }
     }
 
     public synchronized void incrRightPriority() {
