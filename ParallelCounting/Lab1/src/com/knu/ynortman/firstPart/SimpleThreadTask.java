@@ -1,11 +1,11 @@
-package com.knu.ynortman;
+package com.knu.ynortman.firstPart;
 
 public class SimpleThreadTask {
-    protected Slider slider;
-    protected Thread t1;
-    protected Thread t2;
-    protected Runnable right;
-    protected Runnable left;
+    private Slider slider;
+    private Thread t1;
+    private Thread t2;
+    private Runnable right;
+    private Runnable left;
 
     public SimpleThreadTask() {
         slider = new Slider();

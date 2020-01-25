@@ -1,6 +1,6 @@
 package com.knu.ynortman.secondPart;
 
-import com.knu.ynortman.Slider;
+import com.knu.ynortman.firstPart.Slider;
 
 import javax.swing.*;
 
@@ -13,11 +13,16 @@ public class SliderSemaphore extends Slider {
 
     public SliderSemaphore() {
         super();
-        startRight = new JButton("Start right");
-        startLeft = new JButton("Start left");
-        stopRight = new JButton("Stop right");
-        stopLeft = new JButton("Stop left");
+        startRight = new JButton("Start");
+        startRight.setBounds(340, 60, 70, 50);
+        startLeft = new JButton("Start");
+        startLeft.setBounds(20, 60, 70, 50);
+        stopRight = new JButton("Stop");
+        stopRight.setBounds(415, 60, 70, 50);
+        stopLeft = new JButton("Stop");
+        stopLeft.setBounds(95, 60, 70, 50);
         warningLabel = new JLabel();
+        warningLabel.setBounds(190, 120, 150, 30);
 
         panel.add(startLeft);
         panel.add(startRight);

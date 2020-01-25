@@ -1,4 +1,4 @@
-package com.knu.ynortman;
+package com.knu.ynortman.firstPart;
 
 public class Main {
 

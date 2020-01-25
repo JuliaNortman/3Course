@@ -1,12 +1,13 @@
-package com.knu.ynortman;
+package com.knu.ynortman.firstPart;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Slider extends JFrame {
-    private JButton incrLeft;
-    private JButton incrRight;
-    private JButton decrLeft;
-    private JButton decrRight;
+    protected JButton incrLeft;
+    protected JButton incrRight;
+    protected JButton decrLeft;
+    protected JButton decrRight;
     private JLabel rightLabel;
     private JLabel leftLabel;
 
@@ -16,20 +17,31 @@ public class Slider extends JFrame {
     public Slider() {
         // Create and set up a frame window
         JFrame.setDefaultLookAndFeelDecorated(true);
-        //JFrame frame = new JFrame();
+        setPreferredSize(new Dimension(550, 300));
+        //setLayout(new GridLayout(3, 7));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Set the panel to add buttons
         panel = new JPanel();
         // Different settings on the sliders
         slider = new JSlider();
+        slider.setBounds(190, 5, 150, 50);
         incrLeft = new JButton("+");
+        incrLeft.setBounds(60, 5, 50, 50);
         incrRight = new JButton("+");
+        incrRight.setBounds(340, 5, 50, 50);
         decrLeft = new JButton("-");
+        decrLeft.setBounds(115, 5, 50, 50);
         decrRight = new JButton("-");
+        decrRight.setBounds(395, 5, 50, 50);
         rightLabel = new JLabel();
+        rightLabel.setBounds(470, 5, 50, 50);
+        rightLabel.setText("5");
         leftLabel = new JLabel();
+        leftLabel.setBounds(25, 5, 50, 50);
+        leftLabel.setText("5");
 
         // Add the slider to the panel
+        panel.setLayout(null);
         panel.add(leftLabel);
         panel.add(incrLeft);
         panel.add(decrLeft);
@@ -41,6 +53,7 @@ public class Slider extends JFrame {
         // Set the window to be visible as the default to be false
         add(panel);
         pack();
+
         setVisible(true);
     }
 

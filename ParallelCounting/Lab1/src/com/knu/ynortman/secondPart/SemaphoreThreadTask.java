@@ -1,6 +1,5 @@
 package com.knu.ynortman.secondPart;
 
-
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SemaphoreThreadTask {
@@ -19,21 +18,15 @@ public class SemaphoreThreadTask {
         leftRunning = new AtomicBoolean(true);
         slider = new SliderSemaphore();
         right = () -> {
-            while(leftRunning.get()) {
+            while(rightRunning.get()) {
                 slider.moveOnePositionRight();
-                System.out.println(leftRunning.get());
             }
-            t1.interrupt();
-            System.out.println("t1 interruped");
         };
 
         left = () -> {
-            while(rightRunning.get()) {
+            while(leftRunning.get()) {
                 slider.moveOnePositionLeft();
-                System.out.println(rightRunning.get());
             }
-            t2.interrupt();
-            System.out.println("t2 interrupted");
         };
 
         slider.setStartLeftActionListener(this::startLeftThread);
@@ -53,6 +46,7 @@ public class SemaphoreThreadTask {
             return;
         }
         semaphore = 1;
+        rightRunning.set(true);
         t1 = new Thread(right, "Thread1");
         t1.start();
         slider.clearWarning();
@@ -64,6 +58,7 @@ public class SemaphoreThreadTask {
             return;
         }
         semaphore = 1;
+        leftRunning.set(true);
         t2 = new Thread(left, "Thread2");
         t2.start();
         slider.clearWarning();
@@ -77,7 +72,7 @@ public class SemaphoreThreadTask {
         if(t1 != null) {
             semaphore = 0;
             rightRunning.set(false);
-            System.out.println(rightRunning.get());
+            System.out.println(rightRunning);
             t1 = null;
         }
     }
@@ -90,7 +85,7 @@ public class SemaphoreThreadTask {
         if(t2 != null) {
             semaphore = 0;
             leftRunning.set(false);
-            System.out.println(leftRunning.get());
+            System.out.println(leftRunning);
             t2 = null;
         }
     }
@@ -119,4 +114,10 @@ public class SemaphoreThreadTask {
         }
         slider.setLeftLableText(Integer.toString(t2.getPriority()));
     }
+
+    /*public void print() {
+        System.out.println("Right running: " + rightRunning);
+        System.out.println("Left running: " + leftRunning);
+        System.out.println();
+    }*/
 }
