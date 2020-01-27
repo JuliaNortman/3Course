@@ -28,4 +28,21 @@ public class Polygon {
     public void addEdge(Edge edge) {
         edges.add(edge);
     }
+    public int previousEdgeIndex(int curEdgeIndex) {
+        if(curEdgeIndex == 0) {
+            return edges.size() - 1;
+        }
+        return curEdgeIndex - 1;
+    }
+    public int nextEdgeIndex(int curEdgeIndex) {
+        return (curEdgeIndex + 1) % edges.size();
+    }
+
+    public Edge nextEdge(int curEdgeIndex) {
+        return edges.get(nextEdgeIndex(curEdgeIndex));
+    }
+
+    public Edge previousEdge(int curEdgeIndex) {
+        return edges.get(previousEdgeIndex(curEdgeIndex));
+    }
 }

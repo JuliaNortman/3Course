@@ -66,6 +66,11 @@ public class Edge {
     *
     */
     public double getXHorizontalIntersection(double y) {
-        return ((a.getX()-b.getX())*(y - a.getY())/(b.getY()-a.getY()))+a.getX();
+        return (((b.getX()-a.getX())*(y - a.getY())/(b.getY()-a.getY()))+a.getX());
+    }
+
+    public boolean pointBelongsToEdge(Point point) {
+        return  (Math.abs(point.getX() - (((b.getX()-a.getX())*(point.getY() - a.getY())
+                /(b.getY()-a.getY()))+a.getX())) < 0.001);
     }
 }

@@ -1,5 +1,7 @@
 package com.knu.ynortman.datastructure;
 
+import static java.lang.Math.*;
+
 public class Point {
     private double x;
     private double y;
@@ -25,5 +27,14 @@ public class Point {
 
     public void setY(double y) {
         this.y = y;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) return true;
+        if(obj == null) return false;
+        if(getClass() != obj.getClass()) return false;
+        Point other = (Point) obj;
+        return (abs(x-other.x) < 0.001) && (abs(y-other.y) < 0.001);
     }
 }
