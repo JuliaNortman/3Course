@@ -37,4 +37,12 @@ public class Point {
         Point other = (Point) obj;
         return (abs(x-other.x) < 0.001) && (abs(y-other.y) < 0.001);
     }
+
+    @Override
+    public String toString() {
+        return "Point{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }

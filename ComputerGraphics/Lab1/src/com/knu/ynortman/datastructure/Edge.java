@@ -5,6 +5,7 @@ import static java.lang.Math.*;
 public class Edge {
     private Point a;
     private Point b;
+    private boolean alreadyUsed;
 
     public Edge() {}
     public Edge(Point a, Point b) {
@@ -30,6 +31,14 @@ public class Edge {
 
     public void setB(Point b) {
         this.b = b;
+    }
+
+    public boolean isAlreadyUsed() {
+        return alreadyUsed;
+    }
+
+    public void setAlreadyUsed(boolean alreadyUsed) {
+        this.alreadyUsed = alreadyUsed;
     }
 
     /*
@@ -70,7 +79,39 @@ public class Edge {
     }
 
     public boolean pointBelongsToEdge(Point point) {
-        return  (Math.abs(point.getX() - (((b.getX()-a.getX())*(point.getY() - a.getY())
-                /(b.getY()-a.getY()))+a.getX())) < 0.001);
+        if (Math.abs(point.getX() - (((b.getX()-a.getX())*(point.getY() - a.getY())
+                /(b.getY()-a.getY()))+a.getX())) < 0.001) {
+            if((point.getX() <= b.getX() && point.getX() >= a.getX()) ||
+                    (point.getX() >= b.getX() && point.getX() <= a.getX())) {
+                if((point.getY() <= b.getY() && point.getY() >= a.getY()) ||
+                        (point.getY() >= b.getY() && point.getY() <= a.getY())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Edge{" +
+                "a=" + a.toString() +
+                ", b=" + b.toString() +
+                '}';
+    }
+
+    /*
+    * Checks whether the given line intersects edge
+    *
+    * Line splits the plane into two half-planes
+    * In all points of first half-plane the line equation will be > 0
+    * In all points of other half-plane the line equation will be < 0 */
+    public boolean intersectsLine(Line line) {
+        double first = line.lineEquation(a);
+        double second = line.lineEquation(b);
+        if(first*second <= 0) {
+            return true;
+        }
+        return false;
     }
 }
