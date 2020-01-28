@@ -80,7 +80,7 @@ public class Lab1Algo {
         return true;
     }
 
-    public static boolean execute() {
+    public static Polygon createPolygon() {
         Polygon polygon = new Polygon();
         polygon.addEdge(new Edge(new Point(-2, 1), new Point(2, 3)));
         polygon.addEdge(new Edge(new Point(2, 3), new Point(4, -1)));
@@ -89,6 +89,6 @@ public class Lab1Algo {
         polygon.addEdge(new Edge(new Point(7, -3), new Point(2, -5)));
         polygon.addEdge(new Edge(new Point(2, -5), new Point(-2, 1)));
 
-        return pointIsInPolygon(polygon, new Point(6, -10));
+        return polygon;
     }
 }
