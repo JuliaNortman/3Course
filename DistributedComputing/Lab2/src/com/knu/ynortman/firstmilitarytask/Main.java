@@ -5,7 +5,6 @@ import com.knu.ynortman.firstmilitarytask.soldier.Necheporuk;
 import com.knu.ynortman.firstmilitarytask.soldier.Petrov;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Main {
