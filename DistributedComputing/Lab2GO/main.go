@@ -1,53 +1,80 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+	"sync"
+	"time"
+)
 
-//
-type Task struct {
-	from, to int
-}
+// Forest
+var Matrix [][]int
 
-var forest [100]int
-var bearWasFound bool
-var tasks []Task = make([]Task, 5, 10)
-
-func initProgramme() {
-	forest[50] = 1
-}
-
-func findBear(where Task) bool {
-
-	for i := where.from; i <= where.to; i++ {
-		if forest[i] == 1 {
-			return true
+// Here’s the worker, of which we’ll run several concurrent instances.
+// These workers will receive work on the jobs channel and send the corresponding results on results.
+// We’ll sleep a second per job to simulate an expensive task.
+func worker(wg *sync.WaitGroup, id int, jobs <-chan []int, terminateChannel chan bool, terminated *bool) {
+	for j := range jobs {
+		if *terminated {
+			wg.Done()
+			return
+		}
+		select {
+		case <-terminateChannel:
+			wg.Done()
+			return
+		default:
+			fmt.Println("bee group", id, "started job", j)
+			time.Sleep(time.Second)
+			for i := range j {
+				if j[i] == 1 {
+					terminateChannel <- true
+					*terminated = true
+					fmt.Println("Bee group", id, "found bear")
+				}
+			}
+			fmt.Println("bee group", id, "finished job", j)
 		}
 	}
-	return false
 }
 
-func getAndRemove(tasks []Task) (*Task, []Task) {
-	if len(tasks) > 0 {
-		var t Task
-		t = tasks[len(tasks)-1]
-		tasks := tasks[:len(tasks)-1]
-		return &t, tasks
+func fillingMatrix(n, m int) [][]int {
+	matrix := make([][]int, n, m)
+	for i := range matrix {
+		matrix[i] = make([]int, m)
 	}
-	return nil, tasks
+	rand.Seed(time.Now().UnixNano())
+	x := rand.Intn(n - 1)
+	y := rand.Intn(m - 1)
+	matrix[x][y] = 1
+
+	fmt.Println("Forest created ", matrix)
+
+	return matrix
 }
 
 func main() {
-	initProgramme()
+	var (
+		n  = 10
+		m  = 10
+		wg sync.WaitGroup
+	)
 
-	//
-	t := new(Task)
-	for t != nil {
-		t, tasks = getAndRemove(tasks)
-		fmt.Println(len(tasks), t)
+	Matrix = fillingMatrix(n, m)
+	terminateChannel := make(chan bool)
+	jobs := make(chan []int, 100)
+	var terminateFlag bool = false
+
+	//Workers initially blocked because there are no jobs yet.
+	for w := 1; w <= 3; w++ {
+		go worker(&wg, w, jobs, terminateChannel, &terminateFlag)
+		wg.Add(1)
 	}
-	/*fmt.Println(len(tasks))
-	t := Task{0, 60}
-	bearWasFound = findBear(t)
-	fmt.Println(bearWasFound)
-	tasks := tasks[:len(tasks)-1]
-	fmt.Println(len(tasks))*/
+
+	//Here we send jobs and then close that channel to indicate that’s all the work we have.
+	for j := 0; j < n; j++ {
+		jobs <- Matrix[j]
+	}
+	close(jobs)
+	wg.Wait()
 }
