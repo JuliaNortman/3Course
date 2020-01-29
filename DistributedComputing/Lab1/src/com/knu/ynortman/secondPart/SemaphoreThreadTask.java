@@ -1,9 +1,10 @@
 package com.knu.ynortman.secondPart;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SemaphoreThreadTask {
-    private int semaphore = 0;
+    private AtomicInteger semaphore;
     private SliderSemaphore slider;
     private Thread t1;
     private Thread t2;
@@ -17,6 +18,7 @@ public class SemaphoreThreadTask {
         rightRunning = new AtomicBoolean(true);
         leftRunning = new AtomicBoolean(true);
         slider = new SliderSemaphore();
+        semaphore.set(0);
         right = () -> {
             while(rightRunning.get()) {
                 slider.moveOnePositionRight();
@@ -41,39 +43,42 @@ public class SemaphoreThreadTask {
 
 
     public synchronized void startRightThread() {
-        if(semaphore == 1) {
+        if(semaphore.get() == 1) {
             slider.setWarning();
             return;
         }
-        semaphore = 1;
-        rightRunning.set(true);
-        t1 = new Thread(right, "Thread1");
-        t1.start();
-        slider.clearWarning();
+        if(semaphore.compareAndSet(0, 1)) {
+            rightRunning.set(true);
+            t1 = new Thread(right, "Thread1");
+            t1.start();
+            slider.clearWarning();
+        }
     }
 
     public synchronized void startLeftThread() {
-        if(semaphore == 1) {
+        if(semaphore.get() == 1) {
             slider.setWarning();
             return;
         }
-        semaphore = 1;
-        leftRunning.set(true);
-        t2 = new Thread(left, "Thread2");
-        t2.start();
-        slider.clearWarning();
+        if(semaphore.compareAndSet(0, 1)) {
+            leftRunning.set(true);
+            t2 = new Thread(left, "Thread2");
+            t2.start();
+            slider.clearWarning();
+        }
     }
 
     public synchronized void stopRightThread() {
         slider.clearWarning();
-        if(semaphore == 0) {
+        if(semaphore.get() == 0) {
             return;
         }
         if(t1 != null) {
-            semaphore = 0;
-            rightRunning.set(false);
-            System.out.println(rightRunning);
-            t1 = null;
+            if(semaphore.compareAndSet(1, 0)) {
+                rightRunning.set(false);
+                System.out.println(rightRunning);
+                t1 = null;
+            }
         }
     }
 
@@ -90,25 +95,25 @@ public class SemaphoreThreadTask {
         }
     }
 
-    public synchronized void incrRightPriority() {
+    public void incrRightPriority() {
         if(t1.getPriority() < 10) {
             t1.setPriority(t1.getPriority() + 1);
         }
         slider.setRightLableText(Integer.toString(t1.getPriority()));
     }
-    public synchronized void incrLeftPriority() {
+    public void incrLeftPriority() {
         if(t2.getPriority() < 10) {
             t2.setPriority(t2.getPriority() + 1);
         }
         slider.setLeftLableText(Integer.toString(t2.getPriority()));
     }
-    public synchronized void decrRightPriority() {
+    public void decrRightPriority() {
         if(t1.getPriority() > 1) {
             t1.setPriority(t1.getPriority() - 1);
         }
         slider.setRightLableText(Integer.toString(t1.getPriority()));
     }
-    public synchronized void decrLeftPriority() {
+    public  void decrLeftPriority() {
         if(t2.getPriority() > 1) {
             t2.setPriority(t2.getPriority() - 1);
         }

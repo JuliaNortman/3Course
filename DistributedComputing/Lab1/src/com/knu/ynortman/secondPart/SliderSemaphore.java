@@ -39,16 +39,16 @@ public class SliderSemaphore extends Slider {
         warningLabel.setText("");
     }
 
-    public synchronized void setStartRightActionListener(Runnable r) {
+    public void setStartRightActionListener(Runnable r) {
         startRight.addActionListener(actionEvent -> r.run());
     }
-    public synchronized void setStartLeftActionListener(Runnable r) {
+    public void setStartLeftActionListener(Runnable r) {
         startLeft.addActionListener(actionEvent -> r.run());
     }
-    public synchronized void setStopRightActionListener(Runnable r) {
+    public void setStopRightActionListener(Runnable r) {
         stopRight.addActionListener(actionEvent -> r.run());
     }
-    public synchronized void setStopLeftActionListener(Runnable r) {
+    public void setStopLeftActionListener(Runnable r) {
         stopLeft.addActionListener(actionEvent -> r.run());
     }
 }

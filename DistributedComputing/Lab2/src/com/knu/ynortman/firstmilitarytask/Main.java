@@ -16,7 +16,6 @@ public class Main {
         for (int i = 0; i < 20; ++i) {
             warehouse.add(new Good(i));
         }
-        AtomicBoolean warehouseEmpty = new AtomicBoolean(false);
         Thread ivanov = new Thread(new Ivanov(warehouse, outdoor));
         Thread petrov = new Thread(new Petrov(outdoor, van));
         Thread necheporuk = new Thread(new Necheporuk(van));
