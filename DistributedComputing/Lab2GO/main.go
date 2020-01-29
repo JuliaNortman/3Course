@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 
+//
 type Task struct {
 	from, to int
 }
@@ -12,18 +13,6 @@ var tasks []Task = make([]Task, 5, 10)
 
 func initProgramme() {
 	forest[50] = 1
-
-	/*diapasone = len(forest)/float32(len(tasks))
-	for i := 0; i < len(tasks); i++ {
-		tasks[i].
-		//fmt.Println(i, value)
-	}*/
-}
-
-func getTask(tasks Task) (Task) {
-	if len(tasks) < 1{
-		return Task t
-	}
 }
 
 func findBear(where Task) bool {
@@ -36,13 +25,29 @@ func findBear(where Task) bool {
 	return false
 }
 
+func getAndRemove(tasks []Task) (*Task, []Task) {
+	if len(tasks) > 0 {
+		var t Task
+		t = tasks[len(tasks)-1]
+		tasks := tasks[:len(tasks)-1]
+		return &t, tasks
+	}
+	return nil, tasks
+}
+
 func main() {
 	initProgramme()
-	fmt.Println(len(tasks))
+
+	//
+	t := new(Task)
+	for t != nil {
+		t, tasks = getAndRemove(tasks)
+		fmt.Println(len(tasks), t)
+	}
+	/*fmt.Println(len(tasks))
 	t := Task{0, 60}
 	bearWasFound = findBear(t)
 	fmt.Println(bearWasFound)
 	tasks := tasks[:len(tasks)-1]
-	fmt.Println(len(tasks))
-
+	fmt.Println(len(tasks))*/
 }
