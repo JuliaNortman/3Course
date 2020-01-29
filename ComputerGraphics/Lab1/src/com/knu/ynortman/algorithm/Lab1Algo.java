@@ -47,9 +47,6 @@ public class Lab1Algo {
                     s = e.getB();
                     adjacentEdge = polygon.nextEdge(i);
                 }
-                /*System.out.println(s);
-                System.out.println(e);
-                System.out.println(adjacentEdge);*/
 
                 if(point.equals(s)) {
                     return 1;
