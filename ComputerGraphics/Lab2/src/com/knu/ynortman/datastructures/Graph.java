@@ -11,11 +11,13 @@ public class Graph {
     private GEdge[][] edges;
     private final int N;
     private boolean isRegular;
+    private List<Chain> chains;
 
     public Graph(Point[] points, boolean[][] matrix) {
         N = points.length;
         vertexes = new GVertex[N];
         edges = new GEdge[N][N];
+        chains = new ArrayList<>();
 
         for(int i = 0; i < N; ++i) {
             vertexes[i] = new GVertex(i, points[i]);
@@ -30,6 +32,7 @@ public class Graph {
         }
         sortVertexes();
         balance();
+        splitIntochains();
     }
 
     public void sortVertexes() {
@@ -87,6 +90,43 @@ public class Graph {
         }
     }
 
+    public void splitIntochains() {
+        for(GVertex vNext : vertexes[0].getOut()) {
+            while(edges[0][vNext.getI()].getWeight() > 0) {
+                GVertex v = vertexes[0];
+                chains.add(new Chain());
+                while (v.getOut().size() > 0) {
+                    for (GVertex out : v.getOut()) {
+                        int edgeWeight = edges[v.getI()][out.getI()].getWeight();
+                        if (edgeWeight > 0) {
+                            edgeWeight--;
+                            edges[v.getI()][out.getI()].setWeight(edgeWeight);
+                            edges[out.getI()][v.getI()].setWeight(edgeWeight);
+                            chains.get(chains.size() - 1).addEdge(edges[v.getI()][out.getI()]);
+                            v = out;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        /*if(v.getOut().size() == 0) {
+            chains.add(new Chain());
+            return;
+        }
+        for(GVertex vertex : v.getOut()) {
+            int outWeight = edges[vertex.getI()][v.getI()].getWeight();
+            if(outWeight > 0) {
+                outWeight--;
+                edges[vertex.getI()][v.getI()].setWeight(outWeight);
+                edges[v.getI()][vertex.getI()].setWeight(outWeight);
+                chains.get(chains.size()-1).addEdge(edges[vertex.getI()][v.getI()]);
+                splitIntochains(vertex);
+            }
+        }*/
+    }
+
     public void print() {
         for(GVertex v : vertexes) {
             System.out.println(v);
@@ -99,6 +139,13 @@ public class Graph {
             for(int j = 0; j < N; ++j) {
                 System.out.println("I="+i+" J="+j + " " + edges[i][j]);
             }
+            System.out.println();
+        }
+    }
+
+    public void printChains() {
+        for(Chain c: chains) {
+            System.out.println(c);
             System.out.println();
         }
     }
