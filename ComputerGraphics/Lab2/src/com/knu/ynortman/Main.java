@@ -30,5 +30,7 @@ public class Main {
 
         Graph g = new Graph(points, matrix);
         g.print();
+        System.out.println();
+        g.printEdges();
     }
 }

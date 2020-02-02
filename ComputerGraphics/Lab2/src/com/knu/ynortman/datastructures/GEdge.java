@@ -30,6 +30,12 @@ public class GEdge {
     public float getBy() {
         return  b.getY();
     }
+    public int getWeight() {
+        return this.weight;
+    }
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
 
     public double length() {
         return sqrt(pow(getBx()-getAx(), 2)+(pow(getBy()-getAy(), 2)));
@@ -40,21 +46,26 @@ public class GEdge {
     }
 
     public double cos() {
-        //System.out.println(b);
-        //System.out.println(a);
         if(Float.compare(b.getX(), a.getX()) < 0 && Float.compare(b.getY(), a.getY()) >= 0) {
             return -xProectionLength() / length();
         }
         if(Float.compare(b.getX(), a.getX()) > 0 && Float.compare(b.getY(), a.getY()) > 0) {
-            return 1-(xProectionLength() / length());
+            return (xProectionLength() / length());
         }
 
         if(Float.compare(b.getX(), a.getX()) < 0 && Float.compare(b.getY(), a.getY()) < 0) {
             return -xProectionLength() / length();
         }
         if(Float.compare(b.getX(), a.getX()) > 0 && Float.compare(b.getY(), a.getY()) <= 0) {
-            return 1-(xProectionLength() / length());
+            return (xProectionLength() / length());
         }
         return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "GEdge{" +
+                "weight=" + weight +
+                '}';
     }
 }
