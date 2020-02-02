@@ -52,7 +52,7 @@ public class ProcessContext
   private String dir = "/root" ;
 
   /**
-   * The umask for the process.
+   * The umas k for the process.
    */
   private short umask = 0000 ;
 

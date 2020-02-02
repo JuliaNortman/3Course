@@ -47,6 +47,8 @@ public class dump
 
   public static void main( String[] args )
   {
+    args = new String[1];
+    args[0] = "filesys.dat";
     for ( int i = 0 ; i < args.length ; i ++ )
     {
       // open a file

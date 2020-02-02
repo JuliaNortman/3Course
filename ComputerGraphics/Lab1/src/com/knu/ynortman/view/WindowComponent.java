@@ -6,6 +6,7 @@ import com.knu.ynortman.datastructure.Polygon;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -45,8 +46,9 @@ public class WindowComponent extends JPanel {
                 for (Line2D l : edges){
                     g2.draw(l);
                 }
-                g2.setColor(Color.GREEN);
-                g2.drawOval((int)(point.getX()*10), (int)(point.getY()*10), 2, 2);
+                g2.setColor(Color.RED);
+                g2.fill(new Ellipse2D.Double(point.getX()*1, point.getY()*1, 2, 2));
+                //g2.drawOval((int)(point.getX()*10), (int)(point.getY()*10), 2, 2);
             }
         };
 
@@ -57,7 +59,7 @@ public class WindowComponent extends JPanel {
     public ArrayList<Line2D> transformEdges(Polygon polygon) {
         ArrayList<Line2D> edges = new ArrayList<>();
         for(Edge e : polygon.getEdges()) {
-            edges.add(new Line2D.Double(e.getA().getX()*10, e.getA().getY()*10, e.getB().getX()*10, e.getB().getY()*10));
+            edges.add(new Line2D.Double(e.getA().getX()*1, e.getA().getY()*1, e.getB().getX()*1, e.getB().getY()*1));
         }
         return edges;
     }

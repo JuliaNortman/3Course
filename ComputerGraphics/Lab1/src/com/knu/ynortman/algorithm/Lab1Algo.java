@@ -2,13 +2,11 @@ package com.knu.ynortman.algorithm;
 
 import com.knu.ynortman.datastructure.*;
 
-import java.util.ArrayList;
 
 public class Lab1Algo {
 
     public static int countLeftIntersections(Polygon polygon, Point point) {
         int L = 0; //intersection number
-        //ArrayList<Integer> alreadyUsed = new ArrayList<>();
         for(int i = 0; i < polygon.getEdges().size(); ++i) {
             Edge e = polygon.getEdges().get(i);
             if(e.isAlreadyUsed()) {
@@ -79,12 +77,18 @@ public class Lab1Algo {
 
     public static Polygon createPolygon() {
         Polygon polygon = new Polygon();
-        polygon.addEdge(new Edge(new Point(-2, 1), new Point(2, 3)));
-        polygon.addEdge(new Edge(new Point(2, 3), new Point(4, -1)));
-        polygon.addEdge(new Edge(new Point(4, -1), new Point(6, 1)));
-        polygon.addEdge(new Edge(new Point(6, 1), new Point(7, -3)));
-        polygon.addEdge(new Edge(new Point(7, -3), new Point(2, -5)));
-        polygon.addEdge(new Edge(new Point(2, -5), new Point(-2, 1)));
+        polygon.addEdge(new Edge(new Point(-150, 90), new Point(-90, 180)));
+        polygon.addEdge(new Edge(new Point(-90, 180), new Point(-60, 120)));
+        polygon.addEdge(new Edge(new Point(-60, 120), new Point(-30, 150)));
+        polygon.addEdge(new Edge(new Point(-30, 150), new Point(210, 150)));
+        polygon.addEdge(new Edge(new Point(210, 150), new Point(180, 90)));
+        polygon.addEdge(new Edge(new Point(180, 90), new Point(210, -90)));
+        polygon.addEdge(new Edge(new Point(210, -90), new Point(150, -90)));
+        polygon.addEdge(new Edge(new Point(150, -90), new Point(150, -30)));
+        polygon.addEdge(new Edge(new Point(150, -30), new Point(60, -30)));
+        polygon.addEdge(new Edge(new Point(60, -30), new Point(60, -90)));
+        polygon.addEdge(new Edge(new Point(60, -90), new Point(-30, 60)));
+        polygon.addEdge(new Edge(new Point(-30, 60), new Point(-150, 90)));
 
         return polygon;
     }

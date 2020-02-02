@@ -61,12 +61,18 @@ public class mkfs
    */
   public static void main( String[] argv ) throws Exception
   {
-    if( argv.length != 3 )
+    argv = new String[3];
+    argv[0] = "filesys.dat";
+    argv[1] = "256";
+    argv[2] = "40";
+
+
+    /*if( argv.length != 3 )
     {
       System.err.println( 
         "mkfs: usage: java mkfs <filename> <block-size> <blocks>" ) ;
       System.exit( 1 ) ;
-    }
+    }*/
 
     String filename = argv[0] ;
     short block_size = Short.parseShort( argv[1] ) ;
@@ -112,8 +118,8 @@ public class mkfs
     */
     int inode_size = IndexNode.INDEX_NODE_SIZE ;
     int super_blocks = 1 ;
-    int free_list_blocks = 0 ;
-    int inode_blocks = 0 ;
+    int free_list_blocks;
+    int inode_blocks;
     int data_blocks = 0 ;
     int lo = 0 ;
     int hi = blocks ;
@@ -188,8 +194,11 @@ public class mkfs
     // Under jdk 1.2 we can use setLength() to truncate, but
     // for now we must delete and re-create.
     File deleteFile = new File( filename ) ;
-    deleteFile.delete() ;
-
+    if(!deleteFile.delete())
+    {
+      System.err.println("Cannot create file system under file " + filename);
+      System.exit(2);
+    }
     RandomAccessFile file = new RandomAccessFile( filename , "rw" ) ;
 
     int superBlockOffset = 0 ;

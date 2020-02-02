@@ -308,6 +308,11 @@ public class IndexNode
   public void write( byte[] buffer , int offset )
   {
     // write the mode info
+    /*
+    * mode is a type short
+    * short is a 2-byte(16-bit) length type
+    * therefore we divide it on two array items
+    * */
     buffer[offset] = (byte)( mode >>> 8 ) ;
     buffer[offset+1] = (byte)mode ;
 

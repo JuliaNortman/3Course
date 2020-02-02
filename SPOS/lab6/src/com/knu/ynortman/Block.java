@@ -79,6 +79,12 @@ public class Block
    * @exception java.io.EOFException if attempt to read past end of file
    * @exception java.io.IOException if an I/O error occurs
    */
+  /*
+  * The java.io.RandomAccessFile.readFully(byte[] b) method reads
+  * b.length bytes from this file into the byte array, starting at
+  * the current file pointer. This method reads repeatedly from the
+  * file until the requested number of bytes are read.
+  * */
   public void read( RandomAccessFile file ) throws IOException , EOFException
   {
     file.readFully( bytes ) ;

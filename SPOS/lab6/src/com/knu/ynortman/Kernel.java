@@ -368,12 +368,12 @@ public class Kernel
       return status ;
 
     // remove the file descriptor from the kernel's list of open files
-    for( int i = 0 ; i < MAX_OPEN_FILES ; i ++ )
-      if( openFiles[i] == process.openFiles[fd] )
-      {
-        openFiles[i] = null ;
-        break ;
+    for( int i = 0 ; i < MAX_OPEN_FILES ; i ++ ) {
+      if (openFiles[i] == process.openFiles[fd]) {
+        openFiles[i] = null;
+        break;
       }
+    }
    // ??? is it an error if we didn't find the open file?
 
     // remove the file descriptor from the list.
@@ -411,7 +411,7 @@ public class Kernel
     // get the full path
     String fullPath = getFullPath( pathname ) ;
 
-    StringBuffer dirname = new StringBuffer( "/" ) ;
+    StringBuilder dirname = new StringBuilder( "/" ) ;
     FileSystem fileSystem = openFileSystems[ROOT_FILE_SYSTEM] ;
     IndexNode currIndexNode = getRootIndexNode() ;
     IndexNode prevIndexNode = null ;

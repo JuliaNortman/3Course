@@ -8,7 +8,7 @@ import com.knu.ynortman.view.WindowComponent;
 public class Main {
 
     public static void main(String[] args) {
-        Point point  = new Point(2, -2);
+        Point point  = new Point(90, -30);
         System.out.println(Lab1Algo.pointIsInPolygon(Lab1Algo.createPolygon(), point));
         WindowComponent comp = new WindowComponent(Lab1Algo.createPolygon(), point);
     }
