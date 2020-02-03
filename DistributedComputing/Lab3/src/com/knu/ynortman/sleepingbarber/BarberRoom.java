@@ -4,12 +4,13 @@ import java.util.concurrent.Semaphore;
 
 public class BarberRoom {
     private Semaphore barber;
-    private Semaphore waitingRoom;
     private WaitingRoom room;
 
-    public BarberRoom(Semaphore barber, Semaphore waitingRoom, WaitingRoom room) throws InterruptedException {
-        this.barber = barber;
-        this.waitingRoom = waitingRoom;
+    public BarberRoom() throws InterruptedException {
+        barber = new Semaphore(1, true);
+    }
+
+    public void setWaitingRoom(WaitingRoom room) {
         this.room = room;
     }
 
@@ -19,7 +20,7 @@ public class BarberRoom {
             * Checks whether there are visitors in the waiting room
             * If no barber will sleep
             * Else he will continue working*/
-            waitingRoom.acquire();
+            room.acquire();
             //increase chairs number
             room.releaseSeat();
             String visitor = room.getVisitor();
@@ -33,5 +34,13 @@ public class BarberRoom {
             * */
             barber.release();
         }
+    }
+
+    public void acquire() throws InterruptedException {
+        barber.acquire();
+    }
+
+    public void release() {
+        barber.release();
     }
 }

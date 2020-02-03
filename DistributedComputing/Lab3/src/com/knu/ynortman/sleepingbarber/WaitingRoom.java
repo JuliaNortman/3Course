@@ -7,16 +7,23 @@ public class WaitingRoom {
     private int freeChairs;
     private Semaphore accessChair;
     private Semaphore waitingRoom;
-    private Semaphore barber;
+    private BarberRoom barber;
     private ArrayDeque<String> visitors;
 
-    public WaitingRoom(int chairsNum, Semaphore barber, Semaphore waitingRoom) {
+    public WaitingRoom(int chairsNum) throws InterruptedException {
         System.out.println("There are " + chairsNum + " chairs in the barbershop");
         this.freeChairs = chairsNum;
         this.accessChair = new Semaphore(1, true);
-        this.barber = barber;
-        this.waitingRoom = waitingRoom;
+
+        this.waitingRoom = new Semaphore(chairsNum, true);
+        for(int i = 0; i < chairsNum; ++i) {
+            waitingRoom.acquire();
+        }
         this.visitors = new ArrayDeque<>(chairsNum);
+    }
+
+    public void setBarberRoom(BarberRoom barber) {
+        this.barber = barber;
     }
 
     public void  getIn() throws InterruptedException {
@@ -58,5 +65,13 @@ public class WaitingRoom {
 
     public String getVisitor() {
         return visitors.poll();
+    }
+
+    public void acquire() throws InterruptedException {
+        waitingRoom.acquire();
+    }
+
+    private void release() {
+        waitingRoom.release();
     }
 }
