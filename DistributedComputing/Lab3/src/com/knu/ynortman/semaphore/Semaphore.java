@@ -25,11 +25,12 @@ public class Semaphore {
     }
 
     public synchronized void release() {
-        free++;
-        if(fair) {
-            notify();
+        if (free < permits) {
+            free++;
         }
-        else {
+        if (fair) {
+            notify();
+        } else {
             notifyAll();
         }
     }
