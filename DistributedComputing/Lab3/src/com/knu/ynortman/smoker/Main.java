@@ -1,6 +1,8 @@
 package com.knu.ynortman.smoker;
 
-import java.util.concurrent.Semaphore;
+//import java.util.concurrent.Semaphore;
+
+import com.knu.ynortman.semaphore.Semaphore;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {

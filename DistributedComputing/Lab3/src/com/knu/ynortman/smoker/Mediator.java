@@ -1,7 +1,9 @@
 package com.knu.ynortman.smoker;
 
+import com.knu.ynortman.semaphore.Semaphore;
+
 import java.util.Random;
-import java.util.concurrent.Semaphore;
+//import java.util.concurrent.Semaphore;
 
 public class Mediator implements Runnable {
     private final Semaphore ready;
