@@ -56,10 +56,7 @@ public class Graph {
         sortVertexes();
         balance();
         splitIntochains();
-        //System.out.println(getSide(chains.get(0), 0, chains.get(0).getSize()-1, new Point(-1, 2)).side);
-        for(Chain chain : chains) {
-            System.out.println(getSide(chain, 0, chain.getSize()-1, new Point(-1, 2)));
-        }
+        System.out.println(getArea(0, chains.size()-1, new Point(0, -5)));
     }
 
     public void sortVertexes() {
@@ -209,6 +206,26 @@ public class Graph {
                 //higher
                 return getSide(chain, i, k, point);
             }
+        }
+    }
+
+    public List<GEdge> getArea(int i, int j, Point point) {
+        Result r1 = getSide(chains.get(i), 0, chains.get(i).getSize()-1, point);
+        Result r2 = getSide(chains.get(j), 0, chains.get(i).getSize()-1, point);
+        if(Math.abs(i - j) == 1) {
+            if(r1.side != r2.side) {
+                List<GEdge> result = new ArrayList<>();
+                result.add(r1.edge);
+                result.add(r2.edge);
+                return result;
+            }
+        }
+        int k = (i+j)/2;
+        if(r2.side == Side.LEFT) {
+            return getArea(i, k, point);
+        }
+        else {
+            return getArea(j, chains.size()-1, point);
         }
     }
 

@@ -7,7 +7,7 @@ public class Main {
 
     public static void main(String[] args) {
         Point[] points = {
-                new Point(2, -10),
+                new Point(1, -10),
                 new Point(7, -8),
                 new Point(-2, -5),
                 new Point(2, -3),
