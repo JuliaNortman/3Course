@@ -1,7 +1,10 @@
 package com.knu.ynortman.sleepingbarber;
 
+//import java.util.ArrayDeque;
 import java.util.ArrayDeque;
 import java.util.concurrent.Semaphore;
+
+//import com.knu.ynortman.semaphore.Semaphore;
 
 public class WaitingRoom {
     private int freeChairs;

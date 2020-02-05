@@ -13,6 +13,15 @@ public class Graph {
     private boolean isRegular;
     private List<Chain> chains;
 
+    public class Result {
+        public GEdge edge;
+        public Side sidel;
+    }
+
+    public enum Side {
+        LEFT, RIGHT;
+    }
+
     public Graph(Point[] points, boolean[][] matrix) {
         N = points.length;
         vertexes = new GVertex[N];
@@ -110,21 +119,12 @@ public class Graph {
                 }
             }
         }
+    }
 
-        /*if(v.getOut().size() == 0) {
-            chains.add(new Chain());
-            return;
+    public Result getSide(Chain chain, int i, int j, Point point) {
+        if(j == j && chain.getEdge(i).get) {
+
         }
-        for(GVertex vertex : v.getOut()) {
-            int outWeight = edges[vertex.getI()][v.getI()].getWeight();
-            if(outWeight > 0) {
-                outWeight--;
-                edges[vertex.getI()][v.getI()].setWeight(outWeight);
-                edges[v.getI()][vertex.getI()].setWeight(outWeight);
-                chains.get(chains.size()-1).addEdge(edges[vertex.getI()][v.getI()]);
-                splitIntochains(vertex);
-            }
-        }*/
     }
 
     public void print() {

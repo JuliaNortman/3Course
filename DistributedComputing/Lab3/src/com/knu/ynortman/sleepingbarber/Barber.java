@@ -1,7 +1,5 @@
 package com.knu.ynortman.sleepingbarber;
 
-import java.util.concurrent.Semaphore;
-
 public class Barber implements Runnable{
     private BarberRoom barberRoom;
 

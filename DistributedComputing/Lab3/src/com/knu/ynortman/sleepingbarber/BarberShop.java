@@ -1,7 +1,5 @@
 package com.knu.ynortman.sleepingbarber;
 
-import java.util.concurrent.Semaphore;
-
 public class BarberShop {
     public static void main(String[] args) throws InterruptedException {
         int chairsNumber = 5;

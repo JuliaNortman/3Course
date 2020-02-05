@@ -62,6 +62,8 @@ public class GEdge {
         return 0;
     }
 
+    public boolean 
+
     @Override
     public String toString() {
         return "GEdge{" +

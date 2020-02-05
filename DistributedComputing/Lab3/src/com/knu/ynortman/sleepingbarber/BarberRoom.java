@@ -1,6 +1,7 @@
 package com.knu.ynortman.sleepingbarber;
 
 import java.util.concurrent.Semaphore;
+//import com.knu.ynortman.semaphore.Semaphore;
 
 public class BarberRoom {
     private Semaphore barber;

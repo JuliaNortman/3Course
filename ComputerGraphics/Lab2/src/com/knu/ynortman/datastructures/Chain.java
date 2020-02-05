@@ -18,6 +18,10 @@ public class Chain {
         chain.add(e);
     }
 
+    public GEdge getEdge(int i) {
+        return chain.get(i);
+    }
+
     @Override
     public String toString() {
         String s = "Chain{";

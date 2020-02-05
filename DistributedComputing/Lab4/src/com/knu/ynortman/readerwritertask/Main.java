@@ -1,4 +1,4 @@
-package com.knu.ynortman;
+package com.knu.ynortman.readerwritertask;
 
 import com.knu.ynortman.readerwritertask.*;
 
@@ -11,9 +11,9 @@ public class Main {
         file.createNewFile();
 
         Database db = new Database(file);
-        db.write(new Data("name1", 1111));
+        /*db.write(new Data("name1", 1111));
         db.write(new Data("name2", 2222));
-        db.write(new Data("name12", 1111));
+        db.write(new Data("name12", 1111));*/
         Thread phoneReader = new Thread(new PhonesReader(db), "Phone Reader");
         Thread nameReader = new Thread(new NamesReader(db), "Name Reader");
         Thread writer = new Thread(new Writer(db), "Writer");
