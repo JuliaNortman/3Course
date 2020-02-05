@@ -62,12 +62,34 @@ public class GEdge {
         return 0;
     }
 
-    public boolean 
+    public boolean pointIsYBetween(Point point) {
+        if(Float.compare(point.getY(), a.getY()) <= 0 && Float.compare(point.getY(), b.getY()) >= 0
+                && Float.compare(a.getY(), b.getY()) >= 0) {
+            return true;
+        }
+        if(Float.compare(point.getY(), a.getY()) >= 0 && Float.compare(point.getY(), b.getY()) <= 0
+            && Float.compare(a.getY(), b.getY()) <= 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public double equation(Point point) {
+        if(Float.compare(a.getX(), b.getX()) == 0) {
+            return point.getX() - a.getX();
+        }
+        if(Float.compare(a.getY(), b.getY()) == 0) {
+            return point.getY() - a.getY();
+        }
+        return ((point.getX()-a.getX())/(b.getX() - a.getX())) - ((point.getY()-a.getY())/(b.getY()-a.getY()));
+    }
 
     @Override
     public String toString() {
         return "GEdge{" +
-                "weight=" + weight +
+                "a=" + a +
+                ", b=" + b +
+                ", weight=" + weight +
                 '}';
     }
 }

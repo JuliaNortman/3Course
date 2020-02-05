@@ -22,6 +22,10 @@ public class Chain {
         return chain.get(i);
     }
 
+    public int getSize() {
+        return chain.size();
+    }
+
     @Override
     public String toString() {
         String s = "Chain{";

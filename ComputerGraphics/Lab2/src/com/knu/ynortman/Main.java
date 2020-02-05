@@ -29,8 +29,8 @@ public class Main {
                 {false, false, false, false, false, true, true, true, false} };
 
         Graph g = new Graph(points, matrix);
-        g.print();
-        System.out.println();
-        g.printChains();
+        //g.print();
+        //System.out.println();
+        //g.printChains();
     }
 }

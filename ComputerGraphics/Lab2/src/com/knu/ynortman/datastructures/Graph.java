@@ -15,11 +15,25 @@ public class Graph {
 
     public class Result {
         public GEdge edge;
-        public Side sidel;
+        public Side side;
+
+        @Override
+        public String toString() {
+            return "Result{" +
+                    "edge=" + edge +
+                    ", side=" + side +
+                    '}';
+        }
+
+        public Result(GEdge edge, Side side) {
+            this.edge = edge;
+            this.side = side;
+
+        }
     }
 
     public enum Side {
-        LEFT, RIGHT;
+        LEFT, RIGHT, INTERSECT;
     }
 
     public Graph(Point[] points, boolean[][] matrix) {
@@ -42,6 +56,10 @@ public class Graph {
         sortVertexes();
         balance();
         splitIntochains();
+        //System.out.println(getSide(chains.get(0), 0, chains.get(0).getSize()-1, new Point(-1, 2)).side);
+        for(Chain chain : chains) {
+            System.out.println(getSide(chain, 0, chain.getSize()-1, new Point(-1, 2)));
+        }
     }
 
     public void sortVertexes() {
@@ -122,8 +140,75 @@ public class Graph {
     }
 
     public Result getSide(Chain chain, int i, int j, Point point) {
-        if(j == j && chain.getEdge(i).get) {
-
+        if(i == j && chain.getEdge(i).pointIsYBetween(point)) {
+            GEdge e = chain.getEdge(i);
+            double equation = e.equation(point);
+            if(Double.compare(equation, 0) == 0) {
+                //edge is horizontal
+                if(Float.compare(e.getAy(), e.getBy()) == 0) {
+                    if(Float.compare(point.getX(), e.getAx()) < 0 && Float.compare(point.getX(), e.getBx()) < 0) {
+                        return new Result(chain.getEdge(i), Side.LEFT);
+                    }
+                    if(Float.compare(point.getX(), e.getAx()) > 0 && Float.compare(point.getX(), e.getBx()) > 0) {
+                        return new Result(chain.getEdge(i), Side.RIGHT);
+                    }
+                }
+                return new Result(chain.getEdge(i), Side.INTERSECT);
+            }
+            else if(Double.compare(equation, 0) > 0) {
+                //(1)
+                if(Float.compare(e.getBy(), e.getAy()) > 0 && Float.compare(e.getBx(), e.getAx()) >= 0) {
+                    return new Result(e, Side.RIGHT);
+                }
+                if(Float.compare(e.getAy(), e.getBy()) > 0 && Float.compare(e.getAx(), e.getBx()) >= 0) {
+                    return new Result(e, Side.RIGHT);
+                }
+                //(2)
+                if(Float.compare(e.getBy(), e.getAy()) > 0 && Float.compare(e.getBx(), e.getAx()) <= 0) {
+                    return new Result(e, Side.LEFT);
+                }
+                if(Float.compare(e.getAy(), e.getBy()) > 0 && Float.compare(e.getAx(), e.getBx()) <= 0) {
+                    return new Result(e, Side.LEFT);
+                }
+            }
+            else {
+                //(1)
+                if(Float.compare(e.getBy(), e.getAy()) > 0 && Float.compare(e.getBx(), e.getAx()) >= 0) {
+                    return new Result(e, Side.LEFT);
+                }
+                if(Float.compare(e.getAy(), e.getBy()) > 0 && Float.compare(e.getAx(), e.getBx()) >= 0) {
+                    return new Result(e, Side.LEFT);
+                }
+                //(2)
+                if(Float.compare(e.getBy(), e.getAy()) > 0 && Float.compare(e.getBx(), e.getAx()) <= 0) {
+                    return new Result(e, Side.RIGHT);
+                }
+                if(Float.compare(e.getAy(), e.getBy()) > 0 && Float.compare(e.getAx(), e.getBx()) <= 0) {
+                    return new Result(e, Side.RIGHT);
+                }
+            }
+        }
+        int k = (i+j)/2;
+        GEdge e = chain.getEdge(k);
+        if(Float.compare(e.getAy(), e.getBy()) < 0) {
+            if(Float.compare(point.getY(), e.getBy()) >= 0) {
+                //below
+                return getSide(chain, k+1, j, point);
+            }
+            else {
+                //higher
+                return getSide(chain, i, k, point);
+            }
+        }
+        else {
+            if(Float.compare(point.getY(), e.getAy()) >= 0) {
+                //below
+                return getSide(chain, k+1, j, point);
+            }
+            else {
+                //higher
+                return getSide(chain, i, k, point);
+            }
         }
     }
 
