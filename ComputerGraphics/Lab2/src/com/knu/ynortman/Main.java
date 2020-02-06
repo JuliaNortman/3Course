@@ -1,7 +1,12 @@
 package com.knu.ynortman;
 
+import com.knu.ynortman.datastructures.GEdge;
 import com.knu.ynortman.datastructures.Graph;
+import com.knu.ynortman.datastructures.OutOfGraphException;
 import com.knu.ynortman.datastructures.Point;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
@@ -29,6 +34,15 @@ public class Main {
                 {false, false, false, false, false, true, true, true, false} };
 
         Graph g = new Graph(points, matrix);
+        List<GEdge> area = new ArrayList<>();
+        try {
+            area = g.algo(new Point(20, 20));
+        } catch (OutOfGraphException e) {
+            System.out.println("Point is out of the graph");
+        }
+        for(GEdge e : area) {
+            System.out.println("(" + e.getAx() + ", " + e.getAy() + "), " + "(" + e.getBx() + ", " + e.getBy() + ")");
+        }
         //g.print();
         //System.out.println();
         //g.printChains();

@@ -10,7 +10,6 @@ public class Graph {
     private GVertex[] vertexes;
     private GEdge[][] edges;
     private final int N;
-    private boolean isRegular;
     private List<Chain> chains;
 
     public class Result {
@@ -28,12 +27,11 @@ public class Graph {
         public Result(GEdge edge, Side side) {
             this.edge = edge;
             this.side = side;
-
         }
     }
 
     public enum Side {
-        LEFT, RIGHT, INTERSECT;
+        LEFT, RIGHT, INTERSECT, OUT;
     }
 
     public Graph(Point[] points, boolean[][] matrix) {
@@ -53,10 +51,16 @@ public class Graph {
                 }
             }
         }
+    }
+
+    public List<GEdge> algo(Point point) throws OutOfGraphException {
         sortVertexes();
         balance();
         splitIntochains();
-        System.out.println(getArea(0, chains.size()-1, new Point(0, -5)));
+        if(!pointInGraph(point)) {
+            throw new OutOfGraphException();
+        }
+        return getArea(0, chains.size()-1, point);
     }
 
     public void sortVertexes() {
@@ -212,6 +216,17 @@ public class Graph {
     public List<GEdge> getArea(int i, int j, Point point) {
         Result r1 = getSide(chains.get(i), 0, chains.get(i).getSize()-1, point);
         Result r2 = getSide(chains.get(j), 0, chains.get(i).getSize()-1, point);
+
+        if(r2.side == Side.INTERSECT) {
+            List<GEdge> result = new ArrayList<>();
+            result.add(r2.edge);
+            return result;
+        }
+        else if(r1.side == Side.INTERSECT) {
+            List<GEdge> result = new ArrayList<>();
+            result.add(r1.edge);
+            return result;
+        }
         if(Math.abs(i - j) == 1) {
             if(r1.side != r2.side) {
                 List<GEdge> result = new ArrayList<>();
@@ -224,9 +239,22 @@ public class Graph {
         if(r2.side == Side.LEFT) {
             return getArea(i, k, point);
         }
-        else {
+        else{
             return getArea(j, chains.size()-1, point);
         }
+    }
+
+    public boolean pointInGraph(Point point) {
+        if(Float.compare(vertexes[N-1].getY(), point.getY()) < 0) {
+            return false;
+        }
+        if(Float.compare(vertexes[0].getY(), point.getY()) > 0) {
+            return false;
+        }
+        Side s1 = getSide(chains.get(0), 0, chains.get(0).getSize()-1, point).side;
+        Side s2 = getSide(chains.get(chains.size()-1), 0, chains.get(chains.size()-1).getSize()-1, point).side;
+
+        return s1 != Side.LEFT && s2 != Side.RIGHT;
     }
 
     public void print() {
