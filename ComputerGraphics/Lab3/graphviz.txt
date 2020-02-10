@@ -1,0 +1,9 @@
+digraph G {"1.0"->" {e1} ";
+" {e1} "->" {e4} ";
+" {e2} "->"Trapezium{left= {e1} right= {e2} minY=1.0, maxY=2.0}
+";
+" {e2} "->"Trapezium{left= {e2} right= {e4} minY=1.0, maxY=2.0}
+";
+"2.0"->" {e2} ";
+" {e4} "->"2.0";
+}
