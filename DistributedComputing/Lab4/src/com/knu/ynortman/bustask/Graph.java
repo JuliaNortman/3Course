@@ -1,6 +1,6 @@
 package com.knu.ynortman.bustask;
 
-import com.knu.ynortman.rwlock.ReadWriteLock;
+import com.knu.ynortman.lock.ReadWriteLock;
 
 import java.util.ArrayList;
 import java.util.List;

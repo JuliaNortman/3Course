@@ -1,6 +1,6 @@
 package com.knu.ynortman.readerwritertask;
 
-import com.knu.ynortman.rwlock.ReadWriteLock;
+import com.knu.ynortman.lock.ReadWriteLock;
 
 import java.io.*;
 import java.util.LinkedList;

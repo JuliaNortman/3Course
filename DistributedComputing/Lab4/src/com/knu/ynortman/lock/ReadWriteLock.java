@@ -1,4 +1,4 @@
-package com.knu.ynortman.rwlock;
+package com.knu.ynortman.lock;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -59,7 +59,7 @@ public class ReadWriteLock {
         }
         readerWait--;
         readerActive++;
-        readerCond.signalAll();
+        readerCond.signal();
         readerLock.unlock();
     }
 

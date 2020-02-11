@@ -1,9 +1,40 @@
-digraph G {"1.0"->" {e1} ";
-" {e1} "->" {e4} ";
-" {e2} "->"Trapezium{left= {e1} right= {e2} minY=1.0, maxY=2.0}
-";
-" {e2} "->"Trapezium{left= {e2} right= {e4} minY=1.0, maxY=2.0}
-";
-"2.0"->" {e2} ";
-" {e4} "->"2.0";
+digraph G {
+"{left= {e0} right= {e3} minY=-5.0, maxY=0.0}"[shape="rectangle"];
+"Node 2:  {e3} ""{left= {e3} right= {e5} minY=-5.0, maxY=0.0}"[shape="rectangle"];
+"0.0"[shape="triangle"];
+"{left= {e0} right= {e1} minY=0.0, maxY=1.0}"[shape="rectangle"];
+"Node 5:  {e1} ""{left= {e1} right= {e2} minY=0.0, maxY=1.0}"[shape="rectangle"];
+"Node 7:  {e2} ""{left= {e2} right= {e5} minY=0.0, maxY=1.0}"[shape="rectangle"];
+"Node 10:  {e5} ""{left= {e5} right= {e6} minY=-5.0, maxY=1.0}"[shape="rectangle"];
+"Node 12:  {e6} ""{left= {e6} right= {e7} minY=-5.0, maxY=1.0}"[shape="rectangle"];
+"1.0"[shape="triangle"];
+"{left= {e0} right= {e1} minY=1.0, maxY=6.0}"[shape="rectangle"];
+"Node 15:  {e1} ""{left= {e1} right= {e2} minY=1.0, maxY=2.0}"[shape="rectangle"];
+"Node 17:  {e2} ""{left= {e2} right= {e5} minY=1.0, maxY=2.0}"[shape="rectangle"];
+"Node 19:  {e5} ""{left= {e5} right= {e4} minY=1.0, maxY=2.0}"[shape="rectangle"];
+"2.0"[shape="triangle"];
+"Node 23:  {e4} ""{left= {e4} right= {e7} minY=1.0, maxY=6.0}"[shape="rectangle"];
+"Node 2:  {e3} "->"{left= {e0} right= {e3} minY=-5.0, maxY=0.0}";
+"Node 2:  {e3} "->"{left= {e3} right= {e5} minY=-5.0, maxY=0.0}";
+"0.0"->"Node 2:  {e3} ";
+"0.0"->"Node 5:  {e1} ";
+"Node 5:  {e1} "->"{left= {e0} right= {e1} minY=0.0, maxY=1.0}";
+"Node 5:  {e1} "->"Node 7:  {e2} ";
+"Node 7:  {e2} "->"{left= {e1} right= {e2} minY=0.0, maxY=1.0}";
+"Node 7:  {e2} "->"{left= {e2} right= {e5} minY=0.0, maxY=1.0}";
+"Node 10:  {e5} "->"0.0";
+"Node 10:  {e5} "->"Node 12:  {e6} ";
+"Node 12:  {e6} "->"{left= {e5} right= {e6} minY=-5.0, maxY=1.0}";
+"Node 12:  {e6} "->"{left= {e6} right= {e7} minY=-5.0, maxY=1.0}";
+"1.0"->"Node 10:  {e5} ";
+"1.0"->"Node 15:  {e1} ";
+"Node 15:  {e1} "->"{left= {e0} right= {e1} minY=1.0, maxY=6.0}";
+"Node 15:  {e1} "->"Node 23:  {e4} ";
+"Node 17:  {e2} "->"{left= {e1} right= {e2} minY=1.0, maxY=2.0}";
+"Node 17:  {e2} "->"Node 19:  {e5} ";
+"Node 19:  {e5} "->"{left= {e2} right= {e5} minY=1.0, maxY=2.0}";
+"Node 19:  {e5} "->"{left= {e5} right= {e4} minY=1.0, maxY=2.0}";
+"2.0"->"Node 17:  {e2} ";
+"Node 23:  {e4} "->"2.0";
+"Node 23:  {e4} "->"{left= {e4} right= {e7} minY=1.0, maxY=6.0}";
 }

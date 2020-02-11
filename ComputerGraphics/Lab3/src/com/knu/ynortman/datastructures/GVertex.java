@@ -4,28 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GVertex implements  Comparable<GVertex>{
-    private final int i;
     private final Point point;
-    private List<GVertex> in;
-    private List<GVertex> out;
-    private int inWeight;
-    private int outWeight;
 
-    public GVertex(int i, Point point) {
-        this.i = i;
+    public GVertex(Point point) {
         this.point = point;
-        this.in = new ArrayList<>();
-        this.out = new ArrayList<>();
-        this.inWeight = 1;
-        this.outWeight = 1;
     }
 
-    public void addIn(GVertex vertex) {
-        in.add(vertex);
-    }
-
-    public void addOut(GVertex vertex) {
-        out.add(vertex);
+    public GVertex(float x, float y){
+        this.point = new Point(x, y);
     }
 
     public float getX() {
@@ -34,31 +20,6 @@ public class GVertex implements  Comparable<GVertex>{
 
     public float getY() {
         return point.getY();
-    }
-
-    public int getInWeight() {
-        return  this.inWeight;
-    }
-    public void setInWeight(int weight) {
-        this.inWeight = weight;
-    }
-    public int getOutWeight() {
-        return  this.outWeight;
-    }
-    public void setOutWeight(int weight) {
-        this.outWeight = weight;
-    }
-
-    public List<GVertex> getIn() {
-        return in;
-    }
-
-    public List<GVertex> getOut() {
-        return out;
-    }
-
-    public int getI() {
-        return this.i;
     }
 
     @Override
@@ -85,18 +46,6 @@ public class GVertex implements  Comparable<GVertex>{
 
     @Override
     public String toString() {
-        String s =  "GVertex{" +
-                "i=" + i +
-                ", point=" + point.toString() +
-                ", in=[";
-        for(GVertex v : in) {
-            s += v.i + " ";
-        }
-        s += "], out=[";
-        for(GVertex v : out) {
-            s += v.i + " ";
-        }
-        s += "]}";
-        return s;
+        return "{" + point.getX() + ", " + point.getY() + "}";
     }
 }
