@@ -97,14 +97,6 @@ public class GEdge {
         float xTop, xBottom;
         if(Float.compare(top.getY(), yMax) > 0) {
             xTop = (float)getXCoordinate(yMax);
-            /*if(Float.compare(bottom.getY(), yMin) > 0) {
-                xBottom = bottom.getX();
-                return (xTop+xBottom)/2;
-            }
-            else {
-                xBottom =(float)getXCoordinate(yMin);
-                return (xTop+xBottom+100)/2;
-            }*/
         }
         else {
             xTop = top.getX();
@@ -116,7 +108,77 @@ public class GEdge {
         else {
             xBottom = bottom.getX();
         }
-        return ((xTop+xBottom)/2);
+        return (xTop+xBottom)/2;
+    }
+
+
+    //-1 - left
+    //0 - intersect
+    // 1 - right
+    public int getSide(Point point) {
+        double equation = equation(point);
+        if(Double.compare(equation, 0) == 0) {
+            //edge is horizontal
+            if(Float.compare(getAy(), getBy()) == 0) {
+                if(Float.compare(point.getX(), getAx()) < 0 && Float.compare(point.getX(), getBx()) < 0) {
+                    return -1;
+                }
+                if(Float.compare(point.getX(), getAx()) > 0 && Float.compare(point.getX(), getBx()) > 0) {
+                    return 1;
+                }
+            }
+            return 0;
+        }
+        else if(Double.compare(equation, 0) > 0) {
+            //(1)
+            if(Float.compare(getBy(), getAy()) > 0 && Float.compare(getBx(), getAx()) >= 0) {
+                return 1;
+            }
+            if(Float.compare(getAy(), getBy()) > 0 && Float.compare(getAx(), getBx()) >= 0) {
+                return 1;
+            }
+            //(2)
+            if(Float.compare(getBy(), getAy()) > 0 && Float.compare(getBx(), getAx()) <= 0) {
+                return -1;
+            }
+            if(Float.compare(getAy(), getBy()) > 0 && Float.compare(getAx(), getBx()) <= 0) {
+                return -1;
+            }
+        }
+        else {
+            //(1)
+            if(Float.compare(getBy(), getAy()) > 0 && Float.compare(getBx(), getAx()) >= 0) {
+                return -1;
+            }
+            if(Float.compare(getAy(), getBy()) > 0 && Float.compare(getAx(), getBx()) >= 0) {
+                return -1;
+            }
+            //(2)
+            if(Float.compare(getBy(), getAy()) > 0 && Float.compare(getBx(), getAx()) <= 0) {
+                return 1;
+            }
+            if(Float.compare(getAy(), getBy()) > 0 && Float.compare(getAx(), getBx()) <= 0) {
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    public double cos() {
+        if(Float.compare(b.getX(), a.getX()) < 0 && Float.compare(b.getY(), a.getY()) >= 0) {
+            return -xProectionLength() / length();
+        }
+        if(Float.compare(b.getX(), a.getX()) > 0 && Float.compare(b.getY(), a.getY()) > 0) {
+            return (xProectionLength() / length());
+        }
+
+        if(Float.compare(b.getX(), a.getX()) < 0 && Float.compare(b.getY(), a.getY()) < 0) {
+            return -xProectionLength() / length();
+        }
+        if(Float.compare(b.getX(), a.getX()) > 0 && Float.compare(b.getY(), a.getY()) <= 0) {
+            return (xProectionLength() / length());
+        }
+        return 0;
     }
 
     public Point getMiddle() {

@@ -8,10 +8,22 @@ public class Node {
     private Node right = null;
     private Trapezium trapezium;
     private GEdge edge;
-    private Float median;
+    private Float median = null;
     private int weight = 0;
     private static int i = 0;
     private int id;
+
+    public Trapezium getTrapezium() {
+        return this.trapezium;
+    }
+
+    public GEdge getEdge() {
+        return this.edge;
+    }
+
+    public Float getMedian() {
+        return median;
+    }
 
     public void setLeft(Node left) {
         this.left = left;

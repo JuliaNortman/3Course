@@ -43,7 +43,7 @@ public class Graph {
         trapezium = new Trapezium(left, right, vertexes.get(0).getY(), vertexes.get(N-1).getY());
         edges.add(left);
         edges.add(right);
-        edges.sort(Comparator.comparingDouble(obj->obj.getMiddle().getX()));
+        edges.sort(Comparator.comparingDouble(obj->obj.middleXInInterval(vertexes.get(0).getY(), vertexes.get(N-1).getY())));
 
         for(int i = 0; i < edges.size(); ++i) {
             edges.get(i).setName("e" + i);
@@ -51,11 +51,14 @@ public class Graph {
 
         myRoot = buildTrapezium(vertexes, edges, trapezium);
         graphviz();
+        localization(myRoot, new Point(4, -5));
     }
+
+
 
     public Node buildTrapezium(List<GVertex> V, List<GEdge> E, Trapezium T) {
         if(V.size() == 0) {
-            System.out.println(T);
+            //System.out.println(T);
             return new Node(T, 0); //leaf
         }
 
@@ -335,6 +338,47 @@ public class Graph {
             }
 
             printTreeToFile(root.getRight(), file);
+        }
+    }
+
+    public void localization(Node root, Point point) {
+        if(root.getLeft() == null && root.getRight() == null) {
+            Trapezium t = root.getTrapezium();
+            if(Float.compare(t.getMinY(), point.getY()) > 0) {
+                System.out.println("Point is out of the graph;");
+            }
+            else if(Float.compare(t.getMaxY(), point.getY()) < 0) {
+                System.out.println("Point is out of the graph;");
+            }
+            else if(t.getLeft().getSide(point) == -1 || t.getRight().getSide(point) == 1) {
+                System.out.println("Point is out of the graph;");
+            }
+            else {
+                System.out.println(t);
+            }
+            return;
+        }
+        else if(root.getEdge() != null) {
+            GEdge edge = root.getEdge();
+            if(edge.getSide(point) == 0) {
+                System.out.println("point is on the edge " + edge);
+                return;
+            }
+            else if(edge.getSide(point) == -1) {
+                localization(root.getLeft(), point);
+            }
+            else {
+                localization(root.getRight(), point);
+            }
+        }
+        else {
+            Float vertex = root.getMedian();
+            if(Float.compare(vertex, point.getY()) > 0) {
+                localization(root.getLeft(), point);
+            }
+            else {
+                localization(root.getRight(), point);
+            }
         }
     }
 
