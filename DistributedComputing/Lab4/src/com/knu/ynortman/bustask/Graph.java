@@ -1,9 +1,10 @@
 package com.knu.ynortman.bustask;
 
-import com.knu.ynortman.lock.ReadWriteLock;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Graph {
 
@@ -19,18 +20,24 @@ public class Graph {
 
     private ArrayList<String> cities;
     private ArrayList<ArrayList<Integer>> graph;
-    private ReadWriteLock lock;
+    private ReadWriteLock rwLock;
+    private Lock readLock;
+    private Lock writeLock;
 
     public Graph(ArrayList<String> cities, ArrayList<ArrayList<Integer>> graph) {
         this.cities = cities;
         this.graph = graph;
-        this.lock = new ReadWriteLock();
+        this.rwLock = new ReentrantReadWriteLock();
+        this.readLock = rwLock.readLock();
+        this.writeLock = rwLock.writeLock();
     }
 
     public Graph() {
         this.cities = new ArrayList<>();
         this.graph = new ArrayList<>();
-        this.lock = new ReadWriteLock();
+        this.rwLock = new ReentrantReadWriteLock();
+        this.readLock = rwLock.readLock();
+        this.writeLock = rwLock.writeLock();
     }
 
     public List<String> getCities() {
@@ -66,41 +73,68 @@ public class Graph {
     }
 
     public void changePrice(String cityFrom, String cityTo, int newPrice) {
-        //start writing
+        writeLock.lock();
         Cell cell = findCities(cityFrom, cityTo);
         if(cell.from == -1 || cell.to == -1) {
-            //end writing
+            writeLock.unlock();
             return;
         }
         graph.get(cell.from).set(cell.to, newPrice);
         graph.get(cell.to).set(cell.from, newPrice);
-        //end writing
+        writeLock.unlock();
     }
 
+    /**
+     * function that deletes and adds trips between cities
+     * To delete a trip the ticket price should be set to zero
+     * To add a trip a price should be set to a value more than zero
+     */
     public void changeTrip(String cityFrom, String cityTo, int newPrice) {
         changePrice(cityFrom, cityTo, newPrice);
     }
 
+    /**
+     * Add new cities
+     */
     public void addCities(String city) {
-        //start writing
+        writeLock.lock();
         cities.add(city);
-        for(int i = 0; i < graph.size(); ++i) {
-            graph.get(i).add(0);
+        for (ArrayList<Integer> integers : graph) {
+            integers.add(0);
         }
         ArrayList<Integer> list = new ArrayList<>(cities.size());
         for(int i = 0; i < cities.size(); ++i) {
             list.add(0);
         }
         graph.add(list);
+        writeLock.unlock();
     }
 
     public void printGraph() {
+        readLock.lock();
         System.out.println("Cities: " + cities);
 
-        for(int i = 0; i < graph.size(); ++i) {
-            System.out.println(graph.get(i));
+        for (ArrayList<Integer> integers : graph) {
+            System.out.println(integers);
         }
-
+        readLock.unlock();
     }
 
+    /*
+    * Checks whether there is a direct trip between to cities
+    */
+    public boolean isTrip(String cityFrom, String cityTo) {
+        readLock.lock();
+        Cell cell = findCities(cityFrom, cityTo);
+        if(cell.from == -1 || cell.to == -1) {
+            readLock.unlock();
+            return false;
+        }
+        if(graph.get(cell.from).get(cell.to) > 0) {
+            readLock.unlock();
+            return true;
+        }
+        readLock.unlock();
+        return false;
+    }
 }
