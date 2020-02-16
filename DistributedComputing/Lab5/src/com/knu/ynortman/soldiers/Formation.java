@@ -1,4 +1,4 @@
-package soldiers;
+package com.knu.ynortman.soldiers;
 
 import java.util.Arrays;
 import java.util.Random;

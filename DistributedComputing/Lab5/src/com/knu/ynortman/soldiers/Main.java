@@ -1,4 +1,4 @@
-package soldiers;
+package com.knu.ynortman.soldiers;
 
 public class Main {
     public static void main(String[] args) {
