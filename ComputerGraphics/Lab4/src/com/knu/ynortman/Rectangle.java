@@ -46,4 +46,14 @@ public class Rectangle {
     public void setBottom(Float bottom) {
         this.bottom = bottom;
     }
+
+    public boolean isPointInside(Point point) {
+        if(Float.compare(point.getX(), top) <= 0 &&
+                Float.compare(point.getX(), bottom) >= 0 &&
+                Float.compare(point.getY(), left) >= 0 &&
+                Float.compare(point.getY(), right) <= 0) {
+            return true;
+        }
+        return false;
+    }
 }

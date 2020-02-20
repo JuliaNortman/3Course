@@ -3,6 +3,7 @@ package com.knu.ynortman;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -13,8 +14,14 @@ public class KdTree {
     public KdTree(List<Point> pnts) throws IOException {
         this.pnts = pnts;
         root = buildTree(new Rectangle(), new Line(Straight.VERTICAL, Direction.TOP), pnts);
-        //print(root);
         graphviz();
+        List<Point> list = findRegion(root, new Region(new Point(-6, -1), new Point(7, 1)));
+        if(list.size() == 0) {
+            System.out.println("Nothing found");
+        }
+        else {
+            System.out.println(list);
+        }
     }
 
     public Node buildTree(Rectangle rect, Line line, List<Point> points) {
@@ -118,6 +125,60 @@ public class KdTree {
 
             printTreeToFile(root.getRight(), file);
         }
+    }
+
+    public List<Point> findRegion(Node node, Region region) {
+        List<Point> list = new ArrayList<>();
+        if(node != null && node.getLine() != null) {
+            if(node.getLine().getStraight() == Straight.VERTICAL) {
+                if(Float.compare(node.getLine().getPoint().getX(), region.getBottomLeft().getX()) < 0) {
+                    list.addAll(findRegion(node.getRight(), region));
+                }
+                else if(Float.compare(node.getLine().getPoint().getX(), region.getTopRight().getX()) > 0) {
+                    list.addAll(findRegion(node.getLeft(), region));
+                }
+                else {
+                    if(region.isPointInside(node.getLine().getPoint())) {
+                        list.add(node.getLine().getPoint());
+                    }
+                    list.addAll(findRegion(node.getRight(), region));
+                    list.addAll(findRegion(node.getLeft(), region));
+                }
+            }
+            else if(node.getLine().getStraight() == Straight.HORIZONTAL){
+                if(node.getLine().getDirection() == Direction.RIGHT) {
+                    if(Float.compare(node.getLine().getPoint().getY(), region.getBottomLeft().getY()) < 0) {
+                        list.addAll(findRegion(node.getLeft(), region));
+                    }
+                    else if(Float.compare(node.getLine().getPoint().getY(), region.getTopRight().getY()) > 0) {
+                        list.addAll(findRegion(node.getRight(), region));
+                    }
+                    else {
+                        if(region.isPointInside(node.getLine().getPoint())) {
+                            list.add(node.getLine().getPoint());
+                        }
+                        list.addAll(findRegion(node.getRight(), region));
+                        list.addAll(findRegion(node.getLeft(), region));
+                    }
+                }
+                else if(node.getLine().getDirection() == Direction.LEFT){
+                    if(Float.compare(node.getLine().getPoint().getY(), region.getBottomLeft().getY()) < 0) {
+                        list.addAll(findRegion(node.getRight(), region));
+                    }
+                    else if(Float.compare(node.getLine().getPoint().getY(), region.getTopRight().getY()) > 0) {
+                        list.addAll(findRegion(node.getLeft(), region));
+                    }
+                    else {
+                        if(region.isPointInside(node.getLine().getPoint())) {
+                            list.add(node.getLine().getPoint());
+                        }
+                        list.addAll(findRegion(node.getRight(), region));
+                        list.addAll(findRegion(node.getLeft(), region));
+                    }
+                }
+            }
+        }
+        return list;
     }
 
     public void graphviz() throws IOException {

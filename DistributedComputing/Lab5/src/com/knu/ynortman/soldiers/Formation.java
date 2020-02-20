@@ -1,9 +1,11 @@
 package com.knu.ynortman.soldiers;
 
+import com.knu.ynortman.barrier.CyclicBarrier;
+
 import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
+//import java.util.concurrent.CyclicBarrier;
 
 public class Formation {
     private enum Side {
