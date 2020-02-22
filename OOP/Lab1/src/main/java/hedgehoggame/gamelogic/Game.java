@@ -1,7 +1,7 @@
 package hedgehoggame.gamelogic;
 
+import java.util.Arrays;
 import java.util.Random;
-
 
 public class Game {
 	private final Cell[][] field; //game field
@@ -16,8 +16,21 @@ public class Game {
 		field = new Cell[N][M];
 	}
 	
+	public Cell[][] getField() {
+		return this.field;
+	}
+	
+	public Pair<Integer, Integer> getHedgehogPosition() {
+		return this.hedgehogPosition;
+	}
+	
 	public void init() {
-		int density = new Random().nextInt(N*M/5);
+		for(int i = 0; i < field.length; ++i) {
+			Arrays.fill(field[i], Cell.EMPTY);
+		}
+		field[N-1][0] = Cell.HEDGEHOG;
+		hedgehogPosition = new Pair<Integer, Integer>(N-1, 0);
+		int density = N*M/5;
 		for(int i = 0; i < density; ++i) {
 			int x = new Random().nextInt(N);
 			int y = new Random().nextInt(M);		
@@ -27,8 +40,6 @@ public class Game {
 			}
 			field[x][y] = Cell.APPLE;
 		}
-		field[N-1][0] = Cell.HEDGEHOG;
-		hedgehogPosition = new Pair<Integer, Integer>(N-1, 0);
 	}
 	
 	public void moveTop() {
@@ -70,8 +81,15 @@ public class Game {
 		
 		if(curY != M-1) {
 			field[curX][curY] = Cell.EMPTY;
-			field[curX+1][curY] = Cell.HEDGEHOG;
+			field[curX][curY+1] = Cell.HEDGEHOG;
 			hedgehogPosition = new Pair<Integer, Integer>(curX, curY+1);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "Game [field=" + Arrays.deepToString(field) + "]";
+	}
+	
+	
 }
