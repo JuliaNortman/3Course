@@ -1,4 +1,4 @@
-package hedgehoggame.serverside;
+package hedgehoggame.serverside.messages;
 
 import hedgehoggame.gamelogic.Cell;
 

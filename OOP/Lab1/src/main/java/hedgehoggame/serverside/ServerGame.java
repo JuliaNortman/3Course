@@ -2,6 +2,7 @@ package hedgehoggame.serverside;
 
 import java.io.IOException;
 
+import javax.websocket.EncodeException;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
@@ -10,14 +11,18 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 import hedgehoggame.gamelogic.Game;
+import hedgehoggame.serverside.messages.MessageField;
+import hedgehoggame.serverside.messages.MessageMove;
 
 @ServerEndpoint(value = "/hedgehog")
 public class ServerGame {
 	
 	private Game game;
+	private Session session;
 	
 	@OnOpen
 	public void onOpen(Session session) {
+		this.session = session;
 		game = new Game(6, 6);
 		game.init();
 		broadcast(new MessageField(game.getField()));
@@ -25,7 +30,8 @@ public class ServerGame {
 	
 	@OnMessage
     public void onMessage(MessageMove move) throws IOException {
-       //Handle new messages
+       game.move(move.getDirection());
+       broadcast(new MessageField(game.getField()));
     }
 
     @OnClose
@@ -37,7 +43,11 @@ public class ServerGame {
     public void onError(Throwable throwable) {
     }
     
-    private static void broadcast(MessageField messageField) {
-    	
+    private void broadcast(MessageField messageField) {
+    	try {
+			session.getBasicRemote().sendObject(messageField);
+		} catch (IOException | EncodeException e) {
+			e.printStackTrace();
+		}
     }
 }

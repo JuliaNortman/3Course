@@ -85,6 +85,29 @@ public class Game {
 			hedgehogPosition = new Pair<Integer, Integer>(curX, curY+1);
 		}
 	}
+	
+	public void move(Direction direction) {
+		switch (direction) {
+		case LEFT: {
+			moveLeft();
+			break;
+		}
+		case RIGHT: {
+			moveRight();
+			break;
+		}
+		case TOP: {
+			moveTop();
+			break;
+		}
+		case BOTTOM: {
+			moveBottom();
+			break;
+		}
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + direction);
+		}
+	}
 
 	@Override
 	public String toString() {
