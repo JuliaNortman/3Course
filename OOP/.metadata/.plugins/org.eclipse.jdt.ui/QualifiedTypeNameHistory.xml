@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="java.lang.Integer"/>
+    <fullyQualifiedTypeName name="hedgehoggame.gamelogic.Pair"/>
+    <fullyQualifiedTypeName name="javax.websocket.server.ServerEndpoint"/>
+    <fullyQualifiedTypeName name="javax.websocket.OnOpen"/>
+    <fullyQualifiedTypeName name="hedgehoggame.gamelogic.Game"/>
+    <fullyQualifiedTypeName name="javax.websocket.OnMessage"/>
+    <fullyQualifiedTypeName name="java.io.IOException"/>
+    <fullyQualifiedTypeName name="javax.websocket.OnClose"/>
+    <fullyQualifiedTypeName name="javax.websocket.OnError"/>
+    <fullyQualifiedTypeName name="java.util.concurrent.BrokenBarrierException"/>
+    <fullyQualifiedTypeName name="hedgehoggame.gamelogic.Cell"/>
+    <fullyQualifiedTypeName name="hedgehoggame.serverside.MessageMove"/>
+    <fullyQualifiedTypeName name="hedgehoggame.gamelogic.Direction"/>
+    <fullyQualifiedTypeName name="hedgehoggame.serverside.MessageField"/>
+    <fullyQualifiedTypeName name="javax.websocket.Session"/>
+    <fullyQualifiedTypeName name="javax.websocket.Encoder"/>
+    <fullyQualifiedTypeName name="javax.websocket.Encoder.Text"/>
+    <fullyQualifiedTypeName name="hedgehoggame.serverside.messages.MessageField"/>
+    <fullyQualifiedTypeName name="javax.websocket.Decoder"/>
+    <fullyQualifiedTypeName name="javax.websocket.Decoder.Text"/>
+    <fullyQualifiedTypeName name="hedgehoggame.serverside.messages.MessageMove"/>
+    <fullyQualifiedTypeName name="com.google.gson.Gson"/>
+    <fullyQualifiedTypeName name="hedgehoggame.serverside.messages.MessageMoveDecoder"/>
+    <fullyQualifiedTypeName name="hedgehoggame.serverside.messages.MessageFieldEncoder"/>
+</qualifiedTypeNameHistroy>
