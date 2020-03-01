@@ -1,6 +1,7 @@
 package com.knu.ynortman.extendedeuclid;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 public class ExtendedEuclid {
     public static class Result {
@@ -34,6 +35,16 @@ public class ExtendedEuclid {
                     ", gcd=" + gcd +
                     '}';
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Result result = (Result) o;
+            return firstCoef.equals(result.firstCoef) &&
+                    secondCoef.equals(result.secondCoef) &&
+                    gcd.equals(result.gcd);
+        }
     }
 
     public static Result extendedEuclid(BigInteger a, BigInteger b) {
@@ -45,4 +56,5 @@ public class ExtendedEuclid {
         BigInteger y = r.getFirstCoef().subtract(a.divide(b).multiply(x));
         return new Result(r.getGcd(), x, y);
     }
+
 }
