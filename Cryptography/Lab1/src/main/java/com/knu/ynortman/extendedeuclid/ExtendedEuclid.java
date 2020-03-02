@@ -1,7 +1,6 @@
 package com.knu.ynortman.extendedeuclid;
 
 import java.math.BigInteger;
-import java.util.Objects;
 
 public class ExtendedEuclid {
     public static class Result {

@@ -4,18 +4,20 @@ import java.math.BigInteger;
 import java.util.Random;
 
 public class FermatPrimality {
+    private static final BigInteger TWO = BigInteger.valueOf(2);
+
     public static boolean test(BigInteger p, int iteration) {
         if(p.compareTo(BigInteger.ONE) <= 0) {
             return false;
         }
-        if(p.compareTo(BigInteger.TWO) == 0) {
+        if(p.compareTo(TWO) == 0) {
             return true;
         }
-        if(p.mod(BigInteger.TWO).compareTo(BigInteger.ZERO) == 0) {
+        if(p.mod(TWO).compareTo(BigInteger.ZERO) == 0) {
             return false;
         }
         for(int i = 0; i < iteration; ++i) {
-            BigInteger a = BigIntegerRandom(BigInteger.TWO, p);
+            BigInteger a = BigIntegerRandom(TWO, p);
             if(!modPow(a, p.subtract(BigInteger.ONE), p).equals(BigInteger.ONE)) {
                 return false;
             }
