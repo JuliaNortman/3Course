@@ -25,8 +25,22 @@ public class MontgomeryTest {
         assertEquals(new BigInteger("1"),
                 Montgomery.multiplication(new BigInteger("123456"), new BigInteger("987654"), BigInteger.valueOf(13)));
 
-        /*assertEquals(new BigInteger("18"),
-                Montgomery.multiplication(new BigInteger("147852369"), new BigInteger("321654987"),
-                        new BigInteger("159")));*/
+    }
+
+    @Test
+    public void paw() {
+        assertEquals(new BigInteger("6"),
+                Montgomery.paw(new BigInteger("123456"), new BigInteger("98"), BigInteger.valueOf(15)));
+
+        assertEquals(new BigInteger("10"),
+                Montgomery.paw(new BigInteger("18"), new BigInteger("75"),
+                        new BigInteger("11")));
+
+        assertEquals(new BigInteger("1"),
+                Montgomery.paw(new BigInteger("1457"), new BigInteger("74"), BigInteger.valueOf(7)));
+
+        assertEquals(new BigInteger("10"),
+                Montgomery.paw(new BigInteger("45885"), new BigInteger("74"), BigInteger.valueOf(13)));
+
     }
 }

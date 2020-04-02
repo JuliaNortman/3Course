@@ -51,7 +51,7 @@ public class Graph {
 
         myRoot = buildTrapezium(vertexes, edges, trapezium);
         graphviz();
-        localization(myRoot, new Point(4, -5));
+        localization(myRoot, new Point(-2, 3));
     }
 
 
