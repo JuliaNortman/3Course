@@ -169,6 +169,11 @@ public class BitArray {
         return new BitArray(i, 16);
     }
 
+    public BitArray twosComplement() {
+        AdditionModuloOperator additionModuloOperator = new AdditionModuloOperator();
+        return additionModuloOperator.combine(this.negate(), new BitArray(1, this.size));
+    }
+
     public String toASCII() {
         StringBuilder sb = new StringBuilder();
         for(int i = 0;i < size;i += 8) {
