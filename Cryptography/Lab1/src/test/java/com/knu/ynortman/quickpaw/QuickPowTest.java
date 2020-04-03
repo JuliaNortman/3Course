@@ -23,5 +23,17 @@ public class QuickPowTest {
         assertEquals(new BigInteger("12"),
                 QuickPow.paw(new BigInteger("45885"), new BigInteger("74"), BigInteger.valueOf(13)));
 
+        assertEquals(new BigInteger("1"),
+                QuickPow.paw(new BigInteger("5161511"), new BigInteger("154"), BigInteger.valueOf(145)));
+
+        assertEquals(new BigInteger("16"),
+                QuickPow.paw(new BigInteger("41516146"), new BigInteger("35"), BigInteger.valueOf(19)));
+
+        assertEquals(new BigInteger("52"),
+                QuickPow.paw(new BigInteger("154494"), new BigInteger("19"), BigInteger.valueOf(53)));
+
+        assertEquals(new BigInteger("51"),
+                QuickPow.paw(new BigInteger("154614564"), new BigInteger("613"), BigInteger.valueOf(93)));
+
     }
 }

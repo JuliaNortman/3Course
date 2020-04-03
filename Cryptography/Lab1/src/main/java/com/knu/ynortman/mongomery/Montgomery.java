@@ -15,7 +15,7 @@ public class Montgomery {
         return r.shiftLeft(n.bitLength());
     }
 
-    private static BigInteger multiplicationHelp(BigInteger a, BigInteger b, BigInteger n) {
+    private static BigInteger multiplicationHelp(BigInteger a, BigInteger b, final BigInteger n) {
         r = countR(n);
         BigInteger a1 = a.shiftLeft(r.bitLength()-1).mod(n);
         BigInteger b1 = b.shiftLeft(r.bitLength()-1).mod(n);
@@ -35,14 +35,14 @@ public class Montgomery {
         return u;
     }
 
-    private static BigInteger pawHelp(BigInteger a, BigInteger e, BigInteger n) {
+    private static BigInteger pawHelp(BigInteger a, BigInteger e, final BigInteger n) {
         r = countR(n);
         BigInteger a1 = a.shiftLeft(r.bitLength()-1).mod(n);
-        BigInteger x = r.mod(n);
+        BigInteger x = BigInteger.ONE.shiftLeft(r.bitLength()-1).mod(n);
         for(int i = e.bitLength()-1; i >= 0; --i){
             x = multiplicationHelp(x, x, n);
             if(e.testBit(i)) {
-                x = multiplicationHelp(x, a1, n);
+                x = multiplicationHelp(a1, x, n);
             }
         }
         return multiplicationHelp(x, BigInteger.ONE, n);
