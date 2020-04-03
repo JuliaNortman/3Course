@@ -3,20 +3,20 @@ package com.knu.ynortman.idea;
 import com.knu.ynortman.bits.BitArray;
 
 //64bits block
-public class MessageBlock {
+public class TextBlock {
     private final BitArray bitArray;
 
-    public MessageBlock(BitArray bitArray) {
+    public TextBlock(BitArray bitArray) {
         if (bitArray.size() != 64)
             throw new IllegalArgumentException();
         this.bitArray = bitArray;
     }
 
-    public MessageBlock() {
+    public TextBlock() {
         this(new BitArray(64));
     }
 
-    public MessageBlock(int leftHalf, int rightHalf) {
+    public TextBlock(int leftHalf, int rightHalf) {
         bitArray = new BitArray(64);
 
         BitArray leftBitArray = new BitArray(leftHalf, 32);
@@ -28,7 +28,7 @@ public class MessageBlock {
         }
     }
 
-    public MessageBlock(BitArray a, BitArray b, BitArray c, BitArray d) {
+    public TextBlock(BitArray a, BitArray b, BitArray c, BitArray d) {
         this();
         if (    a.size() != 16 ||
                 b.size() != 16 ||
@@ -58,7 +58,7 @@ public class MessageBlock {
         return bitArray;
     }
 
-    public MessageBlock(int[] values) {
+    public TextBlock(int[] values) {
         this();
         if (values.length != 8) {
             throw new IllegalArgumentException();
@@ -105,7 +105,7 @@ public class MessageBlock {
         return new BitArray[] {a, b, c, d};
     }
 
-    public MessageBlock cloneDeep() {
-        return new MessageBlock(bitArray.cloneDeep());
+    public TextBlock cloneDeep() {
+        return new TextBlock(bitArray.cloneDeep());
     }
 }

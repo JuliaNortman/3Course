@@ -6,10 +6,10 @@ import com.knu.ynortman.bits.ExclusiveOrOperator;
 import com.knu.ynortman.bits.MultiplicationModuloOperator;
 
 public class Round {
-    public MessageBlock encrypt(MessageBlock block,
-                                BitArray k1, BitArray k2,
-                                BitArray k3, BitArray k4,
-                                BitArray k5, BitArray k6) {
+    public TextBlock encrypt(TextBlock block,
+                             BitArray k1, BitArray k2,
+                             BitArray k3, BitArray k4,
+                             BitArray k5, BitArray k6) {
         if (    k1.size() != 16 ||
                 k2.size() != 16 ||
                 k3.size() != 16 ||
@@ -19,7 +19,7 @@ public class Round {
             throw new IllegalArgumentException();
         }
 
-        MessageBlock resultBlock = block.cloneDeep();
+        TextBlock resultBlock = block.cloneDeep();
 
         AdditionModuloOperator additionModuloOperator = new AdditionModuloOperator();
         ExclusiveOrOperator exclusiveOrOperator = new ExclusiveOrOperator();
@@ -53,6 +53,6 @@ public class Round {
         c = b;
         b = swap;
 
-        return new MessageBlock(a, b, c, d);
+        return new TextBlock(a, b, c, d);
     }
 }

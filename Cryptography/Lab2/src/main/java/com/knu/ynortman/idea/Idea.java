@@ -10,6 +10,9 @@ public class Idea {
     private List<BitArray> encryptionKeys = new ArrayList<>();
     private List<BitArray> decryptionKeys = new ArrayList<>();
 
+    List<TextBlock> encryptedBlocks = new ArrayList<>();
+    StringBuilder stringOutput = new StringBuilder();
+
     public Idea(Key originalKey) {
         this.originalKey = originalKey;
 
@@ -48,11 +51,11 @@ public class Idea {
         }
     }
 
-    public MessageBlock compute(MessageBlock inputBlock, List<BitArray> keys) {
+    private TextBlock compute(TextBlock inputBlock, List<BitArray> keys) {
         Round round = new Round();
         HalfRound halfRound = new HalfRound();
 
-        MessageBlock resultBlock = inputBlock;
+        TextBlock resultBlock = inputBlock;
         for (int i = 0; i < 8;i++) {
             resultBlock = round.encrypt(resultBlock, keys.get(i * 6), keys.get(i * 6 + 1),
                     keys.get(i * 6 + 2), keys.get(i * 6 + 3), keys.get(i * 6 + 4),
@@ -63,11 +66,31 @@ public class Idea {
         return resultBlock;
     }
 
-    public MessageBlock encrypt(MessageBlock inputBlock) {
+    private TextBlock encryptTextBlock(TextBlock inputBlock) {
         return compute(inputBlock, encryptionKeys);
     }
 
-    public MessageBlock decrypt(MessageBlock inputBlock) {
+    private TextBlock decryptTextBlock(TextBlock inputBlock) {
         return compute(inputBlock, decryptionKeys);
+    }
+
+    public List<TextBlock> encrypt(String message) {
+        List<TextBlock> blocks =  new StringToTextBlockConverter().convert(message);
+
+        //encrypting
+        List<TextBlock> encryptedBlocks = new ArrayList<>();
+        for(TextBlock blockToEncrypt : blocks) {
+            encryptedBlocks.add(encryptTextBlock(blockToEncrypt));
+        }
+        return encryptedBlocks;
+    }
+
+    public String decrypt(List<TextBlock> encryptedBlocks) {
+        StringBuilder stringOutput = new StringBuilder();
+        for(TextBlock blockToDecrypt : encryptedBlocks) {
+            TextBlock decryptedBlock = decryptTextBlock(blockToDecrypt);
+            stringOutput.append(decryptedBlock.getBitArray().toASCII());
+        }
+        return stringOutput.toString();
     }
 }

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StringToTextBlockConverter {
-    public List<MessageBlock> convert(String stringToConvert) {
-        List<MessageBlock> listOfBitArrays = new ArrayList<>();
+    public List<TextBlock> convert(String stringToConvert) {
+        List<TextBlock> listOfBitArrays = new ArrayList<>();
         for(int i = 0;i < (stringToConvert.length() / 8) + 1;i++) {
             int[] values = new int[8];
 
@@ -18,7 +18,7 @@ public class StringToTextBlockConverter {
                 }
             }
 
-            listOfBitArrays.add(new MessageBlock(values));
+            listOfBitArrays.add(new TextBlock(values));
         }
 
         return listOfBitArrays;

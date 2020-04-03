@@ -5,7 +5,7 @@ import com.knu.ynortman.bits.BitArray;
 import com.knu.ynortman.bits.MultiplicationModuloOperator;
 
 public class HalfRound {
-    public MessageBlock encrypt(MessageBlock block, BitArray k1, BitArray k2, BitArray k3, BitArray k4) {
+    public TextBlock encrypt(TextBlock block, BitArray k1, BitArray k2, BitArray k3, BitArray k4) {
         if (    k1.size() != 16 ||
                 k2.size() != 16 ||
                 k3.size() != 16 ||
@@ -13,7 +13,7 @@ public class HalfRound {
             throw new IllegalArgumentException();
         }
 
-        MessageBlock resultBlock = block.cloneDeep();
+        TextBlock resultBlock = block.cloneDeep();
 
         AdditionModuloOperator additionModuloOperator = new AdditionModuloOperator();
         MultiplicationModuloOperator multiplicationModuloOperator = new MultiplicationModuloOperator();
@@ -29,6 +29,6 @@ public class HalfRound {
         c = additionModuloOperator.combine(c, k3);
         d = multiplicationModuloOperator.combine(d, k4);
 
-        return new MessageBlock(a, b, c, d);
+        return new TextBlock(a, b, c, d);
     }
 }
