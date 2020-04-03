@@ -3,9 +3,15 @@ package com.knu.ynortman.bits;
 import java.math.BigInteger;
 
 public class BitArray {
-    private final int size;
-    private boolean bitArray[];
+    public static final int MODULO = 65536;
 
+    private final int size;
+    private boolean[] bitArray;
+
+    /**
+     *
+     * @param size - number of bits in the array
+     */
     public BitArray(int size) {
         if (size < 0) {
             throw new IllegalArgumentException();
@@ -22,8 +28,8 @@ public class BitArray {
 
     public BitArray(int value, int size) {
         this(size);
-
-        String binString = Integer.toBinaryString(value); //i am lazy
+        //convert integer value to bit array
+        String binString = Integer.toBinaryString(value);
         int offset = size - binString.length();
 
         if (offset < 0) {
@@ -68,15 +74,14 @@ public class BitArray {
             throw new UnsupportedOperationException();
 
         StringBuilder sb = new StringBuilder();
-        for(int i = 0;i < size;i += 8) {
+        for(int i = 0; i < size; i += 8) {
             int n = 0;
-            for (int j = 0;j < 8;j++) {
+            for (int j = 0; j < 8; j++) {
                 n <<= 1;
                 n += bitArray[i + j]? 1 : 0;
             }
-
-            //it also adds leading 0
-            sb.append(Integer.toHexString(0x100 | n).substring(1) + " ");
+            //add leading 0
+            sb.append(Integer.toHexString(0x100 | n).substring(1)).append(" ");
         }
         return "[" + sb.deleteCharAt(sb.length() - 1).toString() + "]";
     }
@@ -183,7 +188,7 @@ public class BitArray {
                 n += bitArray[i + j]? 1 : 0;
             }
 
-            //it also adds leading 0
+            //add leading 0
             sb.append((char)n);
         }
         return sb.toString();
