@@ -1,20 +1,11 @@
 import static java.lang.Integer.rotateLeft;
 import java.util.Arrays;
-import java.util.Objects;
 
 public class Ripemd160 {
 
     private static final int BLOCK_LEN = 64;  // In bytes, 512 bits
 
-    /**
-     * Computes and returns a 20-byte (160-bit) hash of the specified binary message.
-     * Each call will return a new byte array object instance.
-     * @param msg the message to compute the hash of
-     * @return a 20-byte array representing the message's RIPEMD-160 hash
-     * @throws NullPointerException if the message is {@code null}
-     */
     public static byte[] getHash(byte[] msg) {
-        // Compress whole message blocks
         //initial value of hash function
         int[] state = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0};
         int off = msg.length / BLOCK_LEN * BLOCK_LEN;
@@ -51,8 +42,6 @@ public class Ripemd160 {
 
 
     private static void compress(int[] state, byte[] blocks, int len) {
-        //if (len % BLOCK_LEN != 0)
-          //  throw new IllegalArgumentException();
         for (int i = 0; i < len; i += BLOCK_LEN) {
             // Message schedule
             int[] schedule = new int[16];
@@ -133,9 +122,15 @@ public class Ripemd160 {
             8,  5, 12,  9, 12,  5, 14,  6,  8, 13,  6,  5, 15, 13, 11, 11};
 
 
-
-    /*---- Miscellaneous ----*/
-
-    private Ripemd160() {}  // Not instantiable
+    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+    public static String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for (int j = 0; j < bytes.length; j++) {
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+        }
+        return new String(hexChars);
+    }
 
 }
