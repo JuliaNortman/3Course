@@ -46,12 +46,11 @@ public class AlgorithmQuickHall2D {
         s1.add(points.get(hIndex));
         s2.add(points.get(hIndex));
         s2.add(r);
-        for (int i = 0; i < points.size(); i++){
-            if (liesRelativeToLine(l, points.get(hIndex), points.get(i)) == PointRelativeToLine.LEFT){
-                s1.add(points.get(i));
-            }
-            else if (liesRelativeToLine(points.get(hIndex), r, points.get(i)) == PointRelativeToLine.LEFT){
-                s2.add(points.get(i));
+        for (Point2D point : points) {
+            if (liesRelativeToLine(l, points.get(hIndex), point) == PointRelativeToLine.LEFT) {
+                s1.add(point);
+            } else if (liesRelativeToLine(points.get(hIndex), r, point) == PointRelativeToLine.LEFT) {
+                s2.add(point);
             }
         }
 
