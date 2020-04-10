@@ -2,10 +2,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 
-/**
- * TODO
- * if points have the same angle choose the distant one
- * */
+
 public class JarvisAlgo {
     ArrayList<Point2D> points;
     public static final double INF = 9999999;
