@@ -1,0 +1,118 @@
+package hedgehoggame.gamelogic;
+
+import java.util.Arrays;
+import java.util.Random;
+
+public class Game {
+	private final Cell[][] field; //game field
+	private final int N; //x dimension
+	private final int M; //y dimension
+
+	private Pair<Integer, Integer> hedgehogPosition;
+	
+	public Game(int xDimension, int yDimension) {
+		this.N = xDimension;
+		this.M = yDimension;
+		field = new Cell[N][M];
+	}
+	
+	public Cell[][] getField() {
+		return this.field;
+	}
+	
+	public Pair<Integer, Integer> getHedgehogPosition() {
+		return this.hedgehogPosition;
+	}
+	
+	public void init() {
+		for(int i = 0; i < field.length; ++i) {
+			Arrays.fill(field[i], Cell.EMPTY);
+		}
+		field[N-1][0] = Cell.HEDGEHOG;
+		hedgehogPosition = new Pair<Integer, Integer>(N-1, 0);
+		int density = N*M/5;
+		for(int i = 0; i < density; ++i) {
+			int x = new Random().nextInt(N);
+			int y = new Random().nextInt(M);		
+			while(field[x][y] != Cell.EMPTY) {
+				x = new Random().nextInt(N);
+				y = new Random().nextInt(M);	
+			}
+			field[x][y] = Cell.APPLE;
+		}
+	}
+	
+	public void moveTop() {
+		int curX = hedgehogPosition.getKey();
+		int curY = hedgehogPosition.getValue();
+		
+		if(curX != 0) {
+			field[curX][curY] = Cell.EMPTY;
+			field[curX-1][curY] = Cell.HEDGEHOG;
+			hedgehogPosition = new Pair<Integer, Integer>(curX-1, curY);
+		}
+	}
+	
+	public void moveBottom() {
+		int curX = hedgehogPosition.getKey();
+		int curY = hedgehogPosition.getValue();
+		
+		if(curX != N-1) {
+			field[curX][curY] = Cell.EMPTY;
+			field[curX+1][curY] = Cell.HEDGEHOG;
+			hedgehogPosition = new Pair<Integer, Integer>(curX+1, curY);
+		}
+	}
+	
+	public void moveLeft() {
+		int curX = hedgehogPosition.getKey();
+		int curY = hedgehogPosition.getValue();
+		
+		if(curY != 0) {
+			field[curX][curY] = Cell.EMPTY;
+			field[curX][curY-1] = Cell.HEDGEHOG;
+			hedgehogPosition = new Pair<Integer, Integer>(curX, curY-1);
+		}
+	}
+	
+	public void moveRight() {
+		int curX = hedgehogPosition.getKey();
+		int curY = hedgehogPosition.getValue();
+		
+		if(curY != M-1) {
+			field[curX][curY] = Cell.EMPTY;
+			field[curX][curY+1] = Cell.HEDGEHOG;
+			hedgehogPosition = new Pair<Integer, Integer>(curX, curY+1);
+		}
+	}
+	
+	public void move(Direction direction) {
+		switch (direction) {
+		case LEFT: {
+			moveLeft();
+			break;
+		}
+		case RIGHT: {
+			moveRight();
+			break;
+		}
+		case TOP: {
+			moveTop();
+			break;
+		}
+		case BOTTOM: {
+			moveBottom();
+			break;
+		}
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + direction);
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "Game [field=" + Arrays.deepToString(field) + "]";
+	}
+	
+	
+}
