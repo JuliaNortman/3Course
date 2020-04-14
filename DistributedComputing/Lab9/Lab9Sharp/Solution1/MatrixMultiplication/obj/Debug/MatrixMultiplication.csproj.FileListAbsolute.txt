@@ -1,0 +1,6 @@
+D:\RozpObch\Lab9Sharp\Solution1\MatrixMultiplication\bin\Debug\MatrixMultiplication.exe
+D:\RozpObch\Lab9Sharp\Solution1\MatrixMultiplication\bin\Debug\MatrixMultiplication.pdb
+D:\RozpObch\Lab9Sharp\Solution1\MatrixMultiplication\obj\Debug\MatrixMultiplication.csprojAssemblyReference.cache
+D:\RozpObch\Lab9Sharp\Solution1\MatrixMultiplication\obj\Debug\MatrixMultiplication.csproj.CoreCompileInputs.cache
+D:\RozpObch\Lab9Sharp\Solution1\MatrixMultiplication\obj\Debug\MatrixMultiplication.exe
+D:\RozpObch\Lab9Sharp\Solution1\MatrixMultiplication\obj\Debug\MatrixMultiplication.pdb

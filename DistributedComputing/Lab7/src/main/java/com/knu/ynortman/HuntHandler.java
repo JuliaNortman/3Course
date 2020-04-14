@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class HuntHandler extends JFrame
-            implements ChangeListener, KeyListener { 
+            implements ChangeListener, KeyListener {
         private ArrayList<Bullet> bullets;
         private ArrayList<Target> targets;
         private Hunter hunter;
