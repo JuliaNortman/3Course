@@ -202,4 +202,5 @@
   <system systemId="http://www.w3.org/2001/xml.xsd" uri="jar:file:/C:/Users/HP250/eclipse/jee-2019-12/eclipse/../../../.p2/pool/plugins/org.eclipse.xsd_2.17.0.v20191117-1035.jar!/cache/www.w3.org/2001/xml.xsd"/>
   <uri name="http://www.w3.org/2001/XMLSchema" uri="jar:file:/C:/Users/HP250/eclipse/jee-2019-12/eclipse/../../../.p2/pool/plugins/org.eclipse.xsd_2.17.0.v20191117-1035.jar!/cache/www.w3.org/2001/XMLSchema.xsd"/>
   <uri id="org.w3c.xinclude" name="http://www.w3.org/2001/XInclude" uri="jar:file:/C:/Users/HP250/eclipse/jee-2019-12/eclipse/../../../.p2/pool/plugins/org.eclipse.wst.xsl.core_1.2.100.v201907231732.jar!/xslt-schemas/xinclude.xsd"/>
+  <public publicId="-//LOG4J//DTD LOG4J//EN" uri="jar:file:/C:/Users/HP250/eclipse/jee-2019-12/eclipse/../../../.p2/pool/plugins/org.springsource.ide.eclipse.commons.ui_3.9.12.202001132314-CI-B489.jar!/dtd/log4j-1.2.dtd" webURL="https://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd"/>
 </catalog>
