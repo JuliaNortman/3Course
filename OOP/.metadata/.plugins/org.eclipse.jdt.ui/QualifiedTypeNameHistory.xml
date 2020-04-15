@@ -17,11 +17,13 @@
     <fullyQualifiedTypeName name="javax.websocket.Session"/>
     <fullyQualifiedTypeName name="javax.websocket.Encoder"/>
     <fullyQualifiedTypeName name="javax.websocket.Encoder.Text"/>
-    <fullyQualifiedTypeName name="hedgehoggame.serverside.messages.MessageField"/>
     <fullyQualifiedTypeName name="javax.websocket.Decoder"/>
     <fullyQualifiedTypeName name="javax.websocket.Decoder.Text"/>
     <fullyQualifiedTypeName name="hedgehoggame.serverside.messages.MessageMove"/>
     <fullyQualifiedTypeName name="com.google.gson.Gson"/>
     <fullyQualifiedTypeName name="hedgehoggame.serverside.messages.MessageMoveDecoder"/>
     <fullyQualifiedTypeName name="hedgehoggame.serverside.messages.MessageFieldEncoder"/>
+    <fullyQualifiedTypeName name="com.google.gson.GsonBuilder"/>
+    <fullyQualifiedTypeName name="hedgehoggame.serverside.messages.MessageField"/>
+    <fullyQualifiedTypeName name="java.io.Serializable"/>
 </qualifiedTypeNameHistroy>

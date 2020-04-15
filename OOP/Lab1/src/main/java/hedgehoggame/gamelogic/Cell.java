@@ -1,5 +1,7 @@
 package hedgehoggame.gamelogic;
 
-public enum Cell {
+import java.io.Serializable;
+
+public enum Cell implements Serializable {
 	EMPTY, APPLE, HEDGEHOG
 }

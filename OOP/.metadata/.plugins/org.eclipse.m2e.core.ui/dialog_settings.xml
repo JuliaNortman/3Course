@@ -25,6 +25,7 @@
 	</section>
 	<section name="Maven2ProjectWizardArchifactPage">
 		<list key="package">
+			<item value="com.knu.ynortman"/>
 			<item value="Lab1.Lab1"/>
 		</list>
 		<list key="groupId">

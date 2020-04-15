@@ -1,7 +1,8 @@
 package hedgehoggame.gamelogic;
 
+import java.io.Serializable;
 
-public final class Pair<K, V> {
+public final class Pair<K, V> implements Serializable{
 	private final K key;
 	private final V value;
 	

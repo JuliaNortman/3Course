@@ -1,8 +1,10 @@
 package hedgehoggame.serverside.messages;
 
+import java.io.Serializable;
+
 import hedgehoggame.gamelogic.Direction;
 
-public class MessageMove {
+public class MessageMove implements Serializable{
 	private Direction direction;
 
 	public MessageMove(Direction direction) {

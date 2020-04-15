@@ -23,32 +23,30 @@ import hedgehoggame.serverside.messages.MessageMoveDecoder;
 public class ServerGame {
 	
 	private Game game;
-	private Session session;
 	
 	@OnOpen
 	public void onOpen(Session session) {
-		this.session = session;
 		game = new Game(6, 6);
 		game.init();
-		broadcast(new MessageField(game.getField()));
+		broadcast(session, new MessageField(game.getField()));
 	}
 	
 	@OnMessage
-    public void onMessage(MessageMove move) throws IOException {
+    public void onMessage(Session session, MessageMove move) throws IOException {
        game.move(move.getDirection());
-       broadcast(new MessageField(game.getField()));
+       broadcast(session, new MessageField(game.getField()));
     }
 
     @OnClose
-    public void onClose() throws IOException {
+    public void onClose(Session session) throws IOException {
        //WebSocket connection closes
     }
 
     @OnError
-    public void onError(Throwable throwable) {
+    public void onError(Session session, Throwable throwable) {
     }
     
-    private void broadcast(MessageField messageField) {
+    private void broadcast(Session session, MessageField messageField) {
     	try {
 			session.getBasicRemote().sendObject(messageField);
 		} catch (IOException | EncodeException e) {

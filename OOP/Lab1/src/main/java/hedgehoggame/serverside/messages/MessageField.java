@@ -1,8 +1,10 @@
 package hedgehoggame.serverside.messages;
 
+import java.io.Serializable;
+
 import hedgehoggame.gamelogic.Cell;
 
-public class MessageField {
+public class MessageField implements Serializable {
 	private Cell[][] field;
 
 	public MessageField(Cell[][] field) {
