@@ -26,24 +26,28 @@ public class ServerGame {
 	
 	@OnOpen
 	public void onOpen(Session session) {
-		game = new Game(6, 6);
+		game = new Game(4, 4);
 		game.init();
-		broadcast(session, new MessageField(game.getField()));
+		System.out.println("Connected...");
+		broadcast(session, new MessageField(game.getField(), 
+				game.getN(), game.getM(), game.getGameEnd()));
 	}
 	
 	@OnMessage
     public void onMessage(Session session, MessageMove move) throws IOException {
        game.move(move.getDirection());
-       broadcast(session, new MessageField(game.getField()));
+       System.out.println("Message");
+       broadcast(session, new MessageField(game.getField(), 
+    		   game.getN(), game.getM(), game.getGameEnd()));
     }
 
     @OnClose
     public void onClose(Session session) throws IOException {
-       //WebSocket connection closes
     }
 
     @OnError
     public void onError(Session session, Throwable throwable) {
+    	System.out.println("Error");
     }
     
     private void broadcast(Session session, MessageField messageField) {

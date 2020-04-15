@@ -4,12 +4,9 @@ import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class MessageMoveDecoder implements Decoder.Text<MessageMove>{
-
-	private static Gson gson = new Gson();
 	
 	@Override
 	public void init(EndpointConfig config) {
@@ -25,7 +22,13 @@ public class MessageMoveDecoder implements Decoder.Text<MessageMove>{
 
 	@Override
 	public MessageMove decode(String s) throws DecodeException {
-		return gson.fromJson(s, MessageMove.class);
+		try {
+			return new ObjectMapper().readValue(s, MessageMove.class);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override

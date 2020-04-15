@@ -6,6 +6,8 @@ import hedgehoggame.gamelogic.Direction;
 
 public class MessageMove implements Serializable{
 	private Direction direction;
+	
+	public MessageMove() {}
 
 	public MessageMove(Direction direction) {
 		this.direction = direction;
