@@ -4,6 +4,24 @@ var message = {
     direction: 'TOP'
 };
 
+class GameField {
+    constructor(M, N, field) {
+        this.M = M;
+        this.N = N;
+        this.field = new Array(M);
+        for(var i = 0; i < this.field.length; ++i) {
+            this.field[i] = new Array(N);
+        }
+        //console.log("M=" + M + ", N=" + N + " fs=" + field.length);
+
+
+        for(var i = 0; i < field.length; ++i) {
+            //console.log(Math.floor(i/N) + " " + i%N);
+            this.field[Math.floor(i/N)][i%N] = field[i];
+        }
+    }
+}
+
 document.onkeydown = function(e) {
     e = e || window.event;
     send(e);
@@ -34,8 +52,9 @@ function openEvent(evt) {
 
 function onMessage(evt) {
     var jsonData = evt.data;
-
-    console.log(JSON.parse(jsonData).field);
+    var jsonObj = JSON.parse(jsonData);
+    var game = new GameField(jsonObj.yDim, jsonObj.xDim, jsonObj.field);
+    createBoard(game);
 }
 
 function send(e) {

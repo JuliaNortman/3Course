@@ -26,7 +26,7 @@ public class ServerGame {
 	
 	@OnOpen
 	public void onOpen(Session session) {
-		game = new Game(4, 4);
+		game = new Game(8, 4);
 		game.init();
 		System.out.println("Connected...");
 		broadcast(session, new MessageField(game.getField(), 

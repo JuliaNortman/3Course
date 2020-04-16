@@ -101,7 +101,7 @@ public class Game {
 		int curX = hedgehogPosition.getKey();
 		int curY = hedgehogPosition.getValue();
 		
-		if(curX != N-1) {
+		if(curX != M-1) {
 			if(getCell(curX+1, curY) == Cell.APPLE) {
 				decreaseAppleNum();
 			}
@@ -129,7 +129,7 @@ public class Game {
 		int curX = hedgehogPosition.getKey();
 		int curY = hedgehogPosition.getValue();
 		
-		if(curY != M-1) {
+		if(curY != N-1) {
 			if(getCell(curX, curY+1) == Cell.APPLE) {
 				decreaseAppleNum();
 			}
