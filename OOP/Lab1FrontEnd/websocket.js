@@ -13,8 +13,6 @@ class GameField {
             this.field[i] = new Array(N);
         }
         //console.log("M=" + M + ", N=" + N + " fs=" + field.length);
-
-
         for(var i = 0; i < field.length; ++i) {
             //console.log(Math.floor(i/N) + " " + i%N);
             this.field[Math.floor(i/N)][i%N] = field[i];
@@ -49,13 +47,27 @@ function openEvent(evt) {
     console.log("Connection established");
 }
 
+function gameEnd(gameOver) {
+    if(gameOver) {
+        var elem = document.getElementById('gameOver');
+        elem.innerHTML = "Congratulations";
+    }
+}
+
+function newGame() {
+    var elem = document.getElementById('gameOver');
+    elem.innerHTML = "";
+    refresh();
+}
 
 function onMessage(evt) {
-    var jsonData = evt.data;
-    var jsonObj = JSON.parse(jsonData);
+    var jsonObj = JSON.parse(evt.data);
     var game = new GameField(jsonObj.yDim, jsonObj.xDim, jsonObj.field);
     createBoard(game);
+    gameEnd(jsonObj.gameOver);
 }
+
+
 
 function send(e) {
 

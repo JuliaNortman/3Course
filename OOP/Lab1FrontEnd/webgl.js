@@ -29,4 +29,10 @@ function createBoard(gameField)
 		}
 	}
 	document.body.appendChild(table);
+
+}
+
+function refresh() {
+	location.reload();
+	return false;
 }

@@ -19,7 +19,7 @@ public class Game {
 	}
 	
 	public Cell[] getField() {
-		return this.field;
+		return this.field.clone();
 	}
 	
 	public Pair<Integer, Integer> getHedgehogPosition() {
@@ -39,6 +39,9 @@ public class Game {
 		return gameEnd;
 	}
 	
+	public int getAppleNum() {
+		return appleNum;
+	}
 	
 	public void init() {
 		Arrays.fill(field, Cell.EMPTY);
@@ -76,7 +79,7 @@ public class Game {
 		return field[getCellIndex(i, j)];
 	}
 	
-	private void decreaseAppleNum() {
+	public void decreaseAppleNum() {
 		appleNum--;
 		if(appleNum == 0) {
 			gameEnd = true;
