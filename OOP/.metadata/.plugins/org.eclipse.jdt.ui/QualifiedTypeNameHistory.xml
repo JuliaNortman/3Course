@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
     <fullyQualifiedTypeName name="java.lang.Integer"/>
-    <fullyQualifiedTypeName name="hedgehoggame.gamelogic.Pair"/>
     <fullyQualifiedTypeName name="javax.websocket.server.ServerEndpoint"/>
     <fullyQualifiedTypeName name="javax.websocket.OnOpen"/>
-    <fullyQualifiedTypeName name="hedgehoggame.gamelogic.Game"/>
     <fullyQualifiedTypeName name="javax.websocket.OnMessage"/>
     <fullyQualifiedTypeName name="java.io.IOException"/>
     <fullyQualifiedTypeName name="javax.websocket.OnClose"/>
@@ -24,9 +22,12 @@
     <fullyQualifiedTypeName name="hedgehoggame.serverside.messages.MessageFieldEncoder"/>
     <fullyQualifiedTypeName name="com.google.gson.GsonBuilder"/>
     <fullyQualifiedTypeName name="java.io.Serializable"/>
-    <fullyQualifiedTypeName name="java.lang.IllegalArgumentException"/>
     <fullyQualifiedTypeName name="hedgehoggame.serverside.messages.MessageField"/>
     <fullyQualifiedTypeName name="hedgehoggame.serverside.messages.MessageMove"/>
     <fullyQualifiedTypeName name="java.lang.Exception"/>
     <fullyQualifiedTypeName name="com.fasterxml.jackson.databind.ObjectMapper"/>
+    <fullyQualifiedTypeName name="org.junit.Before"/>
+    <fullyQualifiedTypeName name="hedgehoggame.gamelogic.Game"/>
+    <fullyQualifiedTypeName name="hedgehoggame.gamelogic.Pair"/>
+    <fullyQualifiedTypeName name="java.lang.IllegalArgumentException"/>
 </qualifiedTypeNameHistroy>

@@ -17,15 +17,21 @@ function createBoard(gameField)
 			var newCell = newRow.insertCell(j);
 			var img = document.createElement('img');
 			if(gameField.field[i][j] == "HEDGEHOG") {
-				img.src = "images/hedgehog.png";
-				img.className = "grass";
-				newCell.appendChild(img);
+				img.src = "images/hedgehog120.png";
+				img.className = "image";
+				//newCell.appendChild(img);
 			}
 			else if(gameField.field[i][j] == "APPLE"){
-				img.src = "images/apple.png";
-				img.className = "grass";
-				newCell.appendChild(img);
+				img.src = "images/apple120.png";
+				img.className = "image";
+				//newCell.appendChild(img);
 			}
+			else {
+				img.src = "images/grass120.png";
+				img.className = "image";
+				//newCell.appendChild(img);
+			}
+			newCell.appendChild(img);
 		}
 	}
 	document.body.appendChild(table);
