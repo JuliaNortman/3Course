@@ -2,42 +2,19 @@
 <html>
 <head>
     <title>Hedgehog Game</title>
+    <link rel="stylesheet" href="styles.css">
     <script src="websocket.js"></script>
     <script src="webgl.js"></script>
-
-    <style type="text/css">
-        table
-        {
-            border-collapse: collapse;
-            border-spacing: 0px;
-            padding: 0px;
-        }
-        tr
-        {
-            height: 120px;
-            margin: 0px;
-        }
-        td
-        {
-            width: 120px;
-            height: 120px;
-            margin: 0px;
-
-        }
-        .image 
-        {
-            width: 120px;
-            height: 120px;
-            margin: 0px;
-            padding: 0px;
-        }
-    </style>
 
 
 </head>
 <body>
-    <h2>Hedgehog and apples!</h2>
-    <div id="gameOver"></div>
-    <button onclick="newGame()">New Game</button>
+    <h2 class="text-custom">Hedgehog and apples!</h2>
+    <div id="gameOver" class="text-custom"></div>
+
+    <div class="button-div">
+        <button class="button-cast" onclick="newGame()">New Game</button>
+    </div>
+    <div class="button-div" id="table-div"></div>
 </body>
 </html>

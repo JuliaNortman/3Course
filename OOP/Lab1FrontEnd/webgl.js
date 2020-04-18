@@ -2,7 +2,7 @@ function createBoard(gameField)
 {
 	rowNum = gameField.M;
 	colNum = gameField.N;
-	var elem = document.getElementsByTagName('table');
+	var elem = document.getElementById('table-div').getElementsByTagName('table');
 	if(elem[0] != null)
 	{
 		elem[0].parentNode.removeChild(elem[0]);
@@ -34,7 +34,7 @@ function createBoard(gameField)
 			newCell.appendChild(img);
 		}
 	}
-	document.body.appendChild(table);
+	document.getElementById('table-div').appendChild(table);
 
 }
 
