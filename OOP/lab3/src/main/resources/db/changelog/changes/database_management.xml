@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+	<changeSet author="postgres" id="1">
+		<createTable tableName="country">
+			<column name="id" type="int">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+
+			<column name="name" type="varchar">
+				<constraints nullable="false" unique="true" />
+			</column>
+			
+		</createTable>
+		<rollback>
+			<dropTable tableName="country" />
+		</rollback>
+	</changeSet>
+	
+	
+	<changeSet author="postgres" id="3">
+		<createTable tableName="city">
+			<column name="id" type="int">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+
+			<column name="name" type="varchar">
+				<constraints nullable="false" unique="true"/>
+			</column>
+			
+			<column name="country_id" type="int">
+				<constraints nullable="false"/>
+			</column>
+			
+		</createTable>
+		<rollback>
+			<dropTable tableName="city" />
+		</rollback>
+	</changeSet>
+	
+	<changeSet author="postgres" id="5">
+    	<addForeignKeyConstraint 
+    		baseColumnNames="country_id"
+            baseTableName="city"
+            constraintName="fk_city_country"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="id"
+            referencedTableName="country"/>
+	</changeSet>
+	
+	
+	<changeSet author="postgres" id="6">
+		<createTable tableName="crew_member">
+			<column name="id" type="int">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+
+			<column name="name" type="varchar">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="role" type="varchar">
+				<constraints nullable="false"/>
+			</column>
+			
+		</createTable>
+		<rollback>
+			<dropTable tableName="crew_member" />
+		</rollback>
+	</changeSet>
+	
+	
+	<changeSet author="postgres" id="7">
+		<createTable tableName="flight">
+			<column name="id" type="int">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+
+			<column name="departure_city_id" type="int">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="departure_time" type="datetime">
+				<constraints nullable="false"/>
+			</column>
+			
+			<column name="dest_city_id" type="int">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="dest_time" type="datetime">
+				<constraints nullable="false"/>
+			</column>
+			
+		</createTable>
+		<rollback>
+			<dropTable tableName="flight" />
+		</rollback>
+	</changeSet>
+	
+	<changeSet author="postgres" id="8">
+    	<addForeignKeyConstraint 
+    		baseColumnNames="departure_city_id"
+            baseTableName="flight"
+            constraintName="fk_flight_depart_city"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="id"
+            referencedTableName="city"/>
+	</changeSet>
+	
+	<changeSet author="postgres" id="9">
+    	<addForeignKeyConstraint 
+    		baseColumnNames="dest_city_id"
+            baseTableName="flight"
+            constraintName="fk_flight_dest_city"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="id"
+            referencedTableName="city"/>
+	</changeSet>
+	
+	
+	<changeSet author="postgres" id="10">
+		<createTable tableName="crew_flight">
+
+			<column name="flight_id" type="int">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="crew_id" type="int">
+				<constraints nullable="false"/>
+			</column>
+			
+		</createTable>
+		<rollback>
+			<dropTable tableName="crew_flight" />
+		</rollback>
+	</changeSet>
+	
+	<changeSet author="postgres" id="11">
+    	<addForeignKeyConstraint 
+    		baseColumnNames="flight_id"
+            baseTableName="crew_flight"
+            constraintName="fk_crew_flight"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="id"
+            referencedTableName="flight"/>
+	</changeSet>
+	
+	<changeSet author="postgres" id="12">
+    	<addForeignKeyConstraint 
+    		baseColumnNames="crew_id"
+            baseTableName="crew_flight"
+            constraintName="fk_crew_crewmember"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="id"
+            referencedTableName="crew_member"/>
+	</changeSet>
+	
+	<changeSet author="postgres" id="13">
+    	<createSequence
+            incrementBy="5"
+            sequenceName="city_id_seq"/>
+	</changeSet>
+	
+	<changeSet author="postgres" id="14">
+    	<createSequence
+            incrementBy="5"
+            sequenceName="country_id_seq"/>
+	</changeSet>
+	
+	<changeSet author="postgres" id="15">
+    	<createSequence
+            incrementBy="5"
+            sequenceName="flight_id_seq"/>
+	</changeSet>
+	
+	<changeSet author="postgres" id="16">
+    	<createSequence
+            incrementBy="5"
+            sequenceName="member_id_seq"/>
+	</changeSet>
+	
+</databaseChangeLog>
