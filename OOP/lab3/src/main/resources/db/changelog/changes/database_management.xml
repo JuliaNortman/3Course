@@ -191,4 +191,54 @@
             sequenceName="member_id_seq"/>
 	</changeSet>
 	
+	<changeSet author="postgres" id="17">
+    	<createSequence
+            incrementBy="5"
+            sequenceName="crewrole_id_seq"/>
+	</changeSet>
+	
+	
+	
+	<changeSet author="postgres" id="18">
+		<createTable tableName="crew_role">
+
+			<column name="id" type="int">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			
+			<column name="role" type="varchar">
+				<constraints nullable="false"/>
+			</column>
+			
+		</createTable>
+		<rollback>
+			<dropTable tableName="crew_role" />
+		</rollback>
+	</changeSet>
+	
+	<changeSet author="postgres" id="19">
+		<dropColumn tableName="crew_member" columnName="role"/>
+		<addColumn tableName="crew_member">
+			<column name="role_id" type="varchar"></column>
+		</addColumn>
+	</changeSet>
+	
+	<changeSet author="postgres" id="20">
+		<dropColumn tableName="crew_member" columnName="role_id"/>
+		<addColumn tableName="crew_member">
+			<column name="role_id" type="int"></column>
+		</addColumn>
+	</changeSet>
+	
+	<changeSet author="postgres" id="21">
+    	<addForeignKeyConstraint 
+    		baseColumnNames="role_id"
+            baseTableName="crew_member"
+            constraintName="fk_crewmember_crewrole"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="id"
+            referencedTableName="crew_role"/>
+	</changeSet>
+	
 </databaseChangeLog>
