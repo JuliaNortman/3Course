@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Data;
 
 @Data
@@ -30,5 +32,6 @@ public class CrewMember {
 	private CrewRole role;
 	
 	@ManyToMany(mappedBy = "crewMembers")
+	@JsonBackReference(value = "crew")
 	private Set<Flight> flightes;
 }

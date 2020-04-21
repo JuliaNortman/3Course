@@ -16,6 +16,8 @@ import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Data;
 
 @Data
@@ -48,5 +50,7 @@ public class Flight {
         joinColumns = { @JoinColumn(name = "flight_id") }, 
         inverseJoinColumns = { @JoinColumn(name = "crew_id") }
     )
+	
+	@JsonManagedReference(value = "crew")
 	private Set<CrewMember> crewMembers;
 }
