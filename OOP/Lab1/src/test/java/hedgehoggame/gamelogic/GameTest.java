@@ -2,6 +2,7 @@ package hedgehoggame.gamelogic;
 
 import static org.junit.Assert.*;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +19,7 @@ public class GameTest {
 	@Test
 	public void testInit() {
 		assertEquals(12, game.getField().length);
-		assertEquals(new Pair<Integer, Integer>(2,  0), game.getHedgehogPosition());
+		assertEquals(new ImmutablePair<Integer, Integer>(2,  0), game.getHedgehogPosition());
 		assertEquals(2, game.getAppleNum());
 	}
 

@@ -10,6 +10,9 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import hedgehoggame.gamelogic.Game;
 import hedgehoggame.serverside.messages.MessageField;
 import hedgehoggame.serverside.messages.MessageFieldEncoder;
@@ -23,22 +26,22 @@ import hedgehoggame.serverside.messages.MessageMoveDecoder;
 public class ServerGame {
 	
 	private Game game;
+	private static final Logger logger = LogManager.getLogger(ServerGame.class);
 	
 	@OnOpen
 	public void onOpen(Session session) {
 		game = new Game(8, 4);
 		game.init();
-		System.out.println("Connected...");
 		broadcast(session, new MessageField(game.getField(), 
-				game.getN(), game.getM(), game.getGameEnd()));
+				game.getWidth(), game.getHeight(), game.getGameEnd()));
+		logger.debug("Connected...");
 	}
 	
 	@OnMessage
     public void onMessage(Session session, MessageMove move) throws IOException {
        game.move(move.getDirection());
-       System.out.println("Message");
        broadcast(session, new MessageField(game.getField(), 
-    		   game.getN(), game.getM(), game.getGameEnd()));
+    		   game.getWidth(), game.getHeight(), game.getGameEnd()));
     }
 
     @OnClose
@@ -47,14 +50,14 @@ public class ServerGame {
 
     @OnError
     public void onError(Session session, Throwable throwable) {
-    	System.out.println("Error");
+    	logger.error("Error ", throwable.getLocalizedMessage());
     }
     
     private void broadcast(Session session, MessageField messageField) {
     	try {
 			session.getBasicRemote().sendObject(messageField);
 		} catch (IOException | EncodeException e) {
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		}
     }
 }

@@ -25,6 +25,7 @@ public class Key {
         }
     }
 
+    //2-byte(16-bits) subkey
     public BitArray getSubkey(int id) {
         BitArray subKey = new BitArray(16);
 
@@ -49,7 +50,7 @@ public class Key {
     }
 
     public List<BitArray> getSubkeys() {
-        ArrayList<BitArray> subkeys = new ArrayList<BitArray>();
+        ArrayList<BitArray> subkeys = new ArrayList<>();
 
         for (int i = 0;i < 8;i++) {
             subkeys.add(getSubkey(i));
@@ -58,7 +59,7 @@ public class Key {
     }
 
     public List<BitArray> getHalfOfSubkeys() {
-        ArrayList<BitArray> subkeys = new ArrayList<BitArray>();
+        ArrayList<BitArray> subkeys = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
             subkeys.add(getSubkey(i));
