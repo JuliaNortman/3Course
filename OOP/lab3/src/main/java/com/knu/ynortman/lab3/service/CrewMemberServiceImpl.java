@@ -3,12 +3,14 @@ package com.knu.ynortman.lab3.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.knu.ynortman.lab3.model.CrewMember;
 import com.knu.ynortman.lab3.model.Flight;
 import com.knu.ynortman.lab3.repository.CrewMemberRepository;
 import com.knu.ynortman.lab3.repository.FlightRepository;
 
+@Service
 public class CrewMemberServiceImpl implements CrewMemberService{
 
 	@Autowired

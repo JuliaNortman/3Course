@@ -241,4 +241,39 @@
             referencedTableName="crew_role"/>
 	</changeSet>
 	
+	<changeSet author="postgres" id="22">
+		<addDefaultValue
+			 columnName="id" 
+			 tableName="country"
+			 defaultValueSequenceNext="country_id_seq"/>
+	</changeSet>
+	
+	<changeSet author="postgres" id="23">
+		<addDefaultValue
+			 columnName="id" 
+			 tableName="city"
+			 defaultValueSequenceNext="city_id_seq"/>
+	</changeSet>
+	
+	<changeSet author="postgres" id="24">
+		<addDefaultValue
+			 columnName="id" 
+			 tableName="flight"
+			 defaultValueSequenceNext="flight_id_seq"/>
+	</changeSet>
+	
+	<changeSet author="postgres" id="25">
+		<addDefaultValue
+			 columnName="id" 
+			 tableName="crew_role"
+			 defaultValueSequenceNext="crewrole_id_seq"/>
+	</changeSet>
+	
+	<changeSet author="postgres" id="26">
+		<addDefaultValue
+			 columnName="id" 
+			 tableName="crew_member"
+			 defaultValueSequenceNext="member_id_seq"/>
+	</changeSet>
+	
 </databaseChangeLog>
