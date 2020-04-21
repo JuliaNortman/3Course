@@ -29,7 +29,7 @@ public class FlightController {
 	@Autowired
 	private FlightService flightService;
 
-	@GetMapping(path = "/flightslist")
+	@GetMapping(path = "/all")
 	public ResponseEntity<Iterable<Flight>> getAllFlights() {
 		try {
 			Iterable<Flight> flights = flightService.getAllFlights();
@@ -44,7 +44,7 @@ public class FlightController {
 		}
 	}
 	
-	@GetMapping(path = "/flight/{id}")
+	@GetMapping(path = "/{id}")
 	public ResponseEntity<Flight> getFlightById(@PathVariable("id") Integer id) {
 		try {
 			Optional<Flight> flight = flightService.getFlight(id);
@@ -59,7 +59,7 @@ public class FlightController {
 		}
 	}
 	
-	@PostMapping(path = "/addflight", consumes = "application/json")
+	@PostMapping(path = "/add", consumes = "application/json")
 	public ResponseEntity<Flight> postFlight(@RequestBody @Valid Flight flight) {
 		try {
 			return new ResponseEntity<Flight>(flightService.createFlight(flight), HttpStatus.CREATED);
@@ -72,10 +72,10 @@ public class FlightController {
 		}
 	}
 	
-	@PutMapping(path = "/updateflight", consumes = "application/json")
+	@PutMapping(path = "/update", consumes = "application/json")
 	public ResponseEntity<Flight> updateFlight(@RequestBody @Valid Flight flight) {
 		try {
-			return new ResponseEntity<Flight>(flightService.createFlight(flight), HttpStatus.OK);
+			return new ResponseEntity<Flight>(flightService.update(flight), HttpStatus.OK);
 		}
 		catch(IllegalArgumentException e) {
 			return new ResponseEntity<Flight>(HttpStatus.BAD_REQUEST);
@@ -85,7 +85,7 @@ public class FlightController {
 		}
 	}
 	
-	@DeleteMapping(path = "/deleteflight/{id}")
+	@DeleteMapping(path = "/delete/{id}")
 	public ResponseEntity<Flight> deleteFlight(@PathVariable("id") Integer id) {
 		flightService.deleteById(id);
 		return new ResponseEntity<Flight>(HttpStatus.OK);
