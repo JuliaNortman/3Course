@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.knu.ynortman.lab3.model.City;
 import com.knu.ynortman.lab3.model.Flight;
 import com.knu.ynortman.lab3.repository.CityRepository;
 import com.knu.ynortman.lab3.repository.CrewMemberRepository;

@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 import com.knu.ynortman.lab3.model.City;
 
 public interface CityRepository extends CrudRepository<City, Integer> {
-
+	Iterable<City> findByCountryId(int countryId);
 }

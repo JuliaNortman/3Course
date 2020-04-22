@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,7 +23,7 @@ import com.knu.ynortman.lab3.model.Flight;
 import com.knu.ynortman.lab3.service.FlightService;
 
 @RestController
-@RequestMapping(path = "flight", produces = "application/json")
+@RequestMapping(path = "flight", produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins = "*")
 public class FlightController {
 
@@ -59,7 +60,7 @@ public class FlightController {
 		}
 	}
 	
-	@PostMapping(path = "/add", consumes = "application/json")
+	@PostMapping(path = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Flight> postFlight(@RequestBody @Valid Flight flight) {
 		try {
 			return new ResponseEntity<Flight>(flightService.createFlight(flight), HttpStatus.CREATED);
@@ -72,7 +73,7 @@ public class FlightController {
 		}
 	}
 	
-	@PutMapping(path = "/update", consumes = "application/json")
+	@PutMapping(path = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Flight> updateFlight(@RequestBody @Valid Flight flight) {
 		try {
 			return new ResponseEntity<Flight>(flightService.update(flight), HttpStatus.OK);

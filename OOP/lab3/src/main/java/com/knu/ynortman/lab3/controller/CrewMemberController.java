@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,7 +24,7 @@ import com.knu.ynortman.lab3.model.Flight;
 import com.knu.ynortman.lab3.service.CrewMemberServiceImpl;
 
 @RestController
-@RequestMapping(path = "crew", produces = "application/json")
+@RequestMapping(path = "crew", produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins = "*")
 public class CrewMemberController {
 	@Autowired
@@ -86,12 +87,25 @@ public class CrewMemberController {
 		}
 	}
 	
-	@PostMapping(path = "/add", consumes = "application/json")
-	public ResponseEntity<CrewMember> addCrewMember(@Valid @RequestBody CrewMember member) {
-		return new ResponseEntity<CrewMember>(crewService.createMember(member), HttpStatus.CREATED);
+	@PostMapping(path = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<CrewMember> createCity(@RequestBody @Valid CrewMember crewMember) {
+		try {
+			return new ResponseEntity<CrewMember>(crewService.createMember(crewMember), HttpStatus.CREATED);
+		}
+		catch(IllegalArgumentException e) {
+			return new ResponseEntity<CrewMember>(HttpStatus.BAD_REQUEST);
+		}
+		catch(Exception e) {
+			return new ResponseEntity<CrewMember>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
-	@PutMapping(path = "/update", consumes = "application/json")
+	/*@PostMapping(path = "/add", consumes = "application/json")
+	public ResponseEntity<CrewMember> addCrewMember(@RequestBody @Valid CrewMember member) {
+		return new ResponseEntity<CrewMember>(crewService.createMember(member), HttpStatus.CREATED);
+	}*/
+	
+	@PutMapping(path = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CrewMember> updateCrewMember(@Valid @RequestBody CrewMember member) {
 		return new ResponseEntity<CrewMember>(crewService.update(member), HttpStatus.OK);
 	}

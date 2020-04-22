@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +17,7 @@ import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
@@ -26,6 +28,7 @@ public class Flight {
 	@Id
 	@GeneratedValue(generator = "flight_id_seq", strategy = GenerationType.SEQUENCE)
 	@SequenceGenerator(name = "flight_id_seq", sequenceName = "flight_id_seq", allocationSize = 5)
+	@Column(updatable = false)
 	private int id;
 	
 	@NotNull(message = "Departure city cannot be null")
@@ -51,6 +54,7 @@ public class Flight {
         inverseJoinColumns = { @JoinColumn(name = "crew_id") }
     )
 	
-	@JsonManagedReference(value = "crew")
+	//@JsonManagedReference(value = "crew")
+	@JsonIgnoreProperties("flightes")
 	private Set<CrewMember> crewMembers;
 }

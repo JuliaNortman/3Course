@@ -1,5 +1,6 @@
 package com.knu.ynortman.lab3.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +19,7 @@ public class City {
 	@Id
 	@GeneratedValue(generator = "city_id_seq", strategy = GenerationType.SEQUENCE)
 	@SequenceGenerator(name = "city_id_seq", sequenceName = "city_id_seq", allocationSize = 5)
+	@Column(updatable = false)
 	private int id;
 	
 	@NotBlank(message = "Name is mandatory")
@@ -25,6 +27,6 @@ public class City {
 	
 	@NotNull(message = "Country field cannot be empty")
 	@ManyToOne
-	@JoinColumn(name = "country_id", nullable = false)
+	@JoinColumn(name = "country_id", nullable = false, updatable = false)
 	private Country country;
 }

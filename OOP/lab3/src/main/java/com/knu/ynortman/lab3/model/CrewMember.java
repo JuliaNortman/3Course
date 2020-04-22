@@ -2,6 +2,7 @@ package com.knu.ynortman.lab3.model;
 
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +14,7 @@ import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 
@@ -22,6 +24,7 @@ public class CrewMember {
 	@Id
 	@GeneratedValue(generator = "member_id_seq", strategy = GenerationType.SEQUENCE)
 	@SequenceGenerator(name = "member_id_seq", sequenceName = "member_id_seq", allocationSize = 5)
+	@Column(updatable = false)
 	private int id;
 	
 	@NotBlank(message = "Person name is mandatory")
@@ -32,6 +35,7 @@ public class CrewMember {
 	private CrewRole role;
 	
 	@ManyToMany(mappedBy = "crewMembers")
-	@JsonBackReference(value = "crew")
+	@JsonIgnoreProperties("crewmembers")
+	//@JsonBackReference(value = "crew")
 	private Set<Flight> flightes;
 }
