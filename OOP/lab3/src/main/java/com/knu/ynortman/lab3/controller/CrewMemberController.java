@@ -87,7 +87,7 @@ public class CrewMemberController {
 		}
 	}
 	
-	@PostMapping(path = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
+	/*@PostMapping(path = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CrewMember> createCity(@RequestBody @Valid CrewMember crewMember) {
 		try {
 			return new ResponseEntity<CrewMember>(crewService.createMember(crewMember), HttpStatus.CREATED);
@@ -98,19 +98,19 @@ public class CrewMemberController {
 		catch(Exception e) {
 			return new ResponseEntity<CrewMember>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	}
-	
-	/*@PostMapping(path = "/add", consumes = "application/json")
-	public ResponseEntity<CrewMember> addCrewMember(@RequestBody @Valid CrewMember member) {
-		return new ResponseEntity<CrewMember>(crewService.createMember(member), HttpStatus.CREATED);
 	}*/
 	
-	@PutMapping(path = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/dispatcher/add", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<CrewMember> addCrewMember(@RequestBody @Valid CrewMember member) {
+		return new ResponseEntity<CrewMember>(crewService.createMember(member), HttpStatus.CREATED);
+	}
+	
+	@PutMapping(path = "/dispatcher/update", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CrewMember> updateCrewMember(@Valid @RequestBody CrewMember member) {
 		return new ResponseEntity<CrewMember>(crewService.update(member), HttpStatus.OK);
 	}
 	
-	@DeleteMapping(path = "/delete/{id}")
+	@DeleteMapping(path = "/dispatcher/delete/{id}")
 	public ResponseEntity<CrewMember> delete(@PathVariable Integer id) {
 		crewService.deleteById(id);
 		return new ResponseEntity<CrewMember>(HttpStatus.OK);

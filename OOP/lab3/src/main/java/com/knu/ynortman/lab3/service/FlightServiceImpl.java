@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.knu.ynortman.lab3.model.CrewMember;
 import com.knu.ynortman.lab3.model.Flight;
 import com.knu.ynortman.lab3.repository.CityRepository;
 import com.knu.ynortman.lab3.repository.CrewMemberRepository;
@@ -62,6 +63,29 @@ public class FlightServiceImpl implements FlightService {
 	@Override
 	public void deleteById(int id) {
 		flightRepo.deleteById(id);
+	}
+
+	@Override
+	public Flight addMember(int flightId, CrewMember crewMember) {
+		if(!flightRepo.existsById(flightId)) {
+			throw new IllegalArgumentException("Flight with id " + flightId + " does not exist");
+		}
+		try {
+			flightRepo.addCrewMember(flightId, crewMember.getId());
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+		return flightRepo.findById(flightId).get();
+	}
+
+	@Override
+	public Flight deleteMember(int flightId, CrewMember crewMember) {
+		if(!flightRepo.existsById(flightId)) {
+			throw new IllegalArgumentException("Flight with id " + flightId + " does not exist");
+		}
+		flightRepo.deleteCrewMember(flightId, crewMember.getId());
+		return flightRepo.findById(flightId).get();
 	}
 
 }

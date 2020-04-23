@@ -1,6 +1,6 @@
 package com.knu.ynortman.lab3.model;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
@@ -35,7 +34,6 @@ public class CrewMember {
 	private CrewRole role;
 	
 	@ManyToMany(mappedBy = "crewMembers")
-	@JsonIgnoreProperties("crewmembers")
-	//@JsonBackReference(value = "crew")
-	private Set<Flight> flightes;
+	@JsonIgnoreProperties("crewMembers")
+	private List<Flight> flightes;
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.knu.ynortman.lab3.model.CrewMember;
 import com.knu.ynortman.lab3.model.Flight;
 import com.knu.ynortman.lab3.service.FlightService;
 
@@ -60,7 +61,7 @@ public class FlightController {
 		}
 	}
 	
-	@PostMapping(path = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/admin/add", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Flight> postFlight(@RequestBody @Valid Flight flight) {
 		try {
 			return new ResponseEntity<Flight>(flightService.createFlight(flight), HttpStatus.CREATED);
@@ -73,7 +74,29 @@ public class FlightController {
 		}
 	}
 	
-	@PutMapping(path = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/dispatcher/{id}/addmember", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Flight> addFlightMember(@RequestBody CrewMember crewMember,
+			@PathVariable("id") int flightId) {
+		try {
+			return new ResponseEntity<Flight>(flightService.addMember(flightId, crewMember), HttpStatus.CREATED);
+		}
+		catch (IllegalArgumentException e) {
+			return new ResponseEntity<Flight>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@DeleteMapping(path = "/dispatcher/{id}/deletemember", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Flight> deleteFlightMember(@RequestBody CrewMember crewMember,
+			@PathVariable("id") int flightId) {
+		try {
+			return new ResponseEntity<Flight>(flightService.deleteMember(flightId, crewMember), HttpStatus.OK);
+		}
+		catch (IllegalArgumentException e) {
+			return new ResponseEntity<Flight>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PutMapping(path = "/admin/update", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Flight> updateFlight(@RequestBody @Valid Flight flight) {
 		try {
 			return new ResponseEntity<Flight>(flightService.update(flight), HttpStatus.OK);
@@ -86,7 +109,7 @@ public class FlightController {
 		}
 	}
 	
-	@DeleteMapping(path = "/delete/{id}")
+	@DeleteMapping(path = "/admin/delete/{id}")
 	public ResponseEntity<Flight> deleteFlight(@PathVariable("id") Integer id) {
 		flightService.deleteById(id);
 		return new ResponseEntity<Flight>(HttpStatus.OK);

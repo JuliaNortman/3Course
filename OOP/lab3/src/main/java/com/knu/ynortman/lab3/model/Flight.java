@@ -1,7 +1,7 @@
 package com.knu.ynortman.lab3.model;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,7 +18,6 @@ import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
 
@@ -37,6 +36,7 @@ public class Flight {
 	private City departCity;
 	
 	@Future(message = "Departure time cannot refer to the past")
+	@Column(name = "departure_time")
 	private LocalDateTime departTime;
 	
 	@NotNull(message = "Destination city cannot be null")
@@ -54,7 +54,6 @@ public class Flight {
         inverseJoinColumns = { @JoinColumn(name = "crew_id") }
     )
 	
-	//@JsonManagedReference(value = "crew")
 	@JsonIgnoreProperties("flightes")
-	private Set<CrewMember> crewMembers;
+	private List<CrewMember> crewMembers;
 }
