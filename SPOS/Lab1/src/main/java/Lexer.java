@@ -39,12 +39,18 @@ public class Lexer {
             switch (state) {
                 case 0: initialState(c); break;
                 case 1: slash(c); break;
+                case 8: greater(c); break;
+                case 9: less(c); break;
                 case 15: singleLineComment(c); break;
                 case 16: multiLineComment(c); break;
                 case 17: starInMultiLineComment(c); break;
                 case 18: divideEqual(c); break;
                 case 19: maybeComment(c); break;
                 case 21: colonOrSeparator(c); break;
+                case 22: greaterGreater(c); break;
+                case 23: greaterGreaterGreater(c); break;
+                case 24: lessLess(c); break;
+                case 25: lessLessLess(c); break;
                 default: {
                     initialState(c);
                     break;
@@ -127,6 +133,7 @@ public class Lexer {
             //makeToken(TokenName.ERROR, buffer.toString());
         } else {
             makeToken(TokenName.OPERATOR, buffer.toString());
+            letter--;
             state = 0;
         }
     }
@@ -173,7 +180,7 @@ public class Lexer {
 
     /**
      * state 18
-     * /= in buffer
+     * OPERATOR= in buffer
      */
     private void divideEqual(char c) {
         if(c == '/') {
@@ -223,6 +230,124 @@ public class Lexer {
             state = -1;
         }
     }
+
+    /*
+    * state 8
+    * > in buffer
+    * */
+    private void greater(char c) {
+        if(c == '=') {
+            addToBuffer(c, 18);
+        } else if(c == ':') {
+            addToBuffer(c, 21);
+        } else if(c == '>') {
+            addToBuffer(c, 22);
+        } else if(Util.isOperator(c)) {
+            addToBuffer(c, -1);
+        } else {
+            makeToken(TokenName.OPERATOR, buffer.toString());
+            letter--;
+            state = 0;
+        }
+    }
+
+    /*
+    * state 22
+    * >> in buffer
+    * */
+    private void greaterGreater(char c) {
+        if(c == '=') {
+            addToBuffer(c, 18);
+        } else if(c == ':') {
+            addToBuffer(c, 21);
+        } else if(c == '>') {
+            addToBuffer(c, 23);
+        } else if(Util.isOperator(c)) {
+            addToBuffer(c, -1);
+        } else {
+            makeToken(TokenName.OPERATOR, buffer.toString());
+            letter--;
+            state = 0;
+        }
+    }
+
+    /*
+     * state 23
+     * >>> in buffer
+     * */
+    private void greaterGreaterGreater(char c) {
+        if(c == '=') {
+            addToBuffer(c, 18);
+        } else if(c == ':') {
+            addToBuffer(c, 21);
+        }  else if(Util.isOperator(c)) {
+            addToBuffer(c, -1);
+        } else {
+            makeToken(TokenName.OPERATOR, buffer.toString());
+            letter--;
+            state = 0;
+        }
+    }
+
+
+    /*
+     * state 9
+     * < in buffer
+     * */
+    private void less(char c) {
+        if(c == '=') {
+            addToBuffer(c, 18);
+        } else if(c == ':') {
+            addToBuffer(c, 21);
+        } else if(c == '<') {
+            addToBuffer(c, 24);
+        } else if(Util.isOperator(c)) {
+            addToBuffer(c, -1);
+        } else {
+            makeToken(TokenName.OPERATOR, buffer.toString());
+            letter--;
+            state = 0;
+        }
+    }
+
+    /*
+     * state 24
+     * << in buffer
+     * */
+    private void lessLess(char c) {
+        if(c == '=') {
+            addToBuffer(c, 18);
+        } else if(c == ':') {
+            addToBuffer(c, 21);
+        } else if(c == '<') {
+            addToBuffer(c, 25);
+        } else if(Util.isOperator(c)) {
+            addToBuffer(c, -1);
+        } else {
+            makeToken(TokenName.OPERATOR, buffer.toString());
+            letter--;
+            state = 0;
+        }
+    }
+
+    /*
+     * state 25
+     * <<< in buffer
+     * */
+    private void lessLessLess(char c) {
+        if(c == '=') {
+            addToBuffer(c, 18);
+        } else if(c == ':') {
+            addToBuffer(c, 21);
+        }  else if(Util.isOperator(c)) {
+            addToBuffer(c, -1);
+        } else {
+            makeToken(TokenName.OPERATOR, buffer.toString());
+            letter--;
+            state = 0;
+        }
+    }
+
 
     private void error(char c) {
 
