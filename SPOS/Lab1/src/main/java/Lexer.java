@@ -40,11 +40,14 @@ public class Lexer {
                 case 0: initialState(c); break;
                 case 1: slash(c); break;
                 case 2: identifier(c); break;
+                case 7: dot(c); break;
                 case 8: greater(c); break;
                 case 9: less(c); break;
                 case 10: ampersand(c); break;
                 case 11: singleOperator(c); break;
                 case 12: colon(c); break;
+                case 13: plus(c); break;
+                case 14: minus(c); break;
                 case 15: singleLineComment(c); break;
                 case 16: multiLineComment(c); break;
                 case 17: starInMultiLineComment(c); break;
@@ -55,10 +58,10 @@ public class Lexer {
                 case 22: greaterGreater(c); break;
                 //case 23: greaterGreaterGreater(c); break;
                 case 24: lessLess(c); break;
-                //case 25: lessLessLess(c); break;
+                case 25: dotDot(c); break;
                 case 26: identifier(c); break;
-                case 27: ampersandAmpersand(c); break;
-                case 28: pipePipe(c); break;
+                case 27: ampersandOrPipe(c); break;
+                case 28: dotDotDot(c); break;
                 default: {
                     initialState(c);
                     break;
@@ -250,6 +253,8 @@ public class Lexer {
             addToBuffer(c, 21);
         } else if(c == '>') {
             addToBuffer(c, 22);
+        } else if(c == '/') {
+            addToBuffer(c, 19);
         } else if(Util.isOperator(c)) {
             addToBuffer(c, -1);
         } else {
@@ -270,6 +275,8 @@ public class Lexer {
             addToBuffer(c, 21);
         } else if(c == '>') {
             addToBuffer(c, 11);
+        }else if(c == '/') {
+            addToBuffer(c, 19);
         } else if(Util.isOperator(c)) {
             addToBuffer(c, -1);
         } else {
@@ -278,25 +285,6 @@ public class Lexer {
             state = 0;
         }
     }
-
-    /*
-     * state 23
-     * >>> in buffer
-     * */
-    /*private void greaterGreaterGreater(char c) {
-        if(c == '=') {
-            addToBuffer(c, 18);
-        } else if(c == ':') {
-            addToBuffer(c, 21);
-        }  else if(Util.isOperator(c)) {
-            addToBuffer(c, -1);
-        } else {
-            makeToken(TokenName.OPERATOR, buffer.toString());
-            letter--;
-            state = 0;
-        }
-    }*/
-
 
     /*
      * state 9
@@ -309,6 +297,8 @@ public class Lexer {
             addToBuffer(c, 21);
         } else if(c == '<') {
             addToBuffer(c, 24);
+        } else if(c == '/') {
+            addToBuffer(c, 19);
         } else if(Util.isOperator(c)) {
             addToBuffer(c, -1);
         } else {
@@ -329,6 +319,8 @@ public class Lexer {
             addToBuffer(c, 21);
         } else if(c == '<') {
             addToBuffer(c, 11);
+        } else if(c == '/') {
+            addToBuffer(c, 19);
         } else if(Util.isOperator(c)) {
             addToBuffer(c, -1);
         } else {
@@ -337,24 +329,6 @@ public class Lexer {
             state = 0;
         }
     }
-
-    /*
-     * state 25
-     * <<< in buffer
-     * */
-    /*private void lessLessLess(char c) {
-        if(c == '=') {
-            addToBuffer(c, 18);
-        } else if(c == ':') {
-            addToBuffer(c, 21);
-        }  else if(Util.isOperator(c)) {
-            addToBuffer(c, -1);
-        } else {
-            makeToken(TokenName.OPERATOR, buffer.toString());
-            letter--;
-            state = 0;
-        }
-    }*/
 
     /*
     * state 2 or 26
@@ -399,6 +373,8 @@ public class Lexer {
             addToBuffer(c, 18);
         } else if(c == ':') {
             addToBuffer(c, 21);
+        } else if(c == '/') {
+            addToBuffer(c, 19);
         } else if(Util.isOperator(c)) {
             addToBuffer(c, -1);
         } else {
@@ -410,11 +386,13 @@ public class Lexer {
 
     /*
     * state 27
-    * && in buffer
+    * && or || in buffer
     * */
-    private void ampersandAmpersand(char c) {
+    private void ampersandOrPipe(char c) {
         if(c == ':') {
             addToBuffer(c, 21);
+        } else if(c == '/') {
+            addToBuffer(c, 19);
         } else if(Util.isOperator(c)) {
             addToBuffer(c, -1);
         } else {
@@ -435,22 +413,8 @@ public class Lexer {
             addToBuffer(c, 18);
         } else if(c == ':') {
             addToBuffer(c, 21);
-        } else if(Util.isOperator(c)) {
-            addToBuffer(c, -1);
-        } else {
-            letter--;
-            makeToken(TokenName.OPERATOR, buffer.toString());
-            state = 0;
-        }
-    }
-
-    /*
-     * state 28
-     * || in buffer
-     * */
-    private void pipePipe(char c) {
-        if(c == ':') {
-            addToBuffer(c, 21);
+        } else if(c == '/') {
+            addToBuffer(c, 19);
         } else if(Util.isOperator(c)) {
             addToBuffer(c, -1);
         } else {
@@ -465,6 +429,7 @@ public class Lexer {
     * OPERATOR in buffer
     * -- c == : -> 21
     * -- c == = -> 18
+    * -- c == / -> 19
     * -- c == OPERATOR -> -1
     * -- else -> 0
     * */
@@ -473,14 +438,98 @@ public class Lexer {
             addToBuffer(c, 18);
         } else if(c == ':') {
             addToBuffer(c, 21);
+        } else if(c == '/') {
+            addToBuffer(c, 19);
         } else if(Util.isOperator(c)) {
             addToBuffer(c, -1);
         } else {
+            letter--;
             makeToken(TokenName.OPERATOR, buffer.toString());
             state = 0;
         }
     }
 
+    /*
+    * state 7
+    * . in buffer
+    * */
+    private void dot(char c) {
+        if(Character.isDigit(c)) {
+            addToBuffer(c, 23);
+        } else if(c == '.') {
+            addToBuffer(c, 25);
+        } else {
+            letter--;
+            makeToken(TokenName.SEPARATOR, buffer.toString());
+            state = 0;
+        }
+    }
+
+    /*
+    * state 25
+    * .. in buffer
+    * */
+    private void dotDot(char c) {
+        if(c == '.') {
+            addToBuffer(c, 28);
+        } else {
+            makeToken(TokenName.SEPARATOR, buffer.charAt(0));
+            makeToken(TokenName.SEPARATOR, buffer.charAt(1));
+            state = 0;
+        }
+    }
+
+    /*
+    * state 28
+    * ... in buffer
+    * */
+    private void dotDotDot(char c) {
+        if(c == '.') {
+            addToBuffer(c, -1);
+        } else {
+            letter--;
+            makeToken(TokenName.SEPARATOR, buffer.toString());
+            state = 0;
+        }
+    }
+
+    /*
+    * state 13
+    * + in buffer
+    * */
+    private void plus(char c) {
+        if(c == '+') {
+            addToBuffer(c, 11);
+        } else if(c == ':') {
+            addToBuffer(c, 21);
+        } else if(c == '/') {
+            addToBuffer(c, 19);
+        } else if(Util.isOperator(c)) {
+            addToBuffer(c, -1);
+        } else {
+            letter--;
+            makeToken(TokenName.OPERATOR, buffer.toString());
+        }
+    }
+
+    /*
+    * state 14
+    * - in buffer
+    * */
+    private void minus(char c) {
+        if(c == '-') {
+            addToBuffer(c, 11);
+        } else if(c == ':') {
+            addToBuffer(c, 21);
+        } else if(c == '/') {
+            addToBuffer(c, 19);
+        } else if(Util.isOperator(c)) {
+            addToBuffer(c, -1);
+        } else {
+            letter--;
+            makeToken(TokenName.OPERATOR, buffer.toString());
+        }
+    }
 
     private void error(char c) {
 
@@ -489,6 +538,7 @@ public class Lexer {
     private void makeToken(TokenName tokenName, String value) {
         tokens.add(new Token(tokenName, value));
         buffer = new StringBuilder();
+        state = 0;
     }
 
     private void makeToken(TokenName tokenName, char value) {
