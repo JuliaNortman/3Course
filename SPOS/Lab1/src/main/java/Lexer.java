@@ -13,6 +13,7 @@ public class Lexer {
     private List<Token> tokens;
     private final String code;
     private StringBuilder buffer;
+    private int letter;
 
     static final Logger logger = LogManager.getLogger(Logger.class);
 
@@ -33,14 +34,17 @@ public class Lexer {
     }
 
     public void parse() {
-        for(int i = 0; i < code.length(); ++i) {
-            char c = code.charAt(i);
+        for(letter = 0; letter < code.length(); ++letter) {
+            char c = code.charAt(letter);
             switch (state) {
                 case 0: initialState(c); break;
                 case 1: slash(c); break;
                 case 15: singleLineComment(c); break;
                 case 16: multiLineComment(c); break;
                 case 17: starInMultiLineComment(c); break;
+                case 18: divideEqual(c); break;
+                case 19: maybeComment(c); break;
+                case 21: colonOrSeparator(c); break;
                 default: {
                     initialState(c);
                     break;
@@ -120,7 +124,7 @@ public class Lexer {
             addToBuffer(c, 21);
         } else if(Util.isOperator(c)) {
             addToBuffer(c, -1);
-            makeToken(TokenName.ERROR, buffer.toString());
+            //makeToken(TokenName.ERROR, buffer.toString());
         } else {
             makeToken(TokenName.OPERATOR, buffer.toString());
             state = 0;
@@ -164,6 +168,59 @@ public class Lexer {
             makeToken(TokenName.COMMENT, buffer.toString());
         } else {
             addToBuffer(c, 16);
+        }
+    }
+
+    /**
+     * state 18
+     * /= in buffer
+     */
+    private void divideEqual(char c) {
+        if(c == '/') {
+            addToBuffer(c, 19);
+        } else if(c == ':') {
+            addToBuffer(c, 21);
+        } else if(Util.isOperator(c)) {
+            addToBuffer(c, -1);
+        } else {
+            makeToken(TokenName.OPERATOR, buffer.toString());
+            state = 0;
+        }
+    }
+
+    /*
+    * state 19
+    * OPERATOR/ in buffer
+    * */
+    private void maybeComment(char c) {
+        if(c == '/' || c == '*') {
+            buffer.deleteCharAt(buffer.length() - 1);
+            makeToken(TokenName.OPERATOR, buffer.toString());
+            buffer.append('/');
+            if(c == '/') {
+                addToBuffer(c, 15);
+            } else {
+                addToBuffer(c, 16);
+            }
+        } else {
+            letter--;
+            state = -1;
+        }
+    }
+
+    /*
+    * state 21
+    * OPERATOR: in buffer
+    * */
+    private void colonOrSeparator(char c) {
+        if(c == ':') {
+            buffer.deleteCharAt(buffer.length() - 1);
+            makeToken(TokenName.OPERATOR, buffer.toString());
+            makeToken(TokenName.SEPARATOR, "::");
+            state = 0;
+        } else {
+            letter--;
+            state = -1;
         }
     }
 
