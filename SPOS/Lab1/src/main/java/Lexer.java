@@ -39,18 +39,26 @@ public class Lexer {
             switch (state) {
                 case 0: initialState(c); break;
                 case 1: slash(c); break;
+                case 2: identifier(c); break;
                 case 8: greater(c); break;
                 case 9: less(c); break;
+                case 10: ampersand(c); break;
+                case 11: singleOperator(c); break;
+                case 12: colon(c); break;
                 case 15: singleLineComment(c); break;
                 case 16: multiLineComment(c); break;
                 case 17: starInMultiLineComment(c); break;
                 case 18: divideEqual(c); break;
                 case 19: maybeComment(c); break;
+                case 20: pipe(c); break;
                 case 21: colonOrSeparator(c); break;
                 case 22: greaterGreater(c); break;
-                case 23: greaterGreaterGreater(c); break;
+                //case 23: greaterGreaterGreater(c); break;
                 case 24: lessLess(c); break;
-                case 25: lessLessLess(c); break;
+                //case 25: lessLessLess(c); break;
+                case 26: identifier(c); break;
+                case 27: ampersandAmpersand(c); break;
+                case 28: pipePipe(c); break;
                 default: {
                     initialState(c);
                     break;
@@ -261,7 +269,7 @@ public class Lexer {
         } else if(c == ':') {
             addToBuffer(c, 21);
         } else if(c == '>') {
-            addToBuffer(c, 23);
+            addToBuffer(c, 11);
         } else if(Util.isOperator(c)) {
             addToBuffer(c, -1);
         } else {
@@ -275,7 +283,7 @@ public class Lexer {
      * state 23
      * >>> in buffer
      * */
-    private void greaterGreaterGreater(char c) {
+    /*private void greaterGreaterGreater(char c) {
         if(c == '=') {
             addToBuffer(c, 18);
         } else if(c == ':') {
@@ -287,7 +295,7 @@ public class Lexer {
             letter--;
             state = 0;
         }
-    }
+    }*/
 
 
     /*
@@ -320,7 +328,7 @@ public class Lexer {
         } else if(c == ':') {
             addToBuffer(c, 21);
         } else if(c == '<') {
-            addToBuffer(c, 25);
+            addToBuffer(c, 11);
         } else if(Util.isOperator(c)) {
             addToBuffer(c, -1);
         } else {
@@ -334,7 +342,7 @@ public class Lexer {
      * state 25
      * <<< in buffer
      * */
-    private void lessLessLess(char c) {
+    /*private void lessLessLess(char c) {
         if(c == '=') {
             addToBuffer(c, 18);
         } else if(c == ':') {
@@ -344,6 +352,131 @@ public class Lexer {
         } else {
             makeToken(TokenName.OPERATOR, buffer.toString());
             letter--;
+            state = 0;
+        }
+    }*/
+
+    /*
+    * state 2 or 26
+    * letter or $ or _ or digit in buffer
+    * */
+    private void identifier(char c) {
+        if(Character.isJavaIdentifierPart(c)) {
+            addToBuffer(c, 26);
+        } else if(c == '#') {
+            addToBuffer(c, -1);
+        } else {
+            makeToken(TokenName.IDENTIFIER, buffer.toString());
+            state = 0;
+            letter--;
+        }
+    }
+
+    /*
+    * state 12
+    * : in buffer
+    * */
+    private void colon(char c) {
+        if(c == ':') {
+            makeToken(TokenName.SEPARATOR, "::");
+        } else if(Util.isOperator(c)) {
+            addToBuffer(c, -1);
+        } else {
+            makeToken(TokenName.OPERATOR, buffer.toString());
+            state = 0;
+            letter--;
+        }
+    }
+
+    /*
+    * state 10
+    * & in buffer
+    * */
+    private void ampersand(char c) {
+        if(c == '&') {
+            addToBuffer(c, 27);
+        } else if( c == '=') {
+            addToBuffer(c, 18);
+        } else if(c == ':') {
+            addToBuffer(c, 21);
+        } else if(Util.isOperator(c)) {
+            addToBuffer(c, -1);
+        } else {
+            letter--;
+            makeToken(TokenName.OPERATOR, buffer.toString());
+            state = 0;
+        }
+    }
+
+    /*
+    * state 27
+    * && in buffer
+    * */
+    private void ampersandAmpersand(char c) {
+        if(c == ':') {
+            addToBuffer(c, 21);
+        } else if(Util.isOperator(c)) {
+            addToBuffer(c, -1);
+        } else {
+            letter--;
+            makeToken(TokenName.OPERATOR, buffer.toString());
+            state = 0;
+        }
+    }
+
+    /*
+     * state 20
+     * | in buffer
+     * */
+    private void pipe(char c) {
+        if(c == '|') {
+            addToBuffer(c, 28);
+        } else if( c == '=') {
+            addToBuffer(c, 18);
+        } else if(c == ':') {
+            addToBuffer(c, 21);
+        } else if(Util.isOperator(c)) {
+            addToBuffer(c, -1);
+        } else {
+            letter--;
+            makeToken(TokenName.OPERATOR, buffer.toString());
+            state = 0;
+        }
+    }
+
+    /*
+     * state 28
+     * || in buffer
+     * */
+    private void pipePipe(char c) {
+        if(c == ':') {
+            addToBuffer(c, 21);
+        } else if(Util.isOperator(c)) {
+            addToBuffer(c, -1);
+        } else {
+            letter--;
+            makeToken(TokenName.OPERATOR, buffer.toString());
+            state = 0;
+        }
+    }
+
+    /*
+    * state 11
+    * OPERATOR in buffer
+    * -- c == : -> 21
+    * -- c == = -> 18
+    * -- c == OPERATOR -> -1
+    * -- else -> 0
+    * */
+    private void singleOperator(char c) {
+        if(c == '=') {
+            addToBuffer(c, 18);
+        } else if(c == ':') {
+            addToBuffer(c, 21);
+        } else if(Util.isOperator(c)) {
+            addToBuffer(c, -1);
+        } else {
+            makeToken(TokenName.OPERATOR, buffer.toString());
             state = 0;
         }
     }
