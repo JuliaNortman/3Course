@@ -353,7 +353,15 @@ public class Lexer {
         } else if(c == '/') {
             addToBuffer(c, 29);
         } else {
-            makeToken(TokenName.IDENTIFIER, buffer.toString());
+            if(isNullLiteral(buffer.toString())) {
+                makeToken(TokenName.NULL_LITERAL, buffer.toString());
+            } else if(isBooleanLiteral(buffer.toString())) {
+                makeToken(TokenName.BOOLEAN_LITERAL, buffer.toString());
+            } else if(isKeyword(buffer.toString())) {
+                makeToken(TokenName.KEYWORD, buffer.toString());
+            } else {
+                makeToken(TokenName.IDENTIFIER, buffer.toString());
+            }
             state = 0;
             letter--;
         }
@@ -366,6 +374,7 @@ public class Lexer {
     private void colon(char c) {
         if(c == ':') {
             makeToken(TokenName.SEPARATOR, "::");
+            state = 0;
         } else if(Util.isOperator(c)) {
             addToBuffer(c, -1);
         } else {
@@ -557,7 +566,15 @@ public class Lexer {
     private void maybeCommentAfterIdentifier(char c) {
         if(c == '/' || c == '*') {
             buffer.deleteCharAt(buffer.length() - 1);
-            makeToken(TokenName.IDENTIFIER, buffer.toString());
+            if(isNullLiteral(buffer.toString())) {
+                makeToken(TokenName.NULL_LITERAL, buffer.toString());
+            } else if(isBooleanLiteral(buffer.toString())) {
+                makeToken(TokenName.BOOLEAN_LITERAL, buffer.toString());
+            } else if(isKeyword(buffer.toString())) {
+                makeToken(TokenName.KEYWORD, buffer.toString());
+            } else {
+                makeToken(TokenName.IDENTIFIER, buffer.toString());
+            }
             buffer.append('/');
             if (c == '/') {
                 addToBuffer(c, 15);
@@ -567,7 +584,16 @@ public class Lexer {
         }
         else {
             letter -= 2;
-            makeToken(TokenName.IDENTIFIER, buffer.toString());
+            buffer.deleteCharAt(buffer.length()-1);
+            if(isNullLiteral(buffer.toString())) {
+                makeToken(TokenName.NULL_LITERAL, buffer.toString());
+            } else if(isBooleanLiteral(buffer.toString())) {
+                makeToken(TokenName.BOOLEAN_LITERAL, buffer.toString());
+            } else if(isKeyword(buffer.toString())) {
+                makeToken(TokenName.KEYWORD, buffer.toString());
+            } else {
+                makeToken(TokenName.IDENTIFIER, buffer.toString());
+            }
             state = 0;
         }
     }
@@ -696,6 +722,70 @@ public class Lexer {
 
     private void error(char c) {
 
+    }
+
+    private boolean isKeyword(String value) {
+        switch (value.length()) {
+            case 2: {
+                return "do".equals(value) || "if".equals(value);
+            }
+            case 3: {
+                return "for".equals(value) || "int".equals(value) ||
+                        "new".equals(value) || "try".equals(value);
+            }
+            case 4: {
+                return "byte".equals(value) || "case".equals(value) ||
+                        "char".equals(value) || "else".equals(value) ||
+                        "enum".equals(value) || "goto".equals(value) ||
+                        "long".equals(value) || "this".equals(value) ||
+                        "void".equals(value);
+            }
+            case 5: {
+                return "break".equals(value) || "catch".equals(value) ||
+                        "class".equals(value) || "const".equals(value) ||
+                        "final".equals(value) || "float".equals(value) ||
+                        "short".equals(value) || "super".equals(value) ||
+                        "throw".equals(value) || "while".equals(value);
+            }
+            case 6: {
+                return "assert".equals(value) || "double".equals(value) ||
+                        "import".equals(value) || "native".equals(value) ||
+                        "public".equals(value) || "return".equals(value) ||
+                        "static".equals(value) || "switch".equals(value) ||
+                        "throws".equals(value);
+            }
+            case 7: {
+                return "boolean".equals(value) || "default".equals(value) ||
+                        "extends".equals(value) || "finally".equals(value) ||
+                        "package".equals(value) || "private".equals(value);
+            }
+            case 8: {
+                return "abstract".equals(value) || "continue".equals(value) ||
+                        "strictfp".equals(value) || "volatile".equals(value);
+            }
+            case 9: {
+                return "interface".equals(value) || "protected".equals(value) ||
+                        "transient".equals(value);
+            }
+            case 10: {
+                return "implements".equals(value) || "instanceof".equals(value);
+            }
+            case 12: {
+                return "synchronized".equals(value);
+            }
+            default: {
+                return false;
+            }
+        }
+    }
+
+    private boolean isBooleanLiteral(String value) {
+        if(value.length() < 4 || value.length() > 5) return false;
+        return "true".equals(value) || "false".equals(value);
+    }
+
+    private boolean isNullLiteral(String value) {
+        return value.length() == 4 && "null".equals(value);
     }
 
     private void makeToken(TokenName tokenName, String value) {
