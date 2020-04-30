@@ -12,4 +12,12 @@ public class Token {
         return "<" + token.left.name() + "  |  " + token.right +
                 '>';
     }
+
+    public TokenName getTokenName() {
+        return token.left;
+    }
+
+    public String getValue() {
+        return token.right;
+    }
 }
