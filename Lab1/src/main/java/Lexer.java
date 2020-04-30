@@ -11,7 +11,7 @@ import java.util.List;
 public class Lexer {
     private int state;
     private List<Token> tokens;
-    private final String code;
+    private String code;
     private StringBuilder buffer;
     private int letter;
 
@@ -34,12 +34,14 @@ public class Lexer {
     }
 
     public void parse() {
+        code += " ";
         for(letter = 0; letter < code.length(); ++letter) {
             char c = code.charAt(letter);
             switch (state) {
                 case 0: initialState(c); break;
                 case 1: slash(c); break;
                 case 2: identifier(c); break;
+                case 3: zeroFirst(c); break;
                 case 4: nonzeroDigit(c); break;
                 case 5: charLiteral(c); break;
                 case 6: stringLiteral(c); break;
@@ -59,7 +61,7 @@ public class Lexer {
                 case 20: pipe(c); break;
                 case 21: colonOrSeparator(c); break;
                 case 22: greaterGreater(c); break;
-                //case 23: greaterGreaterGreater(c); break;
+                case 23: pointInDigit(c); break;
                 case 24: lessLess(c); break;
                 case 25: dotDot(c); break;
                 case 26: identifier(c); break;
@@ -71,7 +73,15 @@ public class Lexer {
                 case 32: expectEndOfChar(c); break;
                 case 33: digitInChar(c); break;
                 case 34: underlineInDigit(c); break;
-
+                case 35: binaryDigit(c); break;
+                case 36: hexDigit(c); break;
+                case 37: octalDigit(c); break;
+                case 38: underlineInOctal(c); break;
+                case 39: underlineInBinary(c); break;
+                case 40: underlineInHex(c); break;
+                case 41: integerSuffix(c); break;
+                case 42: floatSuffix(c); break;
+                case 43: underlineInFloat(c); break;
                 default: {
                     //initialState(c);
                     logger.warn("Unknown state " + c);
@@ -155,6 +165,32 @@ public class Lexer {
         } else {
             makeToken(TokenName.OPERATOR, buffer.toString());
             letter--;
+            state = 0;
+        }
+    }
+
+    /*
+    * state 3
+    * 0 in buffer
+    * */
+    private void zeroFirst(char c) {
+        if(Util.isOctalDigit(c)) {
+            addToBuffer(c, 37);
+        } else if(c == '_') {
+            addToBuffer(c, 38);
+        } else if(c == 'b' || c == 'B') {
+            addToBuffer(c, 35);
+        } else if(c == 'x' || c == 'X') {
+            addToBuffer(c, 36);
+        } else if(c == '.') {
+            addToBuffer(c, 23);
+        } else if(c == 'l' || c == 'L') {
+            addToBuffer(c, 41);
+        } else if(Character.isJavaIdentifierPart(c) || c == '8' || c == '9') {
+            addToBuffer(c, -1);
+        } else {
+            letter--;
+            makeToken(TokenName.INT_LITERAL, buffer.toString());
             state = 0;
         }
     }
@@ -701,6 +737,10 @@ public class Lexer {
             addToBuffer(c, -1);
         } else if(c == '.') {
             addToBuffer(c, 23);
+        } else if(c == 'l' || c == 'L') {
+            addToBuffer(c, 41);
+        } else if(Character.isJavaIdentifierPart(c)) {
+            addToBuffer(c, -1);
         } else {
             makeToken(TokenName.INT_LITERAL, buffer.toString());
             letter--;
@@ -715,6 +755,172 @@ public class Lexer {
     private void underlineInDigit(char c) {
         if(Character.isDigit(c)) {
             addToBuffer(c, 4);
+        } else if(c == '_') {
+            addToBuffer(c, 34);
+        } else {
+            addToBuffer(c, -1);
+        }
+    }
+
+    /*
+    * state 37
+    * OCTAL DIGITS in buffer
+    * */
+    private void octalDigit(char c) {
+        if(c == '_') {
+            addToBuffer(c, 38);
+        } else if(Util.isOctalDigit(c)) {
+            addToBuffer(c, 37);
+        } else if(c == 'l' || c == 'L') {
+            addToBuffer(c, 41);
+        } else if(Character.isJavaIdentifierPart(c) || c == '8' || c == '9') {
+            addToBuffer(c, -1);
+        } else {
+            letter--;
+            makeToken(TokenName.INT_LITERAL, buffer.toString());
+            state = 0;
+        }
+    }
+
+    /*
+    * state 38
+    * OCTALDIGITS_ in buffer
+    * */
+    private void underlineInOctal(char c) {
+        if(Util.isOctalDigit(c)) {
+            addToBuffer(c, 37);
+        } else if(c == '_') {
+            addToBuffer(c, 38);
+        } else {
+            addToBuffer(c, -1);
+        }
+    }
+
+    /*
+    * state 35
+    * BINARYDIGITS in buffer
+    * */
+    private void binaryDigit(char c) {
+        if(Util.isBinaryDigit(c)) {
+            addToBuffer(c, 35);
+        } else if (c == '_') {
+            addToBuffer(c, 39);
+        } else if(c == 'l' || c == 'L') {
+            addToBuffer(c, 41);
+        } else if(Character.isJavaIdentifierPart(c)) {
+            addToBuffer(c, -1);
+        } else {
+            letter--;
+            makeToken(TokenName.INT_LITERAL, buffer.toString());
+            state = 0;
+        }
+    }
+
+    /*
+    * state 39
+    * BINARYDIGIT_ in buffer
+    * */
+    private void underlineInBinary(char c) {
+        if(c == '_') {
+            addToBuffer(c, 39);
+        } else if(Util.isBinaryDigit(c)) {
+            addToBuffer(c, 35);
+        } else {
+            addToBuffer(c, -1);
+        }
+    }
+
+    /*
+     * state 36
+     * HEXDIGIT in buffer
+     * */
+    private void hexDigit(char c) {
+        if(Util.isHexDigit(c)) {
+            addToBuffer(c, 36);
+        } else if (c == '_') {
+            addToBuffer(c, 40);
+        } else if(c == 'l' || c == 'L') {
+            addToBuffer(c, 41);
+        } else if(Character.isJavaIdentifierPart(c)) {
+            addToBuffer(c, -1);
+        } else {
+            letter--;
+            makeToken(TokenName.INT_LITERAL, buffer.toString());
+            state = 0;
+        }
+    }
+
+    /*
+     * state 40
+     * HEXDIGIT_ in buffer
+     * */
+    private void underlineInHex(char c) {
+        if(c == '_') {
+            addToBuffer(c, 40);
+        } else if(Util.isHexDigit(c)) {
+            addToBuffer(c, 36);
+        } else {
+            addToBuffer(c, -1);
+        }
+    }
+
+    /*
+    * state 41
+    * DIGIT L in buffer
+    * */
+    private void integerSuffix(char c) {
+        if(Character.isJavaIdentifierPart(c)) {
+            addToBuffer(c, -1);
+        } else {
+            letter--;
+            makeToken(TokenName.INT_LITERAL, buffer.toString());
+            state = 0;
+        }
+    }
+
+    /*
+    * state 42
+    * DIGIT f/F/d/D in buffer
+    * */
+    private void floatSuffix(char c) {
+        if(Character.isJavaIdentifierPart(c)) {
+            addToBuffer(c, -1);
+        } else {
+            letter--;
+            makeToken(TokenName.FLOAT_LITERAL, buffer.toString());
+            state = 0;
+        }
+    }
+
+    /*
+    * state 23
+    * DIGIT. in buffer
+    * */
+    private void pointInDigit(char c) {
+        if(Character.isDigit(c)) {
+            addToBuffer(c, 23);
+        } else if(Util.isFloatSuffix(c)) {
+            addToBuffer(c, 42);
+        } else if(Character.isJavaIdentifierPart(c) || c == '.') {
+            addToBuffer(c, -1);
+        } else if(c == '_') {
+            addToBuffer(c, 43);
+        } else {
+            letter--;
+            makeToken(TokenName.FLOAT_LITERAL, buffer.toString());
+            state = 0;
+        }
+    }
+
+    /*
+    * state 43
+    * FLOAT_ in buffer
+    * */
+    private void underlineInFloat(char c) {
+        if(Character.isDigit(c)) {
+            addToBuffer(c, 23);
+        } else if(c == '_') {
+            addToBuffer(c, 43);
         } else {
             addToBuffer(c, -1);
         }
