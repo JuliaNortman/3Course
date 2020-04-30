@@ -15,7 +15,7 @@ public class Lexer {
     private StringBuilder buffer;
     private int letter;
 
-    static final Logger logger = LogManager.getLogger(Logger.class);
+    private static final Logger logger = LogManager.getLogger(Logger.class);
 
     public Lexer(final String filePath) {
         state = 0;
@@ -38,6 +38,7 @@ public class Lexer {
         for(letter = 0; letter < code.length(); ++letter) {
             char c = code.charAt(letter);
             switch (state) {
+                case -1: error(c); break;
                 case 0: initialState(c); break;
                 case 1: slash(c); break;
                 case 2: identifier(c); break;
@@ -89,6 +90,13 @@ public class Lexer {
                 }
             }
         }
+        if(state == 15) {
+            makeToken(TokenName.COMMENT, buffer.toString());
+            state = 0;
+        } else if(state == 16 || state == 17) {
+            makeToken(TokenName.ERROR, buffer.toString());
+            state = 0;
+        }
         HtmlConverter.convert(tokens);
     }
 
@@ -136,8 +144,7 @@ public class Lexer {
             makeToken(TokenName.OPERATOR, c);
             state = 0;
         } else if(c == '#') {
-            makeToken(TokenName.ERROR, c);
-            state = -1;
+            addToBuffer(c, -1);
         } else if(c == '|') {
             addToBuffer(c, 20);
         } else {
@@ -268,8 +275,7 @@ public class Lexer {
                 addToBuffer(c, 16);
             }
         } else {
-            letter--;
-            state = -1;
+            addToBuffer(c, -1);
         }
     }
 
@@ -927,7 +933,23 @@ public class Lexer {
     }
 
     private void error(char c) {
-
+        if(Character.isWhitespace(c) || Util.isSeparator(c) ||
+            c == '.') {
+            letter--;
+            makeToken(TokenName.ERROR, buffer.toString());
+            state = 0;
+        } else if(buffer.length() > 0 && buffer.charAt(buffer.length()-1) == '/' && (c == '/' || c == '*')) {
+            buffer.deleteCharAt(buffer.length()-1);
+            makeToken(TokenName.ERROR, buffer.toString());
+            buffer.append('/');
+            if(c == '/') {
+                addToBuffer(c, 15);
+            } else {
+                addToBuffer(c, 16);
+            }
+        } else {
+            addToBuffer(c, -1);
+        }
     }
 
     private boolean isKeyword(String value) {
