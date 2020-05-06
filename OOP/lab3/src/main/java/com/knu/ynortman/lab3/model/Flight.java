@@ -20,8 +20,10 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @Entity
 public class Flight {
 	@Id
@@ -56,4 +58,17 @@ public class Flight {
 	
 	@JsonIgnoreProperties("flightes")
 	private List<CrewMember> crewMembers;
+
+	public Flight(@NotNull(message = "Departure city cannot be null") City departCity,
+			@Future(message = "Departure time cannot refer to the past") LocalDateTime departTime,
+			@NotNull(message = "Destination city cannot be null") City destCity,
+			@Future(message = "Arrival time cannot refer to the past") LocalDateTime destTime) {
+		super();
+		this.departCity = departCity;
+		this.departTime = departTime;
+		this.destCity = destCity;
+		this.destTime = destTime;
+	}
+	
+	
 }

@@ -9,8 +9,10 @@ import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotBlank;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @Entity
 public class Country {
 	@Id
@@ -21,4 +23,8 @@ public class Country {
 	
 	@NotBlank(message = "Country name is mandatory")
 	private String name;
+	
+	public Country(String name) {
+		this.name = name;
+	}
 }

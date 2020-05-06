@@ -12,8 +12,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @Entity
 public class City {
 	@Id
@@ -29,4 +31,9 @@ public class City {
 	@ManyToOne
 	@JoinColumn(name = "country_id", nullable = false, updatable = false)
 	private Country country;
+	
+	public City(String name, Country country) {
+		this.name = name;
+		this.country = country;
+	}
 }

@@ -61,6 +61,7 @@ public class FlightController {
 		}
 	}
 	
+	//@Secured("admin")
 	@PostMapping(path = "/admin/add", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Flight> postFlight(@RequestBody @Valid Flight flight) {
 		try {
@@ -74,6 +75,7 @@ public class FlightController {
 		}
 	}
 	
+	//@Secured("dispatcher")
 	@PostMapping(path = "/dispatcher/{id}/addmember", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Flight> addFlightMember(@RequestBody CrewMember crewMember,
 			@PathVariable("id") int flightId) {
@@ -85,6 +87,7 @@ public class FlightController {
 		}
 	}
 	
+	//@Secured("dispatcher")
 	@DeleteMapping(path = "/dispatcher/{id}/deletemember", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Flight> deleteFlightMember(@RequestBody CrewMember crewMember,
 			@PathVariable("id") int flightId) {
@@ -96,6 +99,7 @@ public class FlightController {
 		}
 	}
 	
+	//@Secured("admin")
 	@PutMapping(path = "/admin/update", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Flight> updateFlight(@RequestBody @Valid Flight flight) {
 		try {
@@ -109,6 +113,7 @@ public class FlightController {
 		}
 	}
 	
+	//@Secured("admin")
 	@DeleteMapping(path = "/admin/delete/{id}")
 	public ResponseEntity<Flight> deleteFlight(@PathVariable("id") Integer id) {
 		flightService.deleteById(id);
