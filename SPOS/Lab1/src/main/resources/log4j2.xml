@@ -21,6 +21,4 @@
             <AppenderRef ref="Console"/>
         </Root>
     </Loggers>
-
-
 </Configuration>
