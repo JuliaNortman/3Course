@@ -4,7 +4,7 @@ public class Token {
     private ImmutablePair<TokenName, String> token;
 
     public Token(TokenName tokenName, String value) {
-        token = new ImmutablePair<TokenName, String>(tokenName, value);
+        token = new ImmutablePair<>(tokenName, value);
     }
 
     @Override

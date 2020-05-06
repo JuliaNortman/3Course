@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class HtmlConverter {
-    static final Logger logger = LogManager.getLogger(HtmlConverter.class);
-    public static final String html_begin = "" +
+    private static final Logger logger = LogManager.getLogger(HtmlConverter.class);
+    private static final String html_begin = "" +
             "<html lang=\"en\">\n" +
             "<head>\n" +
             "    <meta charset=\"UTF-8\">\n" +
@@ -18,7 +18,7 @@ public class HtmlConverter {
             "\n" +
             "</head>\n" +
             "<body>";
-    public static final String html_end = "</body>\n" +
+    private static final String html_end = "</body>\n" +
             "</html>" +
             "";
 

@@ -30,7 +30,7 @@ public class Lexer {
             logger.error("Cannot read file " + filePath);
             e.printStackTrace();
         }
-        code = new String(bytes, StandardCharsets.UTF_8);
+        code = new String(bytes, StandardCharsets.UTF_8).replaceAll("\r", "");
     }
 
     public void parse() {
@@ -83,6 +83,7 @@ public class Lexer {
                 case 41: integerSuffix(c); break;
                 case 42: floatSuffix(c); break;
                 case 43: underlineInFloat(c); break;
+                case 44: errorCharLiteral(c); break;
                 default: {
                     //initialState(c);
                     logger.warn("Unknown state " + c);
@@ -93,7 +94,7 @@ public class Lexer {
         if(state == 15) {
             makeToken(TokenName.COMMENT, buffer.toString());
             state = 0;
-        } else if(state == 16 || state == 17) {
+        } else if(state == 16 || state == 17 || state == 44) {
             makeToken(TokenName.ERROR, buffer.toString());
             state = 0;
         }
@@ -698,7 +699,7 @@ public class Lexer {
         } else if(Util.isEscapeSequence("\\" + c)) {
             addToBuffer(c, 32);
         } else {
-            addToBuffer(c, -1);
+            addToBuffer(c, 44);
         }
     }
 
@@ -712,7 +713,7 @@ public class Lexer {
             makeToken(TokenName.CHAR_LITERAL, buffer.toString());
             state = 0;
         } else {
-            addToBuffer(c, -1);
+            addToBuffer(c, 44);
         }
     }
 
@@ -727,7 +728,7 @@ public class Lexer {
             addToBuffer(c, 0);
             makeToken(TokenName.CHAR_LITERAL, buffer.toString());
         } else {
-            addToBuffer(c, -1);
+            addToBuffer(c, 44);
         }
     }
 
@@ -932,9 +933,26 @@ public class Lexer {
         }
     }
 
+    /*
+    * state 44
+    * 'SYMBOLS in buffer
+    * */
+    private void errorCharLiteral(char c) {
+        if(c == '\'') {
+            addToBuffer(c, 0);
+            makeToken(TokenName.ERROR, buffer.toString());
+        } else if(Character.isWhitespace(c) && c != ' ' && c != '\t') {
+            makeToken(TokenName.ERROR, buffer.toString());
+            makeToken(TokenName.WHITESPACE, c);
+            state = 0;
+        } else {
+            addToBuffer(c, 44);
+        }
+    }
+
     private void error(char c) {
         if(Character.isWhitespace(c) || Util.isSeparator(c) ||
-            c == '.') {
+            c == '.' || (Util.isOperator(c) && !Util.isOperator(buffer.charAt(buffer.length()-1)))) {
             letter--;
             makeToken(TokenName.ERROR, buffer.toString());
             state = 0;
@@ -1024,7 +1042,7 @@ public class Lexer {
     }
 
     private void makeToken(TokenName tokenName, char value) {
-        logger.info(tokenName.toString() + " " + value);
+        logger.info(tokenName.toString() + " " + (byte)value);
         tokens.add(new Token(tokenName, String.valueOf(value)));
         buffer = new StringBuilder();
     }
