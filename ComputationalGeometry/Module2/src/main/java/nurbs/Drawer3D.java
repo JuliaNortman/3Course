@@ -15,8 +15,6 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
-import static java.lang.System.exit;
-
 public class Drawer3D extends Application {
     public static int SCALE = 100;
 
