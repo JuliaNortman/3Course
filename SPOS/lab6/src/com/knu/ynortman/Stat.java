@@ -160,7 +160,7 @@ public class Stat
     st_mode = indexNode.getMode() ;
     st_nlink = indexNode.getNlink() ;
     st_uid = indexNode.getUid() ;
-    st_uid = indexNode.getGid() ;
+    st_gid = indexNode.getGid() ;
     st_size = indexNode.getSize() ;
     st_atime = indexNode.getAtime() ;
     st_mtime = indexNode.getMtime() ;

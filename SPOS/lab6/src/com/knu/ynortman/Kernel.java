@@ -1600,5 +1600,49 @@ Some internal methods.
     return indexNodeNumber ;
   }
 
+  public static int chown(String path, short ownerId, short groupId) throws Exception {
+      String fullPath = getFullPath( path ) ;
+
+      IndexNode indexNode = new IndexNode() ;
+      short indexNodeNumber = findIndexNode( fullPath , indexNode ) ;
+
+      if( indexNodeNumber < 0 ){
+          Kernel.perror( PROGRAM_NAME ) ;
+          System.err.println( PROGRAM_NAME + ": unable to open file for reading" );
+          Kernel.exit( 1 ) ;
+          return -1;
+      }
+
+      // if we need to change the groupId
+      if (groupId >= 0) {
+          // current user is an owner or a super-user
+          if (indexNode.getUid() == process.getUid() || process.getUid() == 0) {
+              indexNode.setGid(groupId);
+              openFileSystems[ROOT_FILE_SYSTEM].writeIndexNode(indexNode, indexNodeNumber);
+          } else {
+              Kernel.perror( PROGRAM_NAME ) ;
+              System.err.println( PROGRAM_NAME + ": you haven't access" );
+              Kernel.exit( 2 ) ;
+              return -1;
+          }
+      }
+
+      // if we need to change the ownerId
+      if (ownerId >= 0) {
+          // only the super-user may change the uid of the file
+          if (process.getUid() == 0) {
+              indexNode.setUid(ownerId);
+              System.out.println(indexNode.getUid());
+              openFileSystems[ROOT_FILE_SYSTEM].writeIndexNode(indexNode, indexNodeNumber);
+          } else {
+              Kernel.perror( PROGRAM_NAME ) ;
+              System.err.println( PROGRAM_NAME + ": you haven't access" );
+              Kernel.exit( 2 ) ;
+              return -1;
+          }
+      }
+      return 0;
+  }
+
 }
 
