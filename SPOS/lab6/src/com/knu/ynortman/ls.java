@@ -140,6 +140,27 @@ public class ls
     s.append( t ) ;
     s.append( ' ' ) ;
 
+      // append the uid in a field of 5
+      t = Integer.toString( stat.getUid() ) ;
+      s.append(" ".repeat(Math.max(0, 5 - t.length()))) ;
+      s.append( t ) ;
+      s.append( ' ' ) ;
+
+      // append the gid in a field of 5
+      t = Integer.toString( stat.getGid() ) ;
+      s.append(" ".repeat(Math.max(0, 5 - t.length()))) ;
+      s.append( t ) ;
+      s.append( ' ' ) ;
+
+
+      // append the mode in a field of 5
+      short mode = stat.getMode();
+      s.append(" ".repeat(5)) ;
+      s.append( (mode & Kernel.S_IRWXU) >> 6 );
+      s.append( (mode & Kernel.S_IRWXG) >> 3 );
+      s.append( mode & Kernel.S_IRWXO );
+      s.append( ' ' );
+
     // append the size in a field of 10
     t = Integer.toString( stat.getSize() ) ;
     s.append(" ".repeat(Math.max(0, 10 - t.length()))) ;
