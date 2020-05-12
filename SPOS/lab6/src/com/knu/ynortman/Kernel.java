@@ -1600,6 +1600,79 @@ Some internal methods.
     return indexNodeNumber ;
   }
 
+  public static int chmod(String path, short mode) throws Exception {
+    String fullPath = getFullPath( path ) ;
+
+    IndexNode indexNode = new IndexNode() ;
+    short indexNodeNumber = findIndexNode( fullPath , indexNode ) ;
+
+    if( indexNodeNumber < 0 ){
+      Kernel.perror( PROGRAM_NAME ) ;
+      System.err.println( PROGRAM_NAME + ": unable to open file for reading" );
+      Kernel.exit( 1 ) ;
+      return -1;
+    }
+    if (indexNode.getUid() == process.getUid() || process.getUid() == 0) {
+      indexNode.setMode((short)((indexNode.getMode() & (~0777)) | mode));
+      openFileSystems[ROOT_FILE_SYSTEM].writeIndexNode(indexNode, indexNodeNumber);
+    } else {
+      Kernel.perror( PROGRAM_NAME ) ;
+      System.err.println( PROGRAM_NAME + ": you haven't access" );
+      Kernel.exit( 2 ) ;
+      return -1;
+    }
+
+    return 0;
+  }
+
+  public static int link(String pathname1, String pathname2) throws Exception {
+    String fullPath1 = getFullPath(pathname1);
+    String fullPath2 = getFullPath(pathname2);
+    IndexNode inode = new IndexNode();
+    short inodeNumber = findIndexNode(fullPath1, inode);
+
+    if( inodeNumber < 0 ){
+      Kernel.perror( PROGRAM_NAME ) ;
+      System.err.println( PROGRAM_NAME + ": unable to open file for reading" );
+      Kernel.exit( 1 ) ;
+      return -1;
+    }
+
+    DirectoryEntry directoryEntry = new DirectoryEntry(inodeNumber, fullPath2);
+    inode.setNlink((short)(inode.getNlink()+1));
+    openFileSystems[ROOT_FILE_SYSTEM].writeIndexNode(inode, inodeNumber);
+
+    String subpath = fullPath2.substring(0, fullPath2.lastIndexOf('/'));
+    String endname = fullPath2.substring(fullPath2.lastIndexOf('/')+1);
+
+    if (subpath.equals("")) subpath = "/";
+    int dir = open( subpath , O_RDWR ) ;
+    if( dir < 0 ) {
+      Kernel.perror( PROGRAM_NAME ) ;
+      System.err.println( PROGRAM_NAME + ": unable to open directory for writing" );
+      Kernel.exit( 1 ) ;
+    }
+
+    DirectoryEntry temp = new DirectoryEntry();
+    while (true) {
+      int status = readdir( dir , temp ) ;
+      if( status < 0 )
+      {
+        System.err.println( PROGRAM_NAME +
+                ": error reading directory in creat" ) ;
+        System.exit( EXIT_FAILURE ) ;
+      }
+      else if( status == 0 )
+      {
+        writedir( dir , directoryEntry ) ;
+        break ;
+      }
+    }
+    close(dir);
+
+    return 0;
+  }
+
   public static int chown(String path, short ownerId, short groupId) throws Exception {
       String fullPath = getFullPath( path ) ;
 
