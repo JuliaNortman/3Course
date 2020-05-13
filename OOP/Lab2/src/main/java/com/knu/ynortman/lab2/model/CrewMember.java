@@ -1,5 +1,6 @@
 package com.knu.ynortman.lab2.model;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -14,4 +15,11 @@ public class CrewMember {
 	
 	@JsonIgnoreProperties("crewMembers")
 	private List<Flight> flightes;
+	
+	public void addFlight(Flight flight) {
+		if(flightes == null) {
+			flightes = new LinkedList<Flight>();
+		}
+		flightes.add(flight);
+	}
 }

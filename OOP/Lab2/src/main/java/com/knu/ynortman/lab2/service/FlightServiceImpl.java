@@ -1,7 +1,9 @@
 package com.knu.ynortman.lab2.service;
 
+import java.util.List;
 import java.util.Optional;
 
+import com.knu.ynortman.lab2.dao.FlightDao;
 import com.knu.ynortman.lab2.model.CrewMember;
 import com.knu.ynortman.lab2.model.Flight;
 
@@ -15,9 +17,12 @@ public class FlightServiceImpl implements FlightService {
 	}
 
 	@Override
-	public Iterable<Flight> getAllFlights() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Flight> getAllFlights() {
+		List<Flight> flights = FlightDao.getAllFlights();
+		if(flights == null || flights.size() == 0) {
+			return null;
+		}
+		return flights;
 	}
 
 	@Override

@@ -19,4 +19,10 @@ public class Flight {
 	
 	@JsonIgnoreProperties("flightes")
 	private List<CrewMember> crewMembers;
+	
+	public void setCrewMembers(List<CrewMember> crewMembers) {
+		if(crewMembers != null) {
+			crewMembers.forEach(member->member.addFlight(this));
+		}
+	}
 }
