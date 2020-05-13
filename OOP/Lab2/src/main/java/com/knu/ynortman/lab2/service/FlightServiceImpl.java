@@ -26,9 +26,9 @@ public class FlightServiceImpl implements FlightService {
 	}
 
 	@Override
-	public Optional<Flight> getFlight(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Flight getFlight(int id) {
+		Flight flight = FlightDao.getFlightById(id);
+		return flight;
 	}
 
 	@Override

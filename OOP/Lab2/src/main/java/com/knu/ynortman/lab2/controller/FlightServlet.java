@@ -36,20 +36,21 @@ public class FlightServlet extends HttpServlet {
 		String[] urls = request.getPathInfo().split("/");
 		if(urls.length == 2) {
 			if(urls[1].equals(getPathAll)) {
-				response.getWriter().append("all");
 				List<Flight> flights = flightService.getAllFlights();
 				if(flights == null) {
 					response.sendError(404, "Resource not found");
 				} else {
-					response.setContentType("application/json");
-					response.setCharacterEncoding("UTF-8");
-					PrintWriter out = response.getWriter();
-					out.print(new ObjectMapper().writeValueAsString(flights));
-					out.flush();
+					makeJsonAnswer(flights, response);
 				}
 			} else {
 				try {
 					int id = Integer.parseInt(urls[1]);
+					Flight flight = flightService.getFlight(id);
+					if(flight == null) {
+						response.sendError(404, "Resource not found");
+					} else {
+						makeJsonAnswer(flight, response);
+					}
 					response.getWriter().append(String.valueOf(id));
 				} catch(NumberFormatException e) {
 					response.sendError(404, "Path not found");
@@ -67,6 +68,14 @@ public class FlightServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
+	}
+	
+	private<T> void makeJsonAnswer(T obj, HttpServletResponse response) throws IOException {
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(new ObjectMapper().writeValueAsString(obj));
+		out.flush();
 	}
 
 }

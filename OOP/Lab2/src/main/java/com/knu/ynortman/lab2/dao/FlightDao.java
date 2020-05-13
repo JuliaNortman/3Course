@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,8 +34,8 @@ public class FlightDao {
 			while(rs.next()) {
 				Flight flight = new Flight();
 				flight.setId(rs.getInt(1));
-				flight.setDepartTime(LocalDateTime.parse(rs.getString(3)));
-				flight.setDestTime(LocalDateTime.parse(rs.getString(5)));
+				flight.setDepartTime(LocalDateTime.parse(rs.getString(3), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+				flight.setDestTime(LocalDateTime.parse(rs.getString(5), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 				
 				City depCity = CityDao.getCityById(rs.getInt(2));
 				if(depCity == null) {
@@ -58,6 +59,41 @@ public class FlightDao {
 			logger.error("Cannot get all flights");
 		}
 		return result;
+	}
+	
+	public static Flight getFlightById(int id) {
+		Flight flight = null;
+		try(Connection conn = JdbcConnection.getConnection()) {
+			PreparedStatement preparedStatement = conn.prepareStatement(idFlightQuery);
+			preparedStatement.setInt(1, id);
+			ResultSet rs = preparedStatement.executeQuery();
+			if(rs.next()) {
+				flight = new Flight();
+				flight.setId(rs.getInt(1));
+				flight.setDepartTime(LocalDateTime.parse(rs.getString(3), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+				flight.setDestTime(LocalDateTime.parse(rs.getString(5), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+				
+				City depCity = CityDao.getCityById(rs.getInt(2));
+				if(depCity == null) {
+					logger.warn("Cannot get departure city");
+					return null;
+				} else {
+					flight.setDepartCity(depCity);
+				}
+				
+				City destCity = CityDao.getCityById(rs.getInt(4));
+				if(destCity == null) {
+					logger.warn("Cannot get destination city");
+					return null;
+				} else {
+					flight.setDestCity(destCity);
+				}
+				flight.setCrewMembers(CrewMembersDao.getFlightMembers(flight.getId()));
+			}
+		} catch (SQLException | IOException e) {
+			logger.error("Cannot get all flights");
+		}
+		return flight;
 	}
 
 }

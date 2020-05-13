@@ -10,7 +10,7 @@ public interface FlightService {
 
 	public Flight createFlight(Flight flight);
 	public List<Flight> getAllFlights();
-	public Optional<Flight> getFlight(int id);
+	public Flight getFlight(int id);
 	public Flight update(Flight flight);
 	public Flight addMember(int flight, CrewMember crewMember);
 	public Flight deleteMember(int flight, CrewMember crewMember);

@@ -16,7 +16,7 @@ import com.knu.ynortman.lab2.util.JdbcConnection;
 public class CityDao {
 
 	private static final Logger logger = LogManager.getRootLogger();
-	private static final String idCityQuery = "SELECT * FRON city WHERE city.id = ?";
+	private static final String idCityQuery = "SELECT * FROM city WHERE city.id = ?";
 	
 	public static City getCityById(int id) {
 		City city = null;
