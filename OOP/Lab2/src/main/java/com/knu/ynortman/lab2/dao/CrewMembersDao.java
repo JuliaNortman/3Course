@@ -20,8 +20,8 @@ public class CrewMembersDao {
 	private static final Logger logger = LogManager.getRootLogger();
 	
 	private static final String crewIdByFlightIdQuery = 
-			"SELECT * FROM crew_member" + 
-			"WHERE crew_member.id IN (" + 
+			"SELECT * FROM crew_member " + 
+			"WHERE crew_member.id IN ( " + 
 			"						SELECT crew_flight.crew_id " + 
 			"						FROM crew_flight " + 
 			"						WHERE crew_flight.flight_id = ?)";
@@ -51,8 +51,10 @@ public class CrewMembersDao {
 				}
 			}
 		} catch (SQLException | IOException e) {
+			e.printStackTrace();
 			logger.error("Cannot get members");
 		}
+		logger.info(members.size());
 		return members;
 	}
 }

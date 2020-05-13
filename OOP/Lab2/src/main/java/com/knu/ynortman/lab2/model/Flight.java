@@ -21,6 +21,7 @@ public class Flight {
 	private List<CrewMember> crewMembers;
 	
 	public void setCrewMembers(List<CrewMember> crewMembers) {
+		this.crewMembers = crewMembers;
 		if(crewMembers != null) {
 			crewMembers.forEach(member->member.addFlight(this));
 		}
