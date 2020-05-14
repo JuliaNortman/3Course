@@ -25,15 +25,13 @@ public class CrewMemberServiceImpl implements CrewMemberService{
 	}
 
 	@Override
-	public Iterable<CrewMember> getAllFlightCrew(int flightId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<CrewMember> getAllFlightCrew(int flightId) {
+		return CrewMembersDao.getFlightMembers(flightId);
 	}
 
 	@Override
 	public List<Flight> getAllFlightsForMember(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		return CrewMembersDao.getMemberFlights(id);
 	}
 
 	@Override

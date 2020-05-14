@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,6 +18,7 @@ public class CrewMember {
 	
 	@EqualsAndHashCode.Exclude
 	@JsonIgnoreProperties("crewMembers")
+	@JsonInclude(Include.NON_NULL)
 	private List<Flight> flightes;
 	
 	public void addFlight(Flight flight) {

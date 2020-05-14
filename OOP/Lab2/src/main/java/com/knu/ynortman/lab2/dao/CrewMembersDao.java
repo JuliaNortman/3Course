@@ -14,18 +14,23 @@ import org.apache.logging.log4j.Logger;
 import com.knu.ynortman.lab2.model.CrewMember;
 import com.knu.ynortman.lab2.model.CrewRole;
 import com.knu.ynortman.lab2.model.CrewRoleEnum;
+import com.knu.ynortman.lab2.model.Flight;
 import com.knu.ynortman.lab2.util.JdbcConnection;
 
 public class CrewMembersDao {
 	private static final Logger logger = LogManager.getRootLogger();
 	
-	private static final String crewIdByFlightIdQuery = 
+	private static final String crewByFlightIdQuery = 
 			"SELECT crew_member.id, crew_member.name, crew_role.id, crew_role.role " + 
 			"FROM crew_member INNER JOIN crew_role ON crew_member.role_id = crew_role.id " + 
 			"WHERE crew_member.id IN ( " + 
 			"						SELECT crew_flight.crew_id " + 
 			"						FROM crew_flight " + 
 			"						WHERE crew_flight.flight_id = ?)";
+	private static final String flightsByCrewIdQuery = 
+			"SELECT DISTINCT flight.id " + 
+			"FROM flight INNER JOIN crew_flight ON flight.id = crew_flight.flight_id " + 
+			"WHERE crew_flight.crew_id = ?";
 	private static final String crewMemberByIdQuery = 
 			"SELECT crew_member.id, crew_member.name, crew_role.id, crew_role.role " + 
 			"FROM crew_member INNER JOIN crew_role ON crew_member.role_id = crew_role.id " + 
@@ -37,7 +42,7 @@ public class CrewMembersDao {
 	public static List<CrewMember> getFlightMembers(int flightId) {
 		List<CrewMember> members = new LinkedList<CrewMember>();
 		try(Connection conn = JdbcConnection.getConnection()) {
-			PreparedStatement ps = conn.prepareStatement(crewIdByFlightIdQuery);
+			PreparedStatement ps = conn.prepareStatement(crewByFlightIdQuery);
 			ps.setInt(1, flightId);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
@@ -85,6 +90,24 @@ public class CrewMembersDao {
 			return null;
 		}
 		return member;
+	}
+	
+	public static List<Flight> getMemberFlights(int id) {
+		List<Flight> flights = new LinkedList<>();
+		try(Connection conn = JdbcConnection.getConnection()) {
+			PreparedStatement ps = conn.prepareStatement(flightsByCrewIdQuery);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				Flight flight = FlightDao.getFlightById(rs.getInt(1));
+				if(flight != null) {
+					flights.add(flight);
+				}
+			}
+		} catch (SQLException | IOException e) {
+			logger.error("Cannot get all flights by member id");
+		}
+		return flights;
 	}
 	
 	public static boolean iscrewMemberExists(int id) {

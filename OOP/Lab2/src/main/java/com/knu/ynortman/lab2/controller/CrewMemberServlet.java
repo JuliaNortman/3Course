@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.knu.ynortman.lab2.model.CrewMember;
+import com.knu.ynortman.lab2.model.Flight;
 import com.knu.ynortman.lab2.service.CrewMemberService;
 import com.knu.ynortman.lab2.service.CrewMemberServiceImpl;
 
@@ -51,8 +52,27 @@ public class CrewMemberServlet extends HttpServlet {
 					makeJsonAnswer(member, response);
 				}
 			}
-		} else if(urls.length == 2) {
-			
+		} else if(urls.length == 3) {
+			if(urls[1].equals("flight")) {
+				int flightId = Integer.parseInt(urls[2]);
+				List<CrewMember> crew = memberService.getAllFlightCrew(flightId);
+				if(crew == null || crew.size() == 0) {
+					response.sendError(404, "Resorce not found");
+				} else {
+					makeJsonAnswer(crew, response);
+				}
+			} else if(urls[2].equals("flights")) {
+				int id = Integer.parseInt(urls[1]);
+				List<Flight> flights = memberService.getAllFlightsForMember(id);
+				if(flights.size() == 0) {
+					response.sendError(404, "Resorce not found");
+				} else {
+					makeJsonAnswer(flights, response);
+				}
+			} else {
+				response.sendError(404, "Path not found");
+				logger.error("Path not found");
+			}
 		} else {
 			response.sendError(404, "Path not found");
 			logger.error("Path not found");
