@@ -21,10 +21,6 @@ public class DispatcherServlet extends HttpServlet {
 	
 	private final String flightServletPath = "/flight";
 	private final String crewMemberServletPath = "/crew";
-	private final String GET = "GET";
-	private final String POST = "POST";
-	private final String PUT = "PUT";
-	private final String DELETE = "DELETE";
     
 	private FlightServlet flightController;
 	private CrewMemberServlet memberController;
@@ -39,12 +35,7 @@ public class DispatcherServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String servletPath = request.getServletPath();
 		if(servletPath.equals(flightServletPath)) {
-			logger.debug(request.getMethod());
-			if(request.getMethod().equals(GET)) {
-				flightController.doGet(request, response);
-			} else if(request.getMethod().equals(POST)) {
-				flightController.doPost(request, response);
-			}
+			flightController.doGet(request, response);
 		} else if(servletPath.equals(crewMemberServletPath)) {
 			memberController.doGet(request, response);
 		} else {
@@ -60,6 +51,19 @@ public class DispatcherServlet extends HttpServlet {
 			flightController.doPost(request, response);
 		} else if(servletPath.equals(crewMemberServletPath)) {
 			memberController.doPost(request, response);
+		} else {
+			//report error no such path
+			response.sendError(404, "Path not found");
+		}
+	}
+	
+	@Override
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String servletPath = request.getServletPath();
+		if(servletPath.equals(flightServletPath)) {
+			flightController.doDelete(request, response);
+		} else if(servletPath.equals(crewMemberServletPath)) {
+			//memberController.doDelete(request, response);
 		} else {
 			//report error no such path
 			response.sendError(404, "Path not found");

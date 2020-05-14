@@ -25,7 +25,7 @@ public class FlightDao {
 	private static final String idFlightQuery = "SELECT * FROM flight WHERE flight.id= ?";
 	private static final String addFlightQuery = "INSERT INTO flight(departure_city_id, departure_time, dest_city_id, dest_time) "
 			+ "VALUES(?, ?, ?, ?)";
-	private final String deleteFlightQuery = "DELETE FROM flight WHERE flight.id = ?";
+	private static final String deleteFlightQuery = "DELETE FROM flight WHERE flight.id = ?";
 	private static final String addMemberQuery = "INSERT INTO crew_flight VALUES (?, ?)";
 	
 	
@@ -159,4 +159,19 @@ public class FlightDao {
 		return flight;
 	}
 
+	
+	public static void deleteFlight(int id) {
+		try(Connection conn = JdbcConnection.getConnection()) {
+			PreparedStatement ps = conn.prepareStatement(deleteFlightQuery);
+			ps.setInt(1, id);
+			int rows = ps.executeUpdate();
+			if(rows <= 0) {
+				logger.warn("Cannot delete flight");
+			}
+		} catch (SQLException | IOException e) {
+			logger.error("Error deleting flight");
+		}
+	}
+	
+	
 }

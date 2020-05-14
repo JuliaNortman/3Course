@@ -74,25 +74,46 @@ public class FlightServlet extends HttpServlet {
 			// admin/add
 			Flight flight = new ObjectMapper().readValue(jsonBodyFromRequest(request, response), Flight.class);
 			flight = flightService.createFlight(flight);
-			if(flight == null) {
+			if (flight == null) {
 				response.sendError(400, "Bad request");
 			} else {
 				response.setStatus(201);
 				makeJsonAnswer(flight, response);
 			}
 		} else if (urls.length == 4) {
-			if(urls[1].equals("dispatcher") && urls[3].equals("addmember")) {
+			if (urls[1].equals("dispatcher") && urls[3].equals("addmember")) {
 				int flightId = Integer.parseInt(urls[2]);
-				CrewMember member = new ObjectMapper().readValue(jsonBodyFromRequest(request, response), CrewMember.class);
+				CrewMember member = new ObjectMapper().readValue(jsonBodyFromRequest(request, response),
+						CrewMember.class);
 				Flight flight = flightService.addMember(flightId, member);
-				if(flight == null) {
+				if (flight == null) {
 					response.sendError(400, "Bad request");
 				} else {
 					response.setStatus(201);
 					makeJsonAnswer(flight, response);
 				}
+			} else {
+				response.sendError(404, "Path not found");
+				logger.error("Path not found");
 			}
+		} else {
+			response.sendError(404, "Path not found");
+			logger.error("Path not found");
+		}
+	}
 
+	@Override
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String[] urls = request.getPathInfo().split("/");
+		if(urls.length == 4) {
+			if(urls[1].equals("admin") && urls[2].equals("delete")) {
+				int id = Integer.parseInt(urls[3]);
+				flightService.deleteById(id);
+			}
+		} else {
+			response.sendError(404, "Path not found");
+			logger.error("Path not found");
 		}
 	}
 
@@ -103,7 +124,7 @@ public class FlightServlet extends HttpServlet {
 		out.print(new ObjectMapper().writeValueAsString(obj));
 		out.flush();
 	}
-	
+
 	private String jsonBodyFromRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		StringBuffer jsonBody = new StringBuffer();
 		String line = null;
@@ -112,7 +133,7 @@ public class FlightServlet extends HttpServlet {
 			while ((line = reader.readLine()) != null) {
 				jsonBody.append(line);
 			}
-		} catch (Exception e) { 
+		} catch (Exception e) {
 			logger.error("Cannot get json obj");
 			response.sendError(400, "Bad request");
 		}
