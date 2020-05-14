@@ -42,8 +42,7 @@ public class FlightServiceImpl implements FlightService {
 
 	@Override
 	public Flight deleteMember(int flight, CrewMember crewMember) {
-		// TODO Auto-generated method stub
-		return null;
+		return FlightDao.deleteFlightMember(flightId, crewMember);
 	}
 
 	@Override

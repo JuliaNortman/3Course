@@ -27,6 +27,7 @@ public class FlightDao {
 			+ "VALUES(?, ?, ?, ?)";
 	private static final String deleteFlightQuery = "DELETE FROM flight WHERE flight.id = ?";
 	private static final String addMemberQuery = "INSERT INTO crew_flight VALUES (?, ?)";
+	private static final String deleteMemberQuery = "DELETE FROM crew_flight WHERE flight_id = ? AND crew_id = ?";
 	
 	
 	public static List<Flight> getAllFlights() {
@@ -173,5 +174,25 @@ public class FlightDao {
 		}
 	}
 	
-	
+	public static Flight deleteFlightMember(int flightId, CrewMember member) {
+		Flight flight = getFlightById(flightId);
+		if(flight == null) {
+			logger.error("Flight does not exist");
+			return null;
+		}
+		member = CrewMembersDao.getCrewMemberById(member.getId());
+		try(Connection conn = JdbcConnection.getConnection()) {
+			PreparedStatement ps = conn.prepareStatement(deleteMemberQuery);
+			ps.setInt(1, flightId);
+			ps.setInt(2, member.getId());
+			int rows = ps.executeUpdate();
+			if(rows <= 0) {
+				logger.warn("Cannot delete member");
+			}
+			flight.getCrewMembers().remove(member);
+		} catch (SQLException | IOException e) {
+			logger.error("Cannot delete flight member");
+		}
+		return flight;
+	}
 }

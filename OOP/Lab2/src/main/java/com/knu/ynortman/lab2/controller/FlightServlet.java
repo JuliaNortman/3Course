@@ -15,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.knu.ynortman.lab2.dao.FlightDao;
 import com.knu.ynortman.lab2.model.CrewMember;
 import com.knu.ynortman.lab2.model.Flight;
 import com.knu.ynortman.lab2.service.FlightService;
@@ -110,6 +111,19 @@ public class FlightServlet extends HttpServlet {
 			if(urls[1].equals("admin") && urls[2].equals("delete")) {
 				int id = Integer.parseInt(urls[3]);
 				flightService.deleteById(id);
+			} else if(urls[1].equals("dispatcher") && urls[3].equals("deletemember")) {
+				int flightId = Integer.parseInt(urls[2]);
+				CrewMember member = new ObjectMapper().readValue(jsonBodyFromRequest(request, response),
+						CrewMember.class);
+				Flight flight = FlightDao.deleteFlightMember(flightId, member);
+				if(flight == null) {
+					response.sendError(400, "Bad request");
+				} else {
+					makeJsonAnswer(flight, response);
+				}
+			} else {
+				response.sendError(404, "Path not found");
+				logger.error("Path not found");
 			}
 		} else {
 			response.sendError(404, "Path not found");
