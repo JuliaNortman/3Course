@@ -71,6 +71,8 @@ public class FlightDao {
 				flight = new Flight();
 				flight.setId(rs.getInt(1));
 				flight.setDepartTime(LocalDateTime.parse(rs.getString(3), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+				logger.debug(LocalDateTime.parse(rs.getString(3), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+				logger.debug(flight.getDepartTime());
 				flight.setDestTime(LocalDateTime.parse(rs.getString(5), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 				
 				City depCity = CityDao.getCityById(rs.getInt(2));
