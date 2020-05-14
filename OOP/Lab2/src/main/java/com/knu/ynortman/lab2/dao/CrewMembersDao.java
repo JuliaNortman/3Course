@@ -1,6 +1,5 @@
 package com.knu.ynortman.lab2.dao;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,7 +28,11 @@ public class CrewMembersDao {
 			"						WHERE crew_flight.flight_id = ?)";
 	private static final String crewMemberByIdQuery = 
 			"SELECT crew_member.id, crew_member.name, crew_role.id, crew_role.role " + 
-			"FROM crew_member INNER JOIN crew_role ON crew_member.role_id = crew_role.id";
+			"FROM crew_member INNER JOIN crew_role ON crew_member.role_id = crew_role.id " + 
+			"WHERE crew_member.id = ?";
+	private static final String allCrewMembers = 
+			"SELECT crew_member.id, crew_member.name, crew_role.id, crew_role.role " + 
+			"FROM crew_member INNER JOIN crew_role ON crew_member.role_id = crew_role.id ";
 	
 	public static List<CrewMember> getFlightMembers(int flightId) {
 		List<CrewMember> members = new LinkedList<CrewMember>();
@@ -46,7 +49,23 @@ public class CrewMembersDao {
 		} catch (SQLException | IOException e) {
 			logger.error("Cannot get members");
 		}
-		logger.info(members.size());
+		return members;
+	}
+	
+	public static List<CrewMember> getAllCrewMembers() {
+		List<CrewMember> members = new LinkedList<CrewMember>();
+		try(Connection conn = JdbcConnection.getConnection()) {
+			PreparedStatement ps = conn.prepareStatement(allCrewMembers);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				CrewMember member = crewMemberFromResultSet(rs);
+				if(member != null) {
+					members.add(member);
+				}
+			}
+		} catch (SQLException | IOException e) {
+			logger.error("Cannot get members");
+		}
 		return members;
 	}
 	

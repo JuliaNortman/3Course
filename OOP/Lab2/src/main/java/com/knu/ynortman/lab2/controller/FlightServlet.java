@@ -1,8 +1,6 @@
 package com.knu.ynortman.lab2.controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -20,6 +18,8 @@ import com.knu.ynortman.lab2.model.CrewMember;
 import com.knu.ynortman.lab2.model.Flight;
 import com.knu.ynortman.lab2.service.FlightService;
 import com.knu.ynortman.lab2.service.FlightServiceImpl;
+
+import static com.knu.ynortman.lab2.util.JsonConverter.*;
 
 @WebServlet
 public class FlightServlet extends HttpServlet {
@@ -41,7 +41,7 @@ public class FlightServlet extends HttpServlet {
 		if (urls.length == 2) {
 			if (urls[1].equals(getPathAll)) {
 				List<Flight> flights = flightService.getAllFlights();
-				if (flights == null) {
+				if (flights == null || flights.size() == 0) {
 					response.sendError(404, "Resource not found");
 				} else {
 					makeJsonAnswer(flights, response);
@@ -131,26 +131,5 @@ public class FlightServlet extends HttpServlet {
 		}
 	}
 
-	private <T> void makeJsonAnswer(T obj, HttpServletResponse response) throws IOException {
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		PrintWriter out = response.getWriter();
-		out.print(new ObjectMapper().writeValueAsString(obj));
-		out.flush();
-	}
-
-	private String jsonBodyFromRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		StringBuffer jsonBody = new StringBuffer();
-		String line = null;
-		try {
-			BufferedReader reader = request.getReader();
-			while ((line = reader.readLine()) != null) {
-				jsonBody.append(line);
-			}
-		} catch (Exception e) {
-			logger.error("Cannot get json obj");
-			response.sendError(400, "Bad request");
-		}
-		return jsonBody.toString();
-	}
+	
 }
