@@ -36,28 +36,10 @@ public class FlightDao {
 			PreparedStatement preparedStatement = conn.prepareStatement(allFlightsQuery);
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) {
-				Flight flight = new Flight();
-				flight.setId(rs.getInt(1));
-				flight.setDepartTime(LocalDateTime.parse(rs.getString(3), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-				flight.setDestTime(LocalDateTime.parse(rs.getString(5), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-				
-				City depCity = CityDao.getCityById(rs.getInt(2));
-				if(depCity == null) {
-					logger.warn("Cannot get departure city");
-					continue;
-				} else {
-					flight.setDepartCity(depCity);
+				Flight flight = flightFromResultSet(rs);
+				if(flight != null) {
+					result.add(flight);
 				}
-				
-				City destCity = CityDao.getCityById(rs.getInt(4));
-				if(destCity == null) {
-					logger.warn("Cannot get destination city");
-					continue;
-				} else {
-					flight.setDestCity(destCity);
-				}
-				flight.setCrewMembers(CrewMembersDao.getFlightMembers(flight.getId()));
-				result.add(flight);
 			}
 		} catch (SQLException | IOException e) {
 			logger.error("Cannot get all flights");
@@ -72,27 +54,7 @@ public class FlightDao {
 			preparedStatement.setInt(1, id);
 			ResultSet rs = preparedStatement.executeQuery();
 			if(rs.next()) {
-				flight = new Flight();
-				flight.setId(rs.getInt(1));
-				flight.setDepartTime(LocalDateTime.parse(rs.getString(3), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-				flight.setDestTime(LocalDateTime.parse(rs.getString(5), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-				
-				City depCity = CityDao.getCityById(rs.getInt(2));
-				if(depCity == null) {
-					logger.warn("Cannot get departure city");
-					return null;
-				} else {
-					flight.setDepartCity(depCity);
-				}
-				
-				City destCity = CityDao.getCityById(rs.getInt(4));
-				if(destCity == null) {
-					logger.warn("Cannot get destination city");
-					return null;
-				} else {
-					flight.setDestCity(destCity);
-				}
-				flight.setCrewMembers(CrewMembersDao.getFlightMembers(flight.getId()));
+				flight = flightFromResultSet(rs);
 			}
 		} catch (SQLException | IOException e) {
 			logger.error("Cannot get all flights");
@@ -193,6 +155,31 @@ public class FlightDao {
 		} catch (SQLException | IOException e) {
 			logger.error("Cannot delete flight member");
 		}
+		return flight;
+	}
+	
+	private static Flight flightFromResultSet(ResultSet rs) throws SQLException {
+		Flight flight = new Flight();
+		flight.setId(rs.getInt(1));
+		flight.setDepartTime(LocalDateTime.parse(rs.getString(3), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+		flight.setDestTime(LocalDateTime.parse(rs.getString(5), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+		
+		City depCity = CityDao.getCityById(rs.getInt(2));
+		if(depCity == null) {
+			logger.warn("Cannot get departure city");
+			return null;
+		} else {
+			flight.setDepartCity(depCity);
+		}
+		
+		City destCity = CityDao.getCityById(rs.getInt(4));
+		if(destCity == null) {
+			logger.warn("Cannot get destination city");
+			return null;
+		} else {
+			flight.setDestCity(destCity);
+		}
+		flight.setCrewMembers(CrewMembersDao.getFlightMembers(flight.getId()));
 		return flight;
 	}
 }

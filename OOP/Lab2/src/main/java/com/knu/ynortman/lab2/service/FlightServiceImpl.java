@@ -1,7 +1,6 @@
 package com.knu.ynortman.lab2.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.knu.ynortman.lab2.dao.FlightDao;
 import com.knu.ynortman.lab2.model.CrewMember;
@@ -42,13 +41,7 @@ public class FlightServiceImpl implements FlightService {
 
 	@Override
 	public Flight deleteMember(int flight, CrewMember crewMember) {
-		return FlightDao.deleteFlightMember(flightId, crewMember);
-	}
-
-	@Override
-	public void delete(Flight flight) {
-		// TODO Auto-generated method stub
-		
+		return FlightDao.deleteFlightMember(flight, crewMember);
 	}
 
 	@Override

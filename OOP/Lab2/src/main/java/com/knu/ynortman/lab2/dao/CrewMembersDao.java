@@ -1,5 +1,6 @@
 package com.knu.ynortman.lab2.dao;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,13 +21,15 @@ public class CrewMembersDao {
 	private static final Logger logger = LogManager.getRootLogger();
 	
 	private static final String crewIdByFlightIdQuery = 
-			"SELECT * FROM crew_member " + 
+			"SELECT crew_member.id, crew_member.name, crew_role.id, crew_role.role " + 
+			"FROM crew_member INNER JOIN crew_role ON crew_member.role_id = crew_role.id " + 
 			"WHERE crew_member.id IN ( " + 
 			"						SELECT crew_flight.crew_id " + 
 			"						FROM crew_flight " + 
 			"						WHERE crew_flight.flight_id = ?)";
-	private static final String crewRoleByIdQuery = "SELECT * FROM crew_role WHERE id = ?";
-	private static final String crewMemberByIdQuery = "SELECT * FROM crew_member WHERE crew_member.id = ?";
+	private static final String crewMemberByIdQuery = 
+			"SELECT crew_member.id, crew_member.name, crew_role.id, crew_role.role " + 
+			"FROM crew_member INNER JOIN crew_role ON crew_member.role_id = crew_role.id";
 	
 	public static List<CrewMember> getFlightMembers(int flightId) {
 		List<CrewMember> members = new LinkedList<CrewMember>();
@@ -35,20 +38,9 @@ public class CrewMembersDao {
 			ps.setInt(1, flightId);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
-				CrewMember member = new CrewMember();
-				member.setId(rs.getInt(1));
-				member.setName(rs.getString(2));
-				PreparedStatement crewRolePs = conn.prepareStatement(crewRoleByIdQuery);
-				crewRolePs.setInt(1, rs.getInt(3));
-				ResultSet crewRolRs = crewRolePs.executeQuery();
-				if(crewRolRs.next()) {
-					CrewRole role = new CrewRole();
-					role.setId(crewRolRs.getInt(1));
-					role.setRole(CrewRoleEnum.valueOf(crewRolRs.getString(2)));
-					member.setRole(role);
+				CrewMember member = crewMemberFromResultSet(rs);
+				if(member != null) {
 					members.add(member);
-				} else {
-					logger.warn("Cannot get crew member role");
 				}
 			}
 		} catch (SQLException | IOException e) {
@@ -65,21 +57,7 @@ public class CrewMembersDao {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
-				member = new CrewMember();
-				member.setId(rs.getInt(1));
-				member.setName(rs.getString(2));
-				PreparedStatement crewRolePs = conn.prepareStatement(crewRoleByIdQuery);
-				crewRolePs.setInt(1, rs.getInt(3));
-				ResultSet crewRolRs = crewRolePs.executeQuery();
-				if(crewRolRs.next()) {
-					CrewRole role = new CrewRole();
-					role.setId(crewRolRs.getInt(1));
-					role.setRole(CrewRoleEnum.valueOf(crewRolRs.getString(2)));
-					member.setRole(role);
-				} else {
-					logger.warn("Cannot get crew member role");
-					return null;
-				}
+				member = crewMemberFromResultSet(rs);
 			} else {
 				logger.error("Cannot get crew memn=ber by id");
 			}
@@ -92,5 +70,17 @@ public class CrewMembersDao {
 	
 	public static boolean iscrewMemberExists(int id) {
 		return (getCrewMemberById(id) != null);
+	}
+	
+	public static CrewMember crewMemberFromResultSet(ResultSet rs) throws SQLException {
+		CrewMember member = new CrewMember();
+		member.setId(rs.getInt(1));
+		member.setName(rs.getString(2));
+		CrewRole role = new CrewRole();
+		role.setId(rs.getInt(3));
+		role.setRole(CrewRoleEnum.valueOf(rs.getString(4)));
+		member.setRole(role);
+		
+		return member;
 	}
 }
