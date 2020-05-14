@@ -37,8 +37,7 @@ public class FlightServiceImpl implements FlightService {
 
 	@Override
 	public Flight addMember(int flight, CrewMember crewMember) {
-		// TODO Auto-generated method stub
-		return null;
+		return FlightDao.addCrewMember(flight, crewMember);
 	}
 
 	@Override

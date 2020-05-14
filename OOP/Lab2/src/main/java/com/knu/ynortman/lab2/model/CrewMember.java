@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 public class CrewMember {
@@ -13,6 +14,7 @@ public class CrewMember {
 	private String name;
 	private CrewRole role;
 	
+	@EqualsAndHashCode.Exclude
 	@JsonIgnoreProperties("crewMembers")
 	private List<Flight> flightes;
 	

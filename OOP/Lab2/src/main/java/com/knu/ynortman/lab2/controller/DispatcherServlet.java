@@ -42,7 +42,7 @@ public class DispatcherServlet extends HttpServlet {
 			logger.debug(request.getMethod());
 			if(request.getMethod().equals(GET)) {
 				flightController.doGet(request, response);
-			} else if(request.getMethod().equalsIgnoreCase(POST)) {
+			} else if(request.getMethod().equals(POST)) {
 				flightController.doPost(request, response);
 			}
 		} else if(servletPath.equals(crewMemberServletPath)) {

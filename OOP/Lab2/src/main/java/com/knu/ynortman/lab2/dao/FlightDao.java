@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.knu.ynortman.lab2.model.City;
+import com.knu.ynortman.lab2.model.CrewMember;
 import com.knu.ynortman.lab2.model.Flight;
 import com.knu.ynortman.lab2.util.JdbcConnection;
 
@@ -25,6 +26,8 @@ public class FlightDao {
 	private static final String addFlightQuery = "INSERT INTO flight(departure_city_id, departure_time, dest_city_id, dest_time) "
 			+ "VALUES(?, ?, ?, ?)";
 	private final String deleteFlightQuery = "DELETE FROM flight WHERE flight.id = ?";
+	private static final String addMemberQuery = "INSERT INTO crew_flight VALUES (?, ?)";
+	
 	
 	public static List<Flight> getAllFlights() {
 		List<Flight> result = new LinkedList<Flight>();
@@ -71,8 +74,6 @@ public class FlightDao {
 				flight = new Flight();
 				flight.setId(rs.getInt(1));
 				flight.setDepartTime(LocalDateTime.parse(rs.getString(3), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-				logger.debug(LocalDateTime.parse(rs.getString(3), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-				logger.debug(flight.getDepartTime());
 				flight.setDestTime(LocalDateTime.parse(rs.getString(5), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 				
 				City depCity = CityDao.getCityById(rs.getInt(2));
@@ -118,6 +119,43 @@ public class FlightDao {
 			return null;
 		}
 		
+		return flight;
+	}
+	
+	public static Flight addCrewMember(int flightId, CrewMember member) {
+		Flight flight = getFlightById(flightId);
+		member = CrewMembersDao.getCrewMemberById(member.getId());
+		if(flight == null) {
+			logger.error("Flight does not exist");
+			return null;
+		}
+		if(!CrewMembersDao.iscrewMemberExists(member.getId())) {
+			logger.error("Crew member does not exist");
+			return null;
+		}
+		if(flight.getCrewMembers() != null && flight.getCrewMembers().contains(member)) {
+			logger.debug("Member is already there");
+			return flight;
+		}
+		try(Connection conn = JdbcConnection.getConnection()) {
+			PreparedStatement ps = conn.prepareStatement(addMemberQuery);
+			ps.setInt(1, flightId);
+			ps.setInt(2, member.getId());
+			int rows = ps.executeUpdate();
+			if(rows > 0) {
+				logger.debug("Succesfully insert crew member to flight");
+				List<CrewMember> members = flight.getCrewMembers();
+				if(members == null) {
+					members = new LinkedList<CrewMember>();
+				}
+				members.add(member);
+			} else {
+				logger.error("Cannot insert crew member into flight crew");
+				return null;
+			}
+		} catch (SQLException | IOException e) {
+			logger.error("Exception in adding crew member");
+		}
 		return flight;
 	}
 

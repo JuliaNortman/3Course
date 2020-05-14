@@ -15,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.knu.ynortman.lab2.model.CrewMember;
 import com.knu.ynortman.lab2.model.Flight;
 import com.knu.ynortman.lab2.service.FlightService;
 import com.knu.ynortman.lab2.service.FlightServiceImpl;
@@ -71,18 +72,7 @@ public class FlightServlet extends HttpServlet {
 		String[] urls = request.getPathInfo().split("/");
 		if (urls.length == 3 && urls[1].equals("admin") && urls[2].equals("add")) {
 			// admin/add
-			StringBuffer jsonBody = new StringBuffer();
-			String line = null;
-			try {
-				BufferedReader reader = request.getReader();
-				while ((line = reader.readLine()) != null) {
-					jsonBody.append(line);
-				}
-			} catch (Exception e) { 
-				logger.error("Cannot get json flight");
-				response.sendError(400, "Bad request");
-			}
-			Flight flight = new ObjectMapper().readValue(jsonBody.toString(), Flight.class);
+			Flight flight = new ObjectMapper().readValue(jsonBodyFromRequest(request, response), Flight.class);
 			flight = flightService.createFlight(flight);
 			if(flight == null) {
 				response.sendError(400, "Bad request");
@@ -91,7 +81,17 @@ public class FlightServlet extends HttpServlet {
 				makeJsonAnswer(flight, response);
 			}
 		} else if (urls.length == 4) {
-			// dispatcher/{id}/addmember
+			if(urls[1].equals("dispatcher") && urls[3].equals("addmember")) {
+				int flightId = Integer.parseInt(urls[2]);
+				CrewMember member = new ObjectMapper().readValue(jsonBodyFromRequest(request, response), CrewMember.class);
+				Flight flight = flightService.addMember(flightId, member);
+				if(flight == null) {
+					response.sendError(400, "Bad request");
+				} else {
+					response.setStatus(201);
+					makeJsonAnswer(flight, response);
+				}
+			}
 
 		}
 	}
@@ -103,5 +103,19 @@ public class FlightServlet extends HttpServlet {
 		out.print(new ObjectMapper().writeValueAsString(obj));
 		out.flush();
 	}
-
+	
+	private String jsonBodyFromRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		StringBuffer jsonBody = new StringBuffer();
+		String line = null;
+		try {
+			BufferedReader reader = request.getReader();
+			while ((line = reader.readLine()) != null) {
+				jsonBody.append(line);
+			}
+		} catch (Exception e) { 
+			logger.error("Cannot get json obj");
+			response.sendError(400, "Bad request");
+		}
+		return jsonBody.toString();
+	}
 }
