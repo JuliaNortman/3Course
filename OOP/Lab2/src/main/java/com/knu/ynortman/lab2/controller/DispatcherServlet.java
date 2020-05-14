@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @WebServlet(
 		urlPatterns = {
 				"/flight/*",
@@ -14,9 +17,14 @@ import javax.servlet.http.HttpServletResponse;
 		})
 public class DispatcherServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private final Logger logger = LogManager.getRootLogger();
 	
 	private final String flightServletPath = "/flight";
 	private final String crewMemberServletPath = "/crew";
+	private final String GET = "GET";
+	private final String POST = "POST";
+	private final String PUT = "PUT";
+	private final String DELETE = "DELETE";
     
 	private FlightServlet flightController;
 	private CrewMemberServlet memberController;
@@ -31,13 +39,17 @@ public class DispatcherServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String servletPath = request.getServletPath();
 		if(servletPath.equals(flightServletPath)) {
-			flightController.doGet(request, response);
+			logger.debug(request.getMethod());
+			if(request.getMethod().equals(GET)) {
+				flightController.doGet(request, response);
+			} else if(request.getMethod().equalsIgnoreCase(POST)) {
+				flightController.doPost(request, response);
+			}
 		} else if(servletPath.equals(crewMemberServletPath)) {
 			memberController.doGet(request, response);
 		} else {
-			//report error no such path
 			response.sendError(404, "Path not found");
-			response.getWriter().append("dispatcher error");
+			logger.error("dispatcher error");
 		}
 	}
 

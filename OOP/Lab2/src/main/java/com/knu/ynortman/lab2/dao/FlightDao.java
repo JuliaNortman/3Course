@@ -95,5 +95,28 @@ public class FlightDao {
 		}
 		return flight;
 	}
+	
+	public static Flight insertFlight(Flight flight) {
+		if(flight == null) return null;
+		try(Connection conn = JdbcConnection.getConnection()) {
+			PreparedStatement ps = conn.prepareStatement(addFlightQuery);
+			ps.setInt(1, flight.getDepartCity().getId());
+			ps.setObject(2, flight.getDepartTime());
+			ps.setInt(3, flight.getDestCity().getId());
+			ps.setObject(4, flight.getDestTime());
+			int rows = ps.executeUpdate();
+			if(rows > 0) {
+				logger.debug("Flight inserted");
+			} else {
+				logger.warn("Flight was not inserted");
+				return null;
+			}
+		} catch (SQLException | IOException e) {
+			logger.error("Error in adding flight");
+			return null;
+		}
+		
+		return flight;
+	}
 
 }

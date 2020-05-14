@@ -12,8 +12,7 @@ public class FlightServiceImpl implements FlightService {
 
 	@Override
 	public Flight createFlight(Flight flight) {
-		// TODO Auto-generated method stub
-		return null;
+		return FlightDao.insertFlight(flight);
 	}
 
 	@Override
@@ -27,8 +26,7 @@ public class FlightServiceImpl implements FlightService {
 
 	@Override
 	public Flight getFlight(int id) {
-		Flight flight = FlightDao.getFlightById(id);
-		return flight;
+		return FlightDao.getFlightById(id);
 	}
 
 	@Override
