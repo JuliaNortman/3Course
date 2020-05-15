@@ -167,6 +167,7 @@ public class FlightDao {
 			ps.setObject(2, flight.getDepartTime());
 			ps.setInt(3, flight.getDestCity().getId());
 			ps.setObject(4, flight.getDestTime());
+			ps.setInt(5, flight.getId());
 			if(ps.executeUpdate() <= 0) {
 				logger.error("Cannot update flight");
 				return null;
