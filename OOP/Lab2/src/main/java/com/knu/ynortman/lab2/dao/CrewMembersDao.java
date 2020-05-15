@@ -38,6 +38,8 @@ public class CrewMembersDao {
 	private static final String allCrewMembers = 
 			"SELECT crew_member.id, crew_member.name, crew_role.id, crew_role.role " + 
 			"FROM crew_member INNER JOIN crew_role ON crew_member.role_id = crew_role.id ";
+	private static final String addCrewMemberQuery = "INSERT INTO crew_member(name, role_id) VALUES (?, ?)";
+	
 	
 	public static List<CrewMember> getFlightMembers(int flightId) {
 		List<CrewMember> members = new LinkedList<CrewMember>();
@@ -110,8 +112,26 @@ public class CrewMembersDao {
 		return flights;
 	}
 	
-	public static boolean iscrewMemberExists(int id) {
+	public static boolean isCrewMemberExists(int id) {
 		return (getCrewMemberById(id) != null);
+	}
+	
+	public static CrewMember addCrewMember(CrewMember member) {
+		if(member == null) return null;
+		try(Connection conn = JdbcConnection.getConnection()) {
+			PreparedStatement ps = conn.prepareStatement(addCrewMemberQuery);
+			ps.setString(1, member.getName());
+			ps.setInt(2, member.getRole().getId());
+			int rows = ps.executeUpdate();
+			if(rows <= 0) {
+				logger.warn("Cannot insert crew member");
+				return null;
+			}
+		} catch (SQLException | IOException e) {
+			logger.error("Cannot add crew member");
+			return null;
+		}
+		return member;
 	}
 	
 	public static CrewMember crewMemberFromResultSet(ResultSet rs) throws SQLException {

@@ -92,7 +92,7 @@ public class FlightDao {
 			logger.error("Flight does not exist");
 			return null;
 		}
-		if(!CrewMembersDao.iscrewMemberExists(member.getId())) {
+		if(!CrewMembersDao.isCrewMemberExists(member.getId())) {
 			logger.error("Crew member does not exist");
 			return null;
 		}

@@ -13,7 +13,8 @@ import org.apache.logging.log4j.Logger;
 @WebServlet(
 		urlPatterns = {
 				"/flight/*",
-				"/crew/*"
+				"/crew/*",
+				"/role/*"
 		})
 public class DispatcherServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -21,14 +22,17 @@ public class DispatcherServlet extends HttpServlet {
 	
 	private final String flightServletPath = "/flight";
 	private final String crewMemberServletPath = "/crew";
+	private final String crewRoleServletPath = "/role";
     
 	private FlightServlet flightController;
 	private CrewMemberServlet memberController;
+	private CrewRoleServlet roleController;
 
     public DispatcherServlet() {
         super();
         flightController = new FlightServlet();
         memberController = new CrewMemberServlet();
+        roleController = new CrewRoleServlet();
     }
 
 	@Override
@@ -38,6 +42,8 @@ public class DispatcherServlet extends HttpServlet {
 			flightController.doGet(request, response);
 		} else if(servletPath.equals(crewMemberServletPath)) {
 			memberController.doGet(request, response);
+		} else if(servletPath.equals(crewRoleServletPath)) {
+			roleController.doGet(request, response);
 		} else {
 			response.sendError(404, "Path not found");
 			logger.error("dispatcher error");
