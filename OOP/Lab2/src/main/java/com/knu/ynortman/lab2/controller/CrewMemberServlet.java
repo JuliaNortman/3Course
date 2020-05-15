@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.knu.ynortman.lab2.model.CrewMember;
 import com.knu.ynortman.lab2.model.Flight;
 import com.knu.ynortman.lab2.service.CrewMemberService;
@@ -81,8 +82,50 @@ public class CrewMemberServlet extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		String[] urls = request.getPathInfo().split("/");
+		if(urls.length == 3 && urls[1].equals("dispatcher") && urls[2].equals("add")) {
+			CrewMember member = new ObjectMapper().readValue(jsonBodyFromRequest(request, response),
+					CrewMember.class);
+			member = memberService.createMember(member);
+			if(member == null) {
+				response.sendError(401, "Bad request");
+			} else {
+				makeJsonAnswer(member, response);
+			}
+		} else {
+			response.sendError(404, "Path not found");
+			logger.error("Path not found");
+		}
+	}
+	
+	@Override
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String[] urls = request.getPathInfo().split("/");
+		if(urls.length == 3 && urls[1].equals("dispatcher") && urls[2].equals("update")) {
+			CrewMember member = new ObjectMapper().readValue(jsonBodyFromRequest(request, response),
+					CrewMember.class);
+			member = memberService.update(member);
+			if(member == null) {
+				response.sendError(401, "Bad request");
+			} else {
+				makeJsonAnswer(member, response);
+			}
+		} else {
+			response.sendError(404, "Path not found");
+			logger.error("Path not found");
+		}
+	}
+	
+	@Override
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String[] urls = request.getPathInfo().split("/");
+		if(urls.length == 4 && urls[1].equals("dispatcher") && urls[2].equals("delete")) {
+			int id = Integer.parseInt(urls[3]);
+			memberService.deleteById(id);
+		} else {
+			response.sendError(404, "Path not found");
+			logger.error("Path not found");
+		}
 	}
 
 }

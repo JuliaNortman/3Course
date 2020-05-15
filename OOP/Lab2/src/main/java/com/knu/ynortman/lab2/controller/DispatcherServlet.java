@@ -64,12 +64,25 @@ public class DispatcherServlet extends HttpServlet {
 	}
 	
 	@Override
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String servletPath = request.getServletPath();
+		if(servletPath.equals(flightServletPath)) {
+			//flightController.doPut(request, response);
+		} else if(servletPath.equals(crewMemberServletPath)) {
+			memberController.doPut(request, response);
+		} else {
+			//report error no such path
+			response.sendError(404, "Path not found");
+		}
+	}
+	
+	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String servletPath = request.getServletPath();
 		if(servletPath.equals(flightServletPath)) {
 			flightController.doDelete(request, response);
 		} else if(servletPath.equals(crewMemberServletPath)) {
-			//memberController.doDelete(request, response);
+			memberController.doDelete(request, response);
 		} else {
 			//report error no such path
 			response.sendError(404, "Path not found");

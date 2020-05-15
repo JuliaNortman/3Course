@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="com.knu.ynortman.lab3.repository.CrewMemberRepository"/>
-    <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
-    <fullyQualifiedTypeName name="com.knu.ynortman.lab3.model.Flight"/>
-    <fullyQualifiedTypeName name="com.knu.ynortman.lab3.model.Country"/>
-    <fullyQualifiedTypeName name="com.knu.ynortman.lab3.model.City"/>
     <fullyQualifiedTypeName name="java.lang.String"/>
     <fullyQualifiedTypeName name="lombok.NoArgsConstructor"/>
     <fullyQualifiedTypeName name="com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer"/>
@@ -16,8 +11,6 @@
     <fullyQualifiedTypeName name="com.knu.ynortman.lab2.dao.CountryDao"/>
     <fullyQualifiedTypeName name="com.knu.ynortman.lab2.model.City"/>
     <fullyQualifiedTypeName name="com.knu.ynortman.lab2.dao.CityDao"/>
-    <fullyQualifiedTypeName name="com.knu.ynortman.lab2.model.CrewRole"/>
-    <fullyQualifiedTypeName name="com.knu.ynortman.lab2.model.CrewRoleEnum"/>
     <fullyQualifiedTypeName name="com.knu.ynortman.lab2.service.FlightServiceImpl"/>
     <fullyQualifiedTypeName name="java.awt.PageAttributes.MediaType"/>
     <fullyQualifiedTypeName name="java.io.PrintWriter"/>
@@ -44,20 +37,27 @@
     <fullyQualifiedTypeName name="javax.servlet.http.HttpServletResponse"/>
     <fullyQualifiedTypeName name="java.lang.Override"/>
     <fullyQualifiedTypeName name="java.lang.Integer"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="com.knu.ynortman.lab2.service.CrewMemberService"/>
     <fullyQualifiedTypeName name="com.knu.ynortman.lab2.service.CrewMemberServiceImpl"/>
+    <fullyQualifiedTypeName name="com.knu.ynortman.lab2.dao.FlightDao"/>
+    <fullyQualifiedTypeName name="com.knu.ynortman.lab2.model.Flight"/>
+    <fullyQualifiedTypeName name="com.fasterxml.jackson.annotation.JsonInclude"/>
+    <fullyQualifiedTypeName name="java.util.LinkedList"/>
+    <fullyQualifiedTypeName name="java.sql.ResultSet"/>
+    <fullyQualifiedTypeName name="com.knu.ynortman.lab2.model.CrewRoleEnum"/>
+    <fullyQualifiedTypeName name="com.knu.ynortman.lab2.dao.RoleDao"/>
+    <fullyQualifiedTypeName name="com.knu.ynortman.lab2.controller.CrewRoleServlet"/>
+    <fullyQualifiedTypeName name="javax.servlet.annotation.WebServlet"/>
     <fullyQualifiedTypeName name="org.apache.logging.log4j.Logger"/>
     <fullyQualifiedTypeName name="org.apache.logging.log4j.LogManager"/>
+    <fullyQualifiedTypeName name="com.knu.ynortman.lab2.service.CrewRoleService"/>
+    <fullyQualifiedTypeName name="com.knu.ynortman.lab2.service.CrewRoleServiceImpl"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="com.knu.ynortman.lab2.model.CrewRole"/>
     <fullyQualifiedTypeName name="com.knu.ynortman.lab2.util.JsonConverter"/>
     <fullyQualifiedTypeName name="com.knu.ynortman.lab2.model.CrewMember"/>
-    <fullyQualifiedTypeName name="java.util.LinkedList"/>
     <fullyQualifiedTypeName name="java.sql.Connection"/>
     <fullyQualifiedTypeName name="com.knu.ynortman.lab2.util.JdbcConnection"/>
     <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
-    <fullyQualifiedTypeName name="java.sql.ResultSet"/>
-    <fullyQualifiedTypeName name="com.knu.ynortman.lab2.dao.FlightDao"/>
     <fullyQualifiedTypeName name="com.knu.ynortman.lab2.dao.CrewMembersDao"/>
-    <fullyQualifiedTypeName name="com.knu.ynortman.lab2.model.Flight"/>
-    <fullyQualifiedTypeName name="com.fasterxml.jackson.annotation.JsonInclude"/>
 </qualifiedTypeNameHistroy>
