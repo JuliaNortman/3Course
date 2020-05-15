@@ -10,8 +10,7 @@ public class CrewMemberServiceImpl implements CrewMemberService{
 
 	@Override
 	public CrewMember createMember(CrewMember crewMember) {
-		// TODO Auto-generated method stub
-		return null;
+		return CrewMembersDao.addCrewMember(crewMember);
 	}
 
 	@Override
@@ -36,20 +35,12 @@ public class CrewMemberServiceImpl implements CrewMemberService{
 
 	@Override
 	public CrewMember update(CrewMember member) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void delete(CrewMember crewMember) {
-		// TODO Auto-generated method stub
-		
+		return CrewMembersDao.updateCrewMember(member);
 	}
 
 	@Override
 	public void deleteById(int id) {
-		// TODO Auto-generated method stub
-		
+		CrewMembersDao.deleteById(id);
 	}
 
 }

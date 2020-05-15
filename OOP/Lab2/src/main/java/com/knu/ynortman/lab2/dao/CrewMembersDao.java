@@ -38,6 +38,9 @@ public class CrewMembersDao {
 	private static final String allCrewMembers = 
 			"SELECT crew_member.id, crew_member.name, crew_role.id, crew_role.role " + 
 			"FROM crew_member INNER JOIN crew_role ON crew_member.role_id = crew_role.id ";
+	private static final String addCrewMemberQuery = "INSERT INTO crew_member(name, role_id) VALUES (?, ?)";
+	private static final String updateCrewMemberQuery = "UPDATE crew_member SET name = ?, role_id = ? WHERE id = ?";
+	private static final String deleteCrewMemberQuery = "DELETE FROM crew_member WHERE id = ?";
 	
 	public static List<CrewMember> getFlightMembers(int flightId) {
 		List<CrewMember> members = new LinkedList<CrewMember>();
@@ -110,8 +113,59 @@ public class CrewMembersDao {
 		return flights;
 	}
 	
-	public static boolean iscrewMemberExists(int id) {
+	public static boolean isCrewMemberExists(int id) {
 		return (getCrewMemberById(id) != null);
+	}
+	
+	public static CrewMember addCrewMember(CrewMember member) {
+		if(member == null) {
+			logger.debug("null");
+			return null;
+		}
+		try(Connection conn = JdbcConnection.getConnection()) {
+			PreparedStatement ps = conn.prepareStatement(addCrewMemberQuery);
+			ps.setString(1, member.getName());
+			ps.setInt(2, member.getRole().getId());
+			int rows = ps.executeUpdate();
+			if(rows <= 0) {
+				logger.warn("Cannot insert crew member");
+				return null;
+			}
+		} catch (SQLException | IOException e) {
+			logger.error("Cannot add crew member");
+			return null;
+		}
+		return member;
+	}
+	
+	public static CrewMember updateCrewMember(CrewMember member) {
+		if(member == null) return null;
+		try(Connection conn = JdbcConnection.getConnection()) {
+			PreparedStatement ps = conn.prepareStatement(updateCrewMemberQuery);
+			ps.setString(1, member.getName());
+			ps.setInt(2, member.getRole().getId());
+			ps.setInt(3, member.getId());
+			int rows = ps.executeUpdate();
+			if(rows <= 0) {
+				logger.warn("Cannot update member");
+				return null;
+			}
+		} catch (SQLException | IOException e) {
+			logger.error("Cannot update member");
+		}
+		return member;
+	}
+	
+	public static void deleteById(int id) {
+		try(Connection conn = JdbcConnection.getConnection()) {
+			PreparedStatement ps = conn.prepareStatement(deleteCrewMemberQuery);
+			ps.setInt(1, id);
+			if(ps.executeUpdate() <= 0) {
+				logger.warn("Cannot delete crew member");
+			}
+		} catch (SQLException | IOException e) {
+			logger.error("Error deleting crew member");
+		}
 	}
 	
 	public static CrewMember crewMemberFromResultSet(ResultSet rs) throws SQLException {

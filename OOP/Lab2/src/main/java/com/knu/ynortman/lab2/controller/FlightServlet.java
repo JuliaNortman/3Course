@@ -64,7 +64,6 @@ public class FlightServlet extends HttpServlet {
 			response.sendError(404, "Path not found");
 			logger.error("Path not found");
 		}
-		// response.getWriter().append(request.getServletPath()).append(request.getPathInfo());
 
 	}
 

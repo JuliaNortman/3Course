@@ -12,6 +12,5 @@ public interface CrewMemberService {
 	public List<CrewMember> getAllFlightCrew(int flightId);
 	public List<Flight> getAllFlightsForMember(int id);
 	public CrewMember update(CrewMember member);
-	public void delete(CrewMember crewMember);
 	public void deleteById(int id);
 }
