@@ -28,7 +28,9 @@ public class FlightDao {
 	private static final String deleteFlightQuery = "DELETE FROM flight WHERE flight.id = ?";
 	private static final String addMemberQuery = "INSERT INTO crew_flight VALUES (?, ?)";
 	private static final String deleteMemberQuery = "DELETE FROM crew_flight WHERE flight_id = ? AND crew_id = ?";
-	
+	private static final String updateFlightQuery = "UPDATE flight "
+			+ "SET  departure_city_id = ?, departure_time = ?, dest_city_id = ?, dest_time = ?"
+			+ "WHERE id = ?";
 	
 	public static List<Flight> getAllFlights() {
 		List<Flight> result = new LinkedList<Flight>();
@@ -121,7 +123,6 @@ public class FlightDao {
 		}
 		return flight;
 	}
-
 	
 	public static void deleteFlight(int id) {
 		try(Connection conn = JdbcConnection.getConnection()) {
@@ -154,6 +155,24 @@ public class FlightDao {
 			flight.getCrewMembers().remove(member);
 		} catch (SQLException | IOException e) {
 			logger.error("Cannot delete flight member");
+		}
+		return flight;
+	}
+	
+	public static Flight updateFlight(Flight flight) {
+		if(flight == null) return null;
+		try(Connection conn = JdbcConnection.getConnection()) {
+			PreparedStatement ps = conn.prepareStatement(updateFlightQuery);
+			ps.setInt(1, flight.getDepartCity().getId());
+			ps.setObject(2, flight.getDepartTime());
+			ps.setInt(3, flight.getDestCity().getId());
+			ps.setObject(4, flight.getDestTime());
+			if(ps.executeUpdate() <= 0) {
+				logger.error("Cannot update flight");
+				return null;
+			}
+		} catch (SQLException | IOException e) {
+			logger.error("Cannot update flight");
 		}
 		return flight;
 	}

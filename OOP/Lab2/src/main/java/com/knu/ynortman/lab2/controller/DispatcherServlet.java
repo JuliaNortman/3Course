@@ -67,7 +67,7 @@ public class DispatcherServlet extends HttpServlet {
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String servletPath = request.getServletPath();
 		if(servletPath.equals(flightServletPath)) {
-			//flightController.doPut(request, response);
+			flightController.doPut(request, response);
 		} else if(servletPath.equals(crewMemberServletPath)) {
 			memberController.doPut(request, response);
 		} else {

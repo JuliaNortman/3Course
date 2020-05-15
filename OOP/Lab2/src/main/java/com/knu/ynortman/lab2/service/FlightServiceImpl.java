@@ -30,8 +30,7 @@ public class FlightServiceImpl implements FlightService {
 
 	@Override
 	public Flight update(Flight flight) {
-		// TODO Auto-generated method stub
-		return null;
+		return FlightDao.updateFlight(flight);
 	}
 
 	@Override
