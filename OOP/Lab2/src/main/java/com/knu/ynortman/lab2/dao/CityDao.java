@@ -12,6 +12,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.knu.ynortman.lab2.exception.ServerException;
 import com.knu.ynortman.lab2.model.City;
 import com.knu.ynortman.lab2.model.Country;
 import com.knu.ynortman.lab2.util.JdbcConnection;
@@ -22,7 +23,7 @@ public class CityDao {
 	private static final String idCityQuery = "SELECT * FROM city WHERE city.id = ?";
 	private static final String allCitiesQuery = "SELECT * FROM city";
 	
-	public static City getCityById(int id) {
+	public static City getCityById(int id) throws ServerException {
 		City city = null;
 		try(Connection conn = JdbcConnection.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(idCityQuery);
@@ -42,11 +43,12 @@ public class CityDao {
 			}
 		} catch (SQLException | IOException e) {
 			logger.error("Cannot get city");
+			throw new ServerException();
 		} 
 		return city;
 	}
 	
-	public static List<City> getAllCities() {
+	public static List<City> getAllCities() throws ServerException {
 		List<City> cities = new LinkedList<City>();
 		try(Connection conn = JdbcConnection.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(allCitiesQuery);
@@ -65,6 +67,7 @@ public class CityDao {
 			}
 		} catch (SQLException | IOException e) {
 			logger.error("Cannot get cities");
+			throw new ServerException();
 		}
 		return cities;
 	}

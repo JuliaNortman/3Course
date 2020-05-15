@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.knu.ynortman.lab2.exception.ServerException;
 import com.knu.ynortman.lab2.model.Country;
 import com.knu.ynortman.lab2.util.JdbcConnection;
 
@@ -16,7 +17,7 @@ public class CountryDao {
 	private static final Logger logger = LogManager.getRootLogger();
 	private static final String idCountryQuery = "SELECT * FROM country WHERE country.id = ?";
 	
-	public static Country getCountryById(int id) {
+	public static Country getCountryById(int id) throws ServerException {
 		Country country = null;
 		try(Connection conn = JdbcConnection.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(idCountryQuery);
@@ -29,6 +30,7 @@ public class CountryDao {
 			}
 		} catch (SQLException | IOException e) {
 			logger.error("Cannot get country");
+			throw new ServerException();
 		}
 		return country;
 	}

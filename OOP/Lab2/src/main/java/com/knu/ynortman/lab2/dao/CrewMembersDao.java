@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.knu.ynortman.lab2.exception.ServerException;
 import com.knu.ynortman.lab2.model.CrewMember;
 import com.knu.ynortman.lab2.model.CrewRole;
 import com.knu.ynortman.lab2.model.CrewRoleEnum;
@@ -42,7 +43,7 @@ public class CrewMembersDao {
 	private static final String updateCrewMemberQuery = "UPDATE crew_member SET name = ?, role_id = ? WHERE id = ?";
 	private static final String deleteCrewMemberQuery = "DELETE FROM crew_member WHERE id = ?";
 	
-	public static List<CrewMember> getFlightMembers(int flightId) {
+	public static List<CrewMember> getFlightMembers(int flightId) throws ServerException {
 		List<CrewMember> members = new LinkedList<CrewMember>();
 		try(Connection conn = JdbcConnection.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(crewByFlightIdQuery);
@@ -56,11 +57,12 @@ public class CrewMembersDao {
 			}
 		} catch (SQLException | IOException e) {
 			logger.error("Cannot get members");
+			throw new ServerException();
 		}
 		return members;
 	}
 	
-	public static List<CrewMember> getAllCrewMembers() {
+	public static List<CrewMember> getAllCrewMembers() throws ServerException {
 		List<CrewMember> members = new LinkedList<CrewMember>();
 		try(Connection conn = JdbcConnection.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(allCrewMembers);
@@ -73,11 +75,12 @@ public class CrewMembersDao {
 			}
 		} catch (SQLException | IOException e) {
 			logger.error("Cannot get members");
+			throw new ServerException();
 		}
 		return members;
 	}
 	
-	public static CrewMember getCrewMemberById(int id) {
+	public static CrewMember getCrewMemberById(int id) throws ServerException {
 		CrewMember member = null;
 		try(Connection conn = JdbcConnection.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(crewMemberByIdQuery);
@@ -86,16 +89,16 @@ public class CrewMembersDao {
 			if(rs.next()) {
 				member = crewMemberFromResultSet(rs);
 			} else {
-				logger.error("Cannot get crew memn=ber by id");
+				logger.error("Cannot get crew member by id");
 			}
 		} catch (SQLException | IOException e) {
 			logger.error("Cannot get crew member by id");
-			return null;
+			throw new ServerException();
 		}
 		return member;
 	}
 	
-	public static List<Flight> getMemberFlights(int id) {
+	public static List<Flight> getMemberFlights(int id) throws ServerException {
 		List<Flight> flights = new LinkedList<>();
 		try(Connection conn = JdbcConnection.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(flightsByCrewIdQuery);
@@ -109,17 +112,17 @@ public class CrewMembersDao {
 			}
 		} catch (SQLException | IOException e) {
 			logger.error("Cannot get all flights by member id");
+			throw new ServerException();
 		}
 		return flights;
 	}
 	
-	public static boolean isCrewMemberExists(int id) {
+	public static boolean isCrewMemberExists(int id) throws ServerException {
 		return (getCrewMemberById(id) != null);
 	}
 	
-	public static CrewMember addCrewMember(CrewMember member) {
+	public static CrewMember addCrewMember(CrewMember member) throws ServerException {
 		if(member == null) {
-			logger.debug("null");
 			return null;
 		}
 		try(Connection conn = JdbcConnection.getConnection()) {
@@ -133,12 +136,12 @@ public class CrewMembersDao {
 			}
 		} catch (SQLException | IOException e) {
 			logger.error("Cannot add crew member");
-			return null;
+			throw new ServerException();
 		}
 		return member;
 	}
 	
-	public static CrewMember updateCrewMember(CrewMember member) {
+	public static CrewMember updateCrewMember(CrewMember member) throws ServerException {
 		if(member == null) return null;
 		try(Connection conn = JdbcConnection.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(updateCrewMemberQuery);
@@ -152,11 +155,12 @@ public class CrewMembersDao {
 			}
 		} catch (SQLException | IOException e) {
 			logger.error("Cannot update member");
+			throw new ServerException();
 		}
 		return member;
 	}
 	
-	public static void deleteById(int id) {
+	public static void deleteById(int id) throws ServerException {
 		try(Connection conn = JdbcConnection.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(deleteCrewMemberQuery);
 			ps.setInt(1, id);
@@ -165,10 +169,11 @@ public class CrewMembersDao {
 			}
 		} catch (SQLException | IOException e) {
 			logger.error("Error deleting crew member");
+			throw new ServerException();
 		}
 	}
 	
-	public static CrewMember crewMemberFromResultSet(ResultSet rs) throws SQLException {
+	private static CrewMember crewMemberFromResultSet(ResultSet rs) throws SQLException {
 		CrewMember member = new CrewMember();
 		member.setId(rs.getInt(1));
 		member.setName(rs.getString(2));

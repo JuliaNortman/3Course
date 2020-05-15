@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.knu.ynortman.lab2.exception.ServerException;
 import com.knu.ynortman.lab2.model.CrewRole;
 import com.knu.ynortman.lab2.model.CrewRoleEnum;
 import com.knu.ynortman.lab2.util.JdbcConnection;
@@ -17,9 +18,9 @@ import com.knu.ynortman.lab2.util.JdbcConnection;
 public class RoleDao {
 
 	private final static Logger logger = LogManager.getRootLogger();
-	private final static String getAllRolesQuery = "SELECT * FROM crew_role";
+	private final static String getAllRolesQuery = "SELECT * FROM cregitw_role";
 	
-	public static List<CrewRole> getAllRoles() {
+	public static List<CrewRole> getAllRoles() throws ServerException {
 		List<CrewRole> roles = new LinkedList<>();
 		try(Connection conn = JdbcConnection.getConnection()) {
 			ResultSet rs = conn.prepareStatement(getAllRolesQuery).executeQuery();
@@ -31,6 +32,7 @@ public class RoleDao {
 			}
 		} catch (SQLException | IOException e) {
 			logger.error("Cannot get all roles");
+			throw new ServerException();
 		}
 		return roles;
 	}

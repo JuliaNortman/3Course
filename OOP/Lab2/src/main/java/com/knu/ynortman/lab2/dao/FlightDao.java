@@ -13,6 +13,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.knu.ynortman.lab2.exception.ServerException;
 import com.knu.ynortman.lab2.model.City;
 import com.knu.ynortman.lab2.model.CrewMember;
 import com.knu.ynortman.lab2.model.Flight;
@@ -32,7 +33,7 @@ public class FlightDao {
 			+ "SET  departure_city_id = ?, departure_time = ?, dest_city_id = ?, dest_time = ?"
 			+ "WHERE id = ?";
 	
-	public static List<Flight> getAllFlights() {
+	public static List<Flight> getAllFlights() throws ServerException {
 		List<Flight> result = new LinkedList<Flight>();
 		try(Connection conn = JdbcConnection.getConnection()) {
 			PreparedStatement preparedStatement = conn.prepareStatement(allFlightsQuery);
@@ -45,11 +46,12 @@ public class FlightDao {
 			}
 		} catch (SQLException | IOException e) {
 			logger.error("Cannot get all flights");
+			throw new ServerException();
 		}
 		return result;
 	}
 	
-	public static Flight getFlightById(int id) {
+	public static Flight getFlightById(int id) throws ServerException {
 		Flight flight = null;
 		try(Connection conn = JdbcConnection.getConnection()) {
 			PreparedStatement preparedStatement = conn.prepareStatement(idFlightQuery);
@@ -60,11 +62,12 @@ public class FlightDao {
 			}
 		} catch (SQLException | IOException e) {
 			logger.error("Cannot get all flights");
+			throw new ServerException();
 		}
 		return flight;
 	}
 	
-	public static Flight insertFlight(Flight flight) {
+	public static Flight insertFlight(Flight flight) throws ServerException {
 		if(flight == null) return null;
 		try(Connection conn = JdbcConnection.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(addFlightQuery);
@@ -81,13 +84,13 @@ public class FlightDao {
 			}
 		} catch (SQLException | IOException e) {
 			logger.error("Error in adding flight");
-			return null;
+			throw new ServerException();
 		}
 		
 		return flight;
 	}
 	
-	public static Flight addCrewMember(int flightId, CrewMember member) {
+	public static Flight addCrewMember(int flightId, CrewMember member) throws ServerException {
 		Flight flight = getFlightById(flightId);
 		member = CrewMembersDao.getCrewMemberById(member.getId());
 		if(flight == null) {
@@ -120,11 +123,12 @@ public class FlightDao {
 			}
 		} catch (SQLException | IOException e) {
 			logger.error("Exception in adding crew member");
+			throw new ServerException();
 		}
 		return flight;
 	}
 	
-	public static void deleteFlight(int id) {
+	public static void deleteFlight(int id) throws ServerException {
 		try(Connection conn = JdbcConnection.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(deleteFlightQuery);
 			ps.setInt(1, id);
@@ -134,10 +138,11 @@ public class FlightDao {
 			}
 		} catch (SQLException | IOException e) {
 			logger.error("Error deleting flight");
+			throw new ServerException();
 		}
 	}
 	
-	public static Flight deleteFlightMember(int flightId, CrewMember member) {
+	public static Flight deleteFlightMember(int flightId, CrewMember member) throws ServerException {
 		Flight flight = getFlightById(flightId);
 		if(flight == null) {
 			logger.error("Flight does not exist");
@@ -155,11 +160,12 @@ public class FlightDao {
 			flight.getCrewMembers().remove(member);
 		} catch (SQLException | IOException e) {
 			logger.error("Cannot delete flight member");
+			throw new ServerException();
 		}
 		return flight;
 	}
 	
-	public static Flight updateFlight(Flight flight) {
+	public static Flight updateFlight(Flight flight) throws ServerException {
 		if(flight == null) return null;
 		try(Connection conn = JdbcConnection.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(updateFlightQuery);
@@ -174,11 +180,12 @@ public class FlightDao {
 			}
 		} catch (SQLException | IOException e) {
 			logger.error("Cannot update flight");
+			throw new ServerException();
 		}
 		return flight;
 	}
 	
-	private static Flight flightFromResultSet(ResultSet rs) throws SQLException {
+	private static Flight flightFromResultSet(ResultSet rs) throws SQLException, ServerException {
 		Flight flight = new Flight();
 		flight.setId(rs.getInt(1));
 		flight.setDepartTime(LocalDateTime.parse(rs.getString(3), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));

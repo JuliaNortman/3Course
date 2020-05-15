@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.knu.ynortman.lab2.dao.FlightDao;
+import com.knu.ynortman.lab2.exception.ServerException;
 import com.knu.ynortman.lab2.model.CrewMember;
 import com.knu.ynortman.lab2.model.Flight;
 import com.knu.ynortman.lab2.service.FlightService;
@@ -40,11 +41,16 @@ public class FlightServlet extends HttpServlet {
 		String[] urls = request.getPathInfo().split("/");
 		if (urls.length == 2) {
 			if (urls[1].equals(getPathAll)) {
-				List<Flight> flights = flightService.getAllFlights();
-				if (flights == null || flights.size() == 0) {
-					response.sendError(404, "Resource not found");
-				} else {
-					makeJsonAnswer(flights, response);
+				List<Flight> flights;
+				try {
+					flights = flightService.getAllFlights();
+					if (flights == null || flights.size() == 0) {
+						response.sendError(404, "Resource not found");
+					} else {
+						makeJsonAnswer(flights, response);
+					}
+				} catch (ServerException e) {
+					response.sendError(500);
 				}
 			} else {
 				try {
@@ -58,6 +64,8 @@ public class FlightServlet extends HttpServlet {
 				} catch (NumberFormatException e) {
 					response.sendError(404, "Path not found");
 					logger.error("Path not found");
+				} catch (ServerException e) {
+					response.sendError(500);
 				}
 			}
 		} else {
@@ -73,24 +81,33 @@ public class FlightServlet extends HttpServlet {
 		if (urls.length == 3 && urls[1].equals("admin") && urls[2].equals("add")) {
 			// admin/add
 			Flight flight = new ObjectMapper().readValue(jsonBodyFromRequest(request, response), Flight.class);
-			flight = flightService.createFlight(flight);
-			if (flight == null) {
-				response.sendError(400, "Bad request");
-			} else {
-				response.setStatus(201);
-				makeJsonAnswer(flight, response);
+			try {
+				flight = flightService.createFlight(flight);
+				if (flight == null) {
+					response.sendError(400, "Bad request");
+				} else {
+					response.setStatus(201);
+					makeJsonAnswer(flight, response);
+				}
+			} catch (ServerException e) {
+				response.sendError(500);
 			}
 		} else if (urls.length == 4) {
 			if (urls[1].equals("dispatcher") && urls[3].equals("addmember")) {
 				int flightId = Integer.parseInt(urls[2]);
 				CrewMember member = new ObjectMapper().readValue(jsonBodyFromRequest(request, response),
 						CrewMember.class);
-				Flight flight = flightService.addMember(flightId, member);
-				if (flight == null) {
-					response.sendError(400, "Bad request");
-				} else {
-					response.setStatus(201);
-					makeJsonAnswer(flight, response);
+				Flight flight;
+				try {
+					flight = flightService.addMember(flightId, member);
+					if (flight == null) {
+						response.sendError(400, "Bad request");
+					} else {
+						response.setStatus(201);
+						makeJsonAnswer(flight, response);
+					}
+				} catch (ServerException e) {
+					response.sendError(500);
 				}
 			} else {
 				response.sendError(404, "Path not found");
@@ -108,11 +125,15 @@ public class FlightServlet extends HttpServlet {
 		if(urls.length == 3 && urls[1].equals("admin") && urls[2].equals("update")) {
 			Flight flight = new ObjectMapper().readValue(jsonBodyFromRequest(request, response),
 					Flight.class);
-			flight = flightService.update(flight);
-			if(flight == null) {
-				response.sendError(400, "Bad request");
-			} else {
-				makeJsonAnswer(flight, response);
+			try {
+				flight = flightService.update(flight);
+				if(flight == null) {
+					response.sendError(400, "Bad request");
+				} else {
+					makeJsonAnswer(flight, response);
+				}
+			} catch (ServerException e) {
+				response.sendError(500);
 			}
 		} else {
 			response.sendError(404, "Path not found");
@@ -127,16 +148,25 @@ public class FlightServlet extends HttpServlet {
 		if(urls.length == 4) {
 			if(urls[1].equals("admin") && urls[2].equals("delete")) {
 				int id = Integer.parseInt(urls[3]);
-				flightService.deleteById(id);
+				try {
+					flightService.deleteById(id);
+				} catch (ServerException e) {
+					response.sendError(500);
+				}
 			} else if(urls[1].equals("dispatcher") && urls[3].equals("deletemember")) {
 				int flightId = Integer.parseInt(urls[2]);
 				CrewMember member = new ObjectMapper().readValue(jsonBodyFromRequest(request, response),
 						CrewMember.class);
-				Flight flight = FlightDao.deleteFlightMember(flightId, member);
-				if(flight == null) {
-					response.sendError(400, "Bad request");
-				} else {
-					makeJsonAnswer(flight, response);
+				Flight flight;
+				try {
+					flight = FlightDao.deleteFlightMember(flightId, member);
+					if(flight == null) {
+						response.sendError(400, "Bad request");
+					} else {
+						makeJsonAnswer(flight, response);
+					}
+				} catch (ServerException e) {
+					response.sendError(500);
 				}
 			} else {
 				response.sendError(404, "Path not found");
