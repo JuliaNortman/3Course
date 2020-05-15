@@ -14,7 +14,8 @@ import org.apache.logging.log4j.Logger;
 		urlPatterns = {
 				"/flight/*",
 				"/crew/*",
-				"/role/*"
+				"/role/*",
+				"/city/*"
 		})
 public class DispatcherServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -23,16 +24,19 @@ public class DispatcherServlet extends HttpServlet {
 	private final String flightServletPath = "/flight";
 	private final String crewMemberServletPath = "/crew";
 	private final String crewRoleServletPath = "/role";
+	private final String cityServletPath = "/city";
     
 	private FlightServlet flightController;
 	private CrewMemberServlet memberController;
 	private CrewRoleServlet roleController;
+	private CityServlet cityController;
 
     public DispatcherServlet() {
         super();
         flightController = new FlightServlet();
         memberController = new CrewMemberServlet();
         roleController = new CrewRoleServlet();
+        cityController =  new CityServlet();
     }
 
 	@Override
@@ -44,6 +48,8 @@ public class DispatcherServlet extends HttpServlet {
 			memberController.doGet(request, response);
 		} else if(servletPath.equals(crewRoleServletPath)) {
 			roleController.doGet(request, response);
+		} else if(servletPath.equals(cityServletPath)) {
+			cityController.doGet(request, response);
 		} else {
 			response.sendError(404, "Path not found");
 			logger.error("dispatcher error");
@@ -67,7 +73,7 @@ public class DispatcherServlet extends HttpServlet {
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String servletPath = request.getServletPath();
 		if(servletPath.equals(flightServletPath)) {
-			//flightController.doPut(request, response);
+			flightController.doPut(request, response);
 		} else if(servletPath.equals(crewMemberServletPath)) {
 			memberController.doPut(request, response);
 		} else {

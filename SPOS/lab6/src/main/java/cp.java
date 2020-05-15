@@ -26,7 +26,7 @@
  * Initial revision
  *
  */
-package com.knu.ynortman;
+
 /**
  * A simple copy program for a simulated file system.
  * <p>

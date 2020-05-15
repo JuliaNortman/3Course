@@ -1,7 +1,7 @@
 /*
  * $Id: SuperBlock.java,v 1.9 2001/10/07 23:48:55 rayo Exp $
  */
-package com.knu.ynortman;
+
 import java.io.RandomAccessFile ;
 import java.io.IOException ;
 import java.util.*;

@@ -88,7 +88,7 @@ public class CrewMemberServlet extends HttpServlet {
 					CrewMember.class);
 			member = memberService.createMember(member);
 			if(member == null) {
-				response.sendError(401, "Bad request");
+				response.sendError(400, "Bad request");
 			} else {
 				makeJsonAnswer(member, response);
 			}
@@ -106,7 +106,7 @@ public class CrewMemberServlet extends HttpServlet {
 					CrewMember.class);
 			member = memberService.update(member);
 			if(member == null) {
-				response.sendError(401, "Bad request");
+				response.sendError(400, "Bad request");
 			} else {
 				makeJsonAnswer(member, response);
 			}
@@ -124,7 +124,7 @@ public class CrewMemberServlet extends HttpServlet {
 			memberService.deleteById(id);
 		} else {
 			response.sendError(404, "Path not found");
-			logger.error("Path not found");
+			logger.error("Path " + request.getPathInfo() + " not found");
 		}
 	}
 

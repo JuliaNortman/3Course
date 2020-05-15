@@ -1,5 +1,3 @@
-package com.knu.ynortman;
-
 public class chgrp {
     public static final String PROGRAM_NAME = "chgrp" ;
 

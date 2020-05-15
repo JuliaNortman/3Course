@@ -103,6 +103,24 @@ public class FlightServlet extends HttpServlet {
 	}
 
 	@Override
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String[] urls = request.getPathInfo().split("/");
+		if(urls.length == 3 && urls[1].equals("admin") && urls[2].equals("update")) {
+			Flight flight = new ObjectMapper().readValue(jsonBodyFromRequest(request, response),
+					Flight.class);
+			flight = flightService.update(flight);
+			if(flight == null) {
+				response.sendError(400, "Bad request");
+			} else {
+				makeJsonAnswer(flight, response);
+			}
+		} else {
+			response.sendError(404, "Path not found");
+			logger.error("Path not found");
+		}
+	}
+	
+	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String[] urls = request.getPathInfo().split("/");

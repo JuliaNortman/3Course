@@ -27,7 +27,7 @@
 *    http://www.gnu.org/copyleft/gpl.html
 * 
 */
-package com.knu.ynortman;
+
 import java.io.* ;
 import java.lang.Integer ;
 

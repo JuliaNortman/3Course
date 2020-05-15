@@ -1,5 +1,3 @@
-package com.knu.ynortman;
-
 public class find {
 
     private static String PROGRAM_NAME = "find";

@@ -1,5 +1,3 @@
-package com.knu.ynortman;
-
 public class ln {
     public static final String PROGRAM_NAME = "ln" ;
 

@@ -1,7 +1,7 @@
 /*
  * $Id: mkfs.java,v 1.11 2001/10/07 23:48:55 rayo Exp $
  */
-package com.knu.ynortman;
+
 import java.io.* ;
 
 /*
@@ -61,18 +61,18 @@ public class mkfs
    */
   public static void main( String[] argv ) throws Exception
   {
-    argv = new String[3];
+    /*argv = new String[3];
     argv[0] = "filesys.dat";
     argv[1] = "256";
-    argv[2] = "40";
+    argv[2] = "40";*/
 
 
-    /*if( argv.length != 3 )
+    if( argv.length != 3 )
     {
       System.err.println( 
         "mkfs: usage: java mkfs <filename> <block-size> <blocks>" ) ;
       System.exit( 1 ) ;
-    }*/
+    }
 
     String filename = argv[0] ;
     short block_size = Short.parseShort( argv[1] ) ;
