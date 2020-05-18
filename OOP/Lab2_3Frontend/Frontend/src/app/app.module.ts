@@ -4,6 +4,7 @@ import { HttpClientModule }    from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { FlightComponent } from './flight/flight.component';
 import { AddFlightComponent } from './add-flight/add-flight.component';
+import { FormsModule } from '@angular/forms'; 
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { AddFlightComponent } from './add-flight/add-flight.component';
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -4,4 +4,8 @@ export class City {
     id: number;
     name: string;
     country: Country;
+
+    constructor() {
+        this.country = new Country();
+    }
 }

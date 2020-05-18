@@ -1,1 +1,25 @@
 <p>add-flight works!</p>
+<h2>Add Flight</h2>
+<div>
+    {{flight.departCity.id}}  {{flight.destTime}}
+</div>
+
+
+
+<div>
+    <label>Departure city:
+      <input [(ngModel)]="flight.departCity.id" /> <br>
+    </label>
+
+    <label>Departure time:
+        <input [(ngModel)]="flight.departTime" /> <br>
+    </label>
+
+    <label>Destination city:
+        <input [(ngModel)]="flight.destcity.id" /> <br>
+    </label>
+
+    <label>Destination time:
+        <input [(ngModel)]="flight.destTime" /> <br>
+    </label>
+</div>

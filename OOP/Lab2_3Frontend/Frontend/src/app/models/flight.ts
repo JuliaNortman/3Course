@@ -8,4 +8,9 @@ export class Flight {
     destCity: City;
     destTime: Date;
     crewMembers: CrewMember[];
+
+    constructor() {
+        this.departCity = new City();
+        this.destCity = new City();
+    }
 }
