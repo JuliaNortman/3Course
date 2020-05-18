@@ -1,0 +1,8 @@
+<p>flight works!</p>
+
+
+<ul>
+    <li *ngFor="let flight of flights">
+        {{flight.id}} {{flight.departCity.name}} {{flight.departTime}} {{flight.destCity.name}} {{flight.destTime}}
+    </li>
+</ul>

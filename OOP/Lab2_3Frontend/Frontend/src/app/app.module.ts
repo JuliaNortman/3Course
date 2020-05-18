@@ -1,14 +1,19 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { HttpClientModule }    from '@angular/common/http';
 import { AppComponent } from './app.component';
+import { FlightComponent } from './flight/flight.component';
+import { AddFlightComponent } from './add-flight/add-flight.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FlightComponent,
+    AddFlightComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
