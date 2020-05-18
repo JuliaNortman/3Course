@@ -40,7 +40,7 @@ public class FlightServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String[] urls = request.getPathInfo().split("/");
 		if (urls.length == 2) {
-			if (urls[1].equals(getPathAll)) {
+			if (urls[1].equals(getPathAll)) { // flight/all
 				List<Flight> flights;
 				try {
 					flights = flightService.getAllFlights();
@@ -52,7 +52,7 @@ public class FlightServlet extends HttpServlet {
 				} catch (ServerException e) {
 					response.sendError(500);
 				}
-			} else {
+			} else { //flight/5
 				try {
 					int id = Integer.parseInt(urls[1]);
 					Flight flight = flightService.getFlight(id);
