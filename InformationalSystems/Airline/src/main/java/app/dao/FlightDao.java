@@ -26,6 +26,9 @@ public class FlightDao {
             String flightTime = rs.getString("flight_time");
             int seatsNum = rs.getInt("seats");
             double startPrice = rs.getDouble("start_price");
+            int availiableSeats = rs.getInt("seats_num_available");
+            Flight flight = new Flight(id, direction, departureTime, flightTime, seatsNum, startPrice);
+            flight.setSeatsNumAvailable(availiableSeats);
             flights.add(new Flight(id, direction, departureTime, flightTime, seatsNum, startPrice));
         }
         System.out.println("flights number " + flights.size());

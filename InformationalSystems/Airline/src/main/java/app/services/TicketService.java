@@ -8,6 +8,7 @@ import app.entities.Ticket;
 import app.entities.User;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class TicketService {
     private TicketDao ticketDao = new TicketDao();
@@ -37,4 +38,10 @@ public class TicketService {
        ticketDao.insert(ticket);
        return true;
     }
+    
+    
+    public List<Ticket> getTicketsByFlight(int flightId) throws ClassNotFoundException, SQLException {
+    	return ticketDao.findTicketsOfFlight(flightId);
+    }
+   
 }

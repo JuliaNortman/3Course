@@ -20,6 +20,7 @@ public class FlightService {
         List<Flight> flights = flightDao.findAll();
         for (Flight flight : flights){
             flight.setSeatsNumAvailable(seatDao.findNumOfFreeSeats(flight.getId()));
+            System.out.println("Free seats id = " + flight.getId() + " " + seatDao.findNumOfFreeSeats(flight.getId()));
             flight.setPrice(calculateCurrPrice(flight));
         }
         return flights;
