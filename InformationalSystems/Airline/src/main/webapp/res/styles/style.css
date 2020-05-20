@@ -1,0 +1,360 @@
+* {
+    box-sizing: border-box;
+}
+
+.login-btns{
+    position: absolute;
+    width: 11%;
+    left: 88%;
+    font-size: 18px;
+    font-weight: bold;
+    top: 20px;
+}
+
+.cabinet-btns{
+    position: absolute;
+    width: 10%;
+    left: 88%;
+    font-size: 18px;
+    font-weight: bold;
+    top: 20px;
+}
+
+.login-btns a{
+    text-decoration: none;
+    color: dimgray;
+}
+
+.login-btns a:hover{
+    color: darkblue;
+}
+
+.header{
+    position: relative;
+    width: 80%;
+    left: 10%;
+    text-align: center;
+    border-bottom: 2px solid black;
+    font-size: 50px;
+}
+
+.header a{
+    text-decoration: none;
+    color: black;
+}
+
+.header-title{
+    margin: 30px;
+}
+
+.header-title:hover{
+    color: darkred;
+}
+
+.flights{
+    position: relative;
+    width: 70%;
+    left: 15%;
+    display: flex;
+    flex-direction: column
+}
+
+.flight{
+    cursor: pointer;
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.flight p{
+    margin-left: 20px;
+}
+
+.flight span{
+    margin-left: 7px; font-weight: bold
+}
+
+.big-flight{
+
+}
+
+.cntr{
+    text-align: center;
+}
+
+.seats{
+    position: relative;
+    width: 80%;
+    left: 10%;
+    border: 1px solid darkblue;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 200px;
+}
+
+.seat{
+    width: 50px;
+    height: 50px;
+    margin: 20px;
+}
+
+.free{
+    background-color: darkgreen;
+    cursor: pointer;
+}
+
+.free:hover{
+    background-color: darkblue;
+}
+
+.notfree{
+    background-color: darkred;
+}
+
+.infos{
+    font-size: 25px;
+    text-align: center;
+}
+
+.infos-tip{
+    margin-left: 30px;
+    font-weight: bold;
+}
+
+.number{
+    vertical-align: center;
+    font-weight: bold;
+    text-align: center;
+    color: white
+}
+
+.ticket-big{
+    position: relative;
+    width: 50%;
+    left: 25%;
+    border: 2px solid darkblue;
+    margin-top: 40px;
+}
+
+.ticket-cont{
+    position:relative;
+    width: 64%;
+    left: 18%;
+    font-size: 20px;
+    border-bottom: 1px solid black;
+    padding-bottom: 1px;
+    margin-bottom: 7px;
+}
+
+.ticket-inp{
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+}
+
+.ticket-select{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.line{
+    width: 100%;
+    border: 2px solid darkblue;
+    margin-top: 20px;
+}
+
+.ticket-price{
+    position:relative;
+    width: 64%;
+    left: 18%;
+    font-size: 25px;
+    padding-bottom: 1px;
+    margin: 20px 0;
+}
+
+.ticket-price-inp{
+    font-size: 25px;
+    width: 70%;
+    font-weight: bold;
+    border: none;
+}
+
+.buy-btn{
+    position:relative;
+    width: 40%;
+    left: 30%;
+    background-color: darkorange;
+    color: white;
+    border: 1px solid black;
+    padding: 10px 0;
+    margin: 10px 0;
+    cursor: pointer;
+    font-size: 17px;
+}
+
+.buy-btn:hover{
+    background-color: brown;
+}
+
+.reg-header{
+    position: relative;
+    display: block;
+    width: 30%;
+    left: 35%;
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 15px;
+}
+
+.reg-table{
+    position: relative;
+    width: 40%;
+    left: 30%;
+    border: 2px solid black;
+    margin-bottom: 30px;
+}
+
+.reg-row{
+    border-bottom: 1px solid black;
+}
+
+.reg-node{
+    padding: 30px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.reg-inp{
+    border: 1px solid black;
+    padding: 10px 0 10px 10px;
+    width: 90%;
+    margin-bottom: 10px;
+}
+
+.reg-btn{
+    width: 100%;
+    padding: 10px 0;
+    background: darkblue;
+    color: white;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+}
+
+.cabinet{
+    position: relative;
+    width: 90%;
+    left: 5%;
+}
+
+.account{
+    position: absolute;
+    width: 15%;
+    left: 85%;
+    top:-30px;
+}
+
+.account-value{
+    margin-bottom: 0;
+    font-size: 18px;
+}
+
+.bold{
+    font-weight: bold;
+}
+
+.account-btn{
+    width: 120px;
+    background-color: darkred;
+    color: white;
+    border: none;
+    padding: 7px 0;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.account-btn:hover{
+    background-color: darkslategrey;
+}
+
+.logout-btn{
+    width: 90px;
+    background-color: darkblue;
+    color: white;
+    border: none;
+    padding: 7px 0;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.logout-btn:hover{
+    background-color: orangered;
+}
+
+.welcm{
+    text-align: center;
+    font-size: 30px;
+}
+
+.user-name{
+    color: forestgreen;
+    font-weight: bold;
+}
+
+.info-bl{
+    width: 50%;
+}
+
+.bl-ttl{
+    text-align: center;
+}
+
+.bl-info{
+    position:relative;
+    border-top: 1px solid black;
+    width: 70%;
+    left: 15%;
+}
+
+.bl-info p{
+    margin-left: 20px;
+}
+
+.bl-tickets{
+    position:relative;
+    border-top: 1px solid black;
+    width: 80%;
+    left: 10%;
+    display: flex;
+    flex-direction: column;
+}
+
+.sm-ticket{
+    border: 2px solid mediumslateblue;
+    margin: 20px 0;
+    padding: 20px 30px;
+    position: relative;
+    width: 80%;
+    left: 10%;
+}
+
+.sm-ticket-cont{
+    width: 100%;
+    left: 0;
+}
+
+.sm-ticket-price{
+    width: 100%;
+    left: 0;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.message{
+    font-size: 25px;
+    text-align: center;
+    padding: 30px 0;
+}
