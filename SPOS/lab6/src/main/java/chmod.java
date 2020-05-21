@@ -30,12 +30,13 @@ public class chmod {
                     Kernel.exit(2);
                 }
             }
+            Kernel.exit(0);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private static boolean checkMode(short mode) {
+    згидшс static boolean checkMode(short mode) {
         if(mode < 0 || mode > 777) return false;
 
         short firstDigit = (short)(mode - (mode/10)*10);

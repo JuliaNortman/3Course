@@ -136,19 +136,19 @@ public class ls
 
     // append the inode number in a field of 5
     t = Integer.toString( stat.getIno() ) ;
-    s.append(" ".repeat(Math.max(0, 5 - t.length()))) ;
+    s.append(" ") ;
     s.append( t ) ;
     s.append( ' ' ) ;
 
       // append the uid in a field of 5
       t = Integer.toString( stat.getUid() ) ;
-      s.append(" ".repeat(Math.max(0, 5 - t.length()))) ;
+      s.append(" ") ;
       s.append( t ) ;
       s.append( ' ' ) ;
 
       // append the gid in a field of 5
       t = Integer.toString( stat.getGid() ) ;
-      s.append(" ".repeat(Math.max(0, 5 - t.length()))) ;
+      s.append(" ") ;
       s.append( t ) ;
       s.append( ' ' ) ;
 

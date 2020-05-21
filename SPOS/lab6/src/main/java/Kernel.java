@@ -1631,7 +1631,9 @@ Some internal methods.
 
   public static short umask(short newUmask) {
     short prevUmask = process.getUmask();
+    System.out.println("Previous umask value: " + Integer.toString(prevUmask, 8));
     process.setUmask((short)((prevUmask & ~0777)|newUmask));
+    System.out.println("New umask value: " + Integer.toString(process.getUmask(), 8));
     return prevUmask;
   }
 
@@ -1683,48 +1685,40 @@ Some internal methods.
     return 0;
   }
 
-  public static int chown(String path, short ownerId, short groupId) throws Exception {
-      String fullPath = getFullPath( path ) ;
-
+  public static int chown(String filePath, short id, boolean gid) throws Exception {
       IndexNode indexNode = new IndexNode() ;
-      short indexNodeNumber = findIndexNode( fullPath , indexNode ) ;
+      short indexNodeNumber = findIndexNode(filePath , indexNode ) ;
 
-      if( indexNodeNumber < 0 ){
+      if(indexNodeNumber < 0){
           Kernel.perror( PROGRAM_NAME ) ;
-          System.err.println( PROGRAM_NAME + ": unable to open file for reading" );
+          System.err.println( PROGRAM_NAME + " error opening file" );
           Kernel.exit( 1 ) ;
           return -1;
       }
-
-      // if we need to change the groupId
-      if (groupId >= 0) {
-          // current user is an owner or a super-user
+      if (gid) {
           if (indexNode.getUid() == process.getUid() || process.getUid() == 0) {
-              indexNode.setGid(groupId);
+              indexNode.setGid(id);
               openFileSystems[ROOT_FILE_SYSTEM].writeIndexNode(indexNode, indexNodeNumber);
+              return 0;
           } else {
               Kernel.perror( PROGRAM_NAME ) ;
-              System.err.println( PROGRAM_NAME + ": you haven't access" );
+              System.err.println( PROGRAM_NAME + ": only superuser or owner can change gid" );
               Kernel.exit( 2 ) ;
               return -1;
           }
-      }
-
-      // if we need to change the ownerId
-      if (ownerId >= 0) {
-          // only the super-user may change the uid of the file
+      } else {
           if (process.getUid() == 0) {
-              indexNode.setUid(ownerId);
+              indexNode.setUid(id);
               System.out.println(indexNode.getUid());
               openFileSystems[ROOT_FILE_SYSTEM].writeIndexNode(indexNode, indexNodeNumber);
+              return 0;
           } else {
               Kernel.perror( PROGRAM_NAME ) ;
-              System.err.println( PROGRAM_NAME + ": you haven't access" );
+              System.err.println( PROGRAM_NAME + ": only superuser can change uid" );
               Kernel.exit( 2 ) ;
               return -1;
           }
       }
-      return 0;
   }
 
 }
