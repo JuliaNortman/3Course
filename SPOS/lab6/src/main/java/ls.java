@@ -152,10 +152,8 @@ public class ls
       s.append( t ) ;
       s.append( ' ' ) ;
 
-
-      // append the mode in a field of 5
       short mode = stat.getMode();
-      s.append(" ".repeat(5)) ;
+      s.append("     ") ;
       s.append( (mode & Kernel.S_IRWXU) >> 6 );
       s.append( (mode & Kernel.S_IRWXG) >> 3 );
       s.append( mode & Kernel.S_IRWXO );
@@ -163,7 +161,7 @@ public class ls
 
     // append the size in a field of 10
     t = Integer.toString( stat.getSize() ) ;
-    s.append(" ".repeat(Math.max(0, 10 - t.length()))) ;
+    s.append("     ") ;
     s.append( t ) ;
     s.append( ' ' ) ;
 

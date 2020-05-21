@@ -17,7 +17,7 @@ public class chmod {
                 i++;
                 short mode = -1;
                 try {
-                    mode = Short.parseShort(args[i]);
+                    mode = Short.parseShort(args[i], 8);
                     if(!checkMode(mode)) throw new NumberFormatException();
                 } catch (NumberFormatException e) {
                     System.err.println(PROGRAM_NAME + " " + args[i] + " is not a correct mode value");
@@ -36,7 +36,7 @@ public class chmod {
         }
     }
 
-    згидшс static boolean checkMode(short mode) {
+    public static boolean checkMode(short mode) {
         if(mode < 0 || mode > 777) return false;
 
         short firstDigit = (short)(mode - (mode/10)*10);

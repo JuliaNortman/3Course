@@ -1618,6 +1618,10 @@ Some internal methods.
       return -1;
     }
     if (indexNode.getUid() == process.getUid() || process.getUid() == 0) {
+      System.out.println("Mode " + mode);
+      System.out.println("Indexnodemode " + indexNode.getMode());
+      System.out.println(indexNode.getMode() & (~0777));
+      System.out.println((indexNode.getMode() & (~0777)) | mode);
       indexNode.setMode((short)((indexNode.getMode() & (~0777)) | mode));
       openFileSystems[ROOT_FILE_SYSTEM].writeIndexNode(indexNode, indexNodeNumber);
       return 0;
@@ -1645,12 +1649,11 @@ Some internal methods.
 
     if( inodeNumber < 0 ){
       Kernel.perror( PROGRAM_NAME ) ;
-      System.err.println( PROGRAM_NAME + ": unable to open file for reading" );
+      System.err.println( PROGRAM_NAME + ": cannot open file" );
       Kernel.exit( 1 ) ;
       return -1;
     }
 
-    DirectoryEntry directoryEntry = new DirectoryEntry(inodeNumber, fullPath2);
     inode.setNlink((short)(inode.getNlink()+1));
     openFileSystems[ROOT_FILE_SYSTEM].writeIndexNode(inode, inodeNumber);
 
@@ -1661,18 +1664,18 @@ Some internal methods.
     int dir = open( subpath , O_RDWR ) ;
     if( dir < 0 ) {
       Kernel.perror( PROGRAM_NAME ) ;
-      System.err.println( PROGRAM_NAME + ": unable to open directory for writing" );
+      System.err.println( PROGRAM_NAME + ": cannot open directory " + subpath );
       Kernel.exit( 1 ) ;
     }
 
+    DirectoryEntry directoryEntry = new DirectoryEntry(inodeNumber, endname);
     DirectoryEntry temp = new DirectoryEntry();
     while (true) {
       int status = readdir( dir , temp ) ;
       if( status < 0 )
       {
-        System.err.println( PROGRAM_NAME +
-                ": error reading directory in creat" ) ;
-        System.exit( EXIT_FAILURE ) ;
+        System.err.println( PROGRAM_NAME + " cannot read directory" ) ;
+        System.exit( 2 ) ;
       }
       else if( status == 0 )
       {
@@ -1681,17 +1684,16 @@ Some internal methods.
       }
     }
     close(dir);
-
     return 0;
   }
 
   public static int chown(String filePath, short id, boolean gid) throws Exception {
-      IndexNode indexNode = new IndexNode() ;
-      short indexNodeNumber = findIndexNode(filePath , indexNode ) ;
+      IndexNode indexNode = new IndexNode();
+      short indexNodeNumber = findIndexNode(getFullPath(filePath) , indexNode ) ;
 
       if(indexNodeNumber < 0){
           Kernel.perror( PROGRAM_NAME ) ;
-          System.err.println( PROGRAM_NAME + " error opening file" );
+          System.err.println( PROGRAM_NAME + ": error opening file" );
           Kernel.exit( 1 ) ;
           return -1;
       }

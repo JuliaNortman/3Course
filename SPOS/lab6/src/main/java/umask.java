@@ -9,7 +9,7 @@ public class umask {
             return;
         }
         try {
-            short umask = Short.parseShort(args[0]);
+            short umask = Short.parseShort(args[0], 8);
             if(!chmod.checkMode(umask)) throw new NumberFormatException();
             Kernel.umask(umask);
         } catch(NumberFormatException e) {

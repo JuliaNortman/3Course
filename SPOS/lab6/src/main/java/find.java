@@ -23,7 +23,7 @@ public class find {
         Stat stat = new Stat() ;
         status = Kernel.stat( name , stat ) ;
         if(status < 0) {
-            System.err.println("Cannot init stat");
+            System.err.println(PROGRAM_NAME + ": cannot find path");
             return;
         }
         short type = (short)( stat.getMode() & Kernel.S_IFMT ) ;

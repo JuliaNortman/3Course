@@ -13,7 +13,7 @@ public class chown {
         }
         short uid = -1;
         try {
-            uid = Short.parseShort(args[0]);
+            uid = Short.parseShort(args[0], 8);
         } catch(NumberFormatException ignored) { }
         if (uid < 0)
         {
@@ -29,7 +29,7 @@ public class chown {
             if( res < 0 )
             {
                 Kernel.perror( PROGRAM_NAME ) ;
-                System.err.println( PROGRAM_NAME + ": cannot to change owner of the file \"" + name + "\"" ) ;
+                System.err.println( PROGRAM_NAME + ": cannot change owner of the file \"" + name + "\"" ) ;
                 Kernel.exit( 3 );
                 return;
             }
