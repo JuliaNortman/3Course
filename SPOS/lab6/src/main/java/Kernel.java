@@ -463,7 +463,14 @@ public class Kernel
       // return (EACCES) if the file does not exist and the directory
       // in which it is to be created is not writable
 
-      currIndexNode.setMode( mode ) ;
+      int protectionInfo;
+      if((mode & S_IFMT) == S_IFDIR) { //directory
+        protectionInfo = 0777;
+      } else {
+        protectionInfo = 0666;
+      }
+
+      currIndexNode.setMode((short)  ((mode & ~0777)|(protectionInfo & ~(process.getUmask()))) ) ;
       currIndexNode.setNlink( (short)1 ) ;
 
       // allocate the next available inode from the file system
@@ -1601,28 +1608,31 @@ Some internal methods.
   }
 
   public static int chmod(String path, short mode) throws Exception {
-    String fullPath = getFullPath( path ) ;
-
     IndexNode indexNode = new IndexNode() ;
-    short indexNodeNumber = findIndexNode( fullPath , indexNode ) ;
+    short indexNodeNumber = findIndexNode(path, indexNode);
 
     if( indexNodeNumber < 0 ){
       Kernel.perror( PROGRAM_NAME ) ;
-      System.err.println( PROGRAM_NAME + ": unable to open file for reading" );
-      Kernel.exit( 1 ) ;
+      System.err.println( PROGRAM_NAME + ": cannot open file" );
+      Kernel.exit(1) ;
       return -1;
     }
     if (indexNode.getUid() == process.getUid() || process.getUid() == 0) {
       indexNode.setMode((short)((indexNode.getMode() & (~0777)) | mode));
       openFileSystems[ROOT_FILE_SYSTEM].writeIndexNode(indexNode, indexNodeNumber);
+      return 0;
     } else {
-      Kernel.perror( PROGRAM_NAME ) ;
-      System.err.println( PROGRAM_NAME + ": you haven't access" );
-      Kernel.exit( 2 ) ;
+      Kernel.perror(PROGRAM_NAME) ;
+      System.err.println(PROGRAM_NAME + ": you are not owner and not a superuser");
+      Kernel.exit(2);
       return -1;
     }
+  }
 
-    return 0;
+  public static short umask(short newUmask) {
+    short prevUmask = process.getUmask();
+    process.setUmask((short)((prevUmask & ~0777)|newUmask));
+    return prevUmask;
   }
 
   public static int link(String pathname1, String pathname2) throws Exception {

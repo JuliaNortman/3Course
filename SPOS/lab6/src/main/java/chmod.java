@@ -4,38 +4,49 @@ public class chmod {
     public static final String PROGRAM_NAME = "chmod" ;
 
     public static void main(String[] args) {
-        ArrayList<String> filename = new ArrayList<>();
-        ArrayList<Short> mode = new ArrayList<>();
-        if (args.length % 2 == 0 && args.length != 0) {
-            for (int i = 0; i < args.length; i+=2) {
-                filename.add(args[i]);
-                if (args[i+1].length() != 3) {
-                    System.out.println("Error \"" + PROGRAM_NAME + "\": need correct mode arguments, not " + args[i+1].length());
-                    System.exit(1);
-                }
-                mode.add(Short.parseShort(args[i+1], 8));
-            }
-        } else {
-            System.out.println("Error \"" + PROGRAM_NAME + "\": need correct count arguments");
-            System.exit(2);
-        }
+        Kernel.initialize();
 
         try {
-            Kernel.initialize();
-
-            for (int i = 0; i < filename.size(); i++) {
-                int res = Kernel.chmod( filename.get(i) , mode.get(i) ) ;
-                if( res < 0 )
-                {
-                    Kernel.perror( PROGRAM_NAME ) ;
-                    System.err.println( PROGRAM_NAME + ": cannot to change mode file \"" + filename.get(i) + "\"" ) ;
-                    Kernel.exit( 3 ) ;
+            if (args.length % 2 != 0 && args.length < 2) {
+                System.err.println(PROGRAM_NAME + " uses arguments: filename and mode");
+                Kernel.exit(1);
+                return;
+            }
+            for(int i = 0; i < args.length; ++i) {
+                String filename = args[i];
+                i++;
+                short mode = -1;
+                try {
+                    mode = Short.parseShort(args[i]);
+                    if(!checkMode(mode)) throw new NumberFormatException();
+                } catch (NumberFormatException e) {
+                    System.err.println(PROGRAM_NAME + " " + args[i] + " is not a correct mode value");
+                    Kernel.exit(1);
+                    return;
+                }
+                int result = Kernel.chmod(filename, mode);
+                if(result != 0) {
+                    System.err.println(PROGRAM_NAME + " cannot change mode for the file " + filename);
+                    Kernel.exit(2);
                 }
             }
-
-            Kernel.exit(0);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static boolean checkMode(short mode) {
+        if(mode < 0 || mode > 777) return false;
+
+        short firstDigit = (short)(mode - (mode/10)*10);
+        mode /= 10;
+        short secondDigit = (short)(mode - (mode/10)*10);
+        mode /= 10;
+        short thirdDigit = (short)(mode - (mode/10)*10);
+
+        if(firstDigit < 0 || firstDigit > 7) return false;
+        if(secondDigit < 0 || secondDigit > 7) return false;
+
+        return true;
     }
 }
