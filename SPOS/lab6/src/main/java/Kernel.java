@@ -1657,8 +1657,9 @@ Some internal methods.
     inode.setNlink((short)(inode.getNlink()+1));
     openFileSystems[ROOT_FILE_SYSTEM].writeIndexNode(inode, inodeNumber);
 
+    //path before filename
     String subpath = fullPath2.substring(0, fullPath2.lastIndexOf('/'));
-    String endname = fullPath2.substring(fullPath2.lastIndexOf('/')+1);
+    String endname = fullPath2.substring(fullPath2.lastIndexOf('/')+1); //filename
 
     if (subpath.equals("")) subpath = "/";
     int dir = open( subpath , O_RDWR ) ;
@@ -1711,7 +1712,6 @@ Some internal methods.
       } else {
           if (process.getUid() == 0) {
               indexNode.setUid(id);
-              System.out.println(indexNode.getUid());
               openFileSystems[ROOT_FILE_SYSTEM].writeIndexNode(indexNode, indexNodeNumber);
               return 0;
           } else {

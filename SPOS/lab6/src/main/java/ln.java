@@ -18,7 +18,7 @@ public class ln {
             if( res < 0 )
             {
                 Kernel.perror( PROGRAM_NAME ) ;
-                System.err.println( PROGRAM_NAME + ": cannot link to the file \"" + inputFileName + "\"" ) ;
+                System.err.println( PROGRAM_NAME + ": cannot create hard link to the file \"" + inputFileName + "\"" ) ;
                 Kernel.exit( 2 ) ;
             }
             Kernel.exit(0);
