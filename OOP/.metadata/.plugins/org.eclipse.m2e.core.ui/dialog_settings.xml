@@ -2,6 +2,7 @@
 <section name="Workbench">
 	<section name="MavenProjectWizardLocationPage">
 		<list key="location">
+			<item value="C:\Users\HP250\Documents\3course\SECOND_SEMESTER\3Course\InformationalSystems"/>
 		</list>
 		<list key="projectNameTemplate">
 			<item value="[artifactId]"/>
@@ -29,9 +30,11 @@
 			<item value="Lab1.Lab1"/>
 		</list>
 		<list key="groupId">
+			<item value="airline"/>
 			<item value="Lab1"/>
 		</list>
 		<list key="artifactId">
+			<item value="airline"/>
 			<item value="Lab1"/>
 		</list>
 		<list key="projectNameTemplate">
